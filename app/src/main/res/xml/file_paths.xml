@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Only finished PDFs are shareable. Raw photos and the database are never exposed. -->
+    <files-path
+        name="reports"
+        path="reports/" />
+    <files-path
+        name="labels"
+        path="labels/" />
+</paths>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SafeStitch launcher foreground: a safety shield with a stitched check mark. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,28L76,36.5V53C76,67.5 66.6,77.8 54,82C41.4,77.8 32,67.5 32,53V36.5Z" />
+    <path
+        android:pathData="M43,55L51,63L66,46"
+        android:strokeWidth="5"
+        android:strokeColor="#FF0B6E69"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#FFF2B33D"
+        android:pathData="M40,40h4v2.4h-4zM47,38.4h4v2.4h-4zM57,38.4h4v2.4h-4zM64,40h4v2.4h-4z" />
+</vector>

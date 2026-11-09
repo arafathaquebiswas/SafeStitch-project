@@ -1,0 +1,20 @@
+# Gradle / Android Studio
+.gradle/
+.kotlin/
+build/
+/local.properties
+.idea/
+*.iml
+.DS_Store
+captures/
+
+# Build outputs; regenerate with ./scripts/build-deliverables.sh
+/deliverables/
+
+# Signing material must never be committed (it lives in ~/.android-keystores/safestitch/)
+*.jks
+*.keystore
+*.p12
+*.pem
+signing.properties
+keystore.properties

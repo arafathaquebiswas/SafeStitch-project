@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 9-11 backup rules: keep the inspection database, photos and reports
+     when the user restores to a new phone. -->
+<full-backup-content>
+    <include
+        domain="database"
+        path="." />
+    <include
+        domain="file"
+        path="." />
+    <include
+        domain="sharedpref"
+        path="." />
+</full-backup-content>
