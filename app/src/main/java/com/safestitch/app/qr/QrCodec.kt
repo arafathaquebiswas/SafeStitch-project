@@ -6,6 +6,7 @@ import com.google.zxing.DecodeHintType
 import com.google.zxing.EncodeHintType
 import com.google.zxing.LuminanceSource
 import com.google.zxing.PlanarYUVLuminanceSource
+import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.ReaderException
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.common.HybridBinarizer
@@ -44,6 +45,19 @@ object QrCodec {
             } catch (_: ReaderException) {
                 null
             }
+        }
+    }
+
+    /** Decodes a QR code from a still image (ARGB pixels), e.g. a photo picked from the gallery. Tries harder than live scanning. */
+    fun decodeArgb(pixels: IntArray, width: Int, height: Int): String? {
+        require(width > 0 && height > 0 && pixels.size >= width * height) { "Invalid image" }
+        val source = RGBLuminanceSource(width, height, pixels)
+        val reader = QRCodeReader()
+        val hints = decodeHints + (DecodeHintType.TRY_HARDER to true)
+        return try {
+            reader.decode(BinaryBitmap(HybridBinarizer(source)), hints).text
+        } catch (_: ReaderException) {
+            decode(source)
         }
     }
 

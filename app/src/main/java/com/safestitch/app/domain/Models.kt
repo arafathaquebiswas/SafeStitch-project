@@ -1,11 +1,26 @@
 package com.safestitch.app.domain
 
-/** What kind of place or equipment a QR-tagged checkpoint is. Decides which checklist is used. */
-enum class CheckpointType(val label: String) {
-    SEWING_LINE("Sewing line"),
-    FIRE_SAFETY("Fire safety point"),
+/**
+ * What kind of equipment a QR-tagged checkpoint is. Decides which (editable) checklist is used.
+ * The five current types come from the SafeStitch brief. Legacy types are kept so equipment created
+ * before them keeps its label, QR code and history; an admin can reclassify it at any time.
+ * Values are stored by name in the database: never rename a constant.
+ */
+enum class CheckpointType(val label: String, val legacy: Boolean = false) {
+    FIRE_EXTINGUISHER("Fire extinguisher"),
     ELECTRICAL("Electrical panel"),
-    GENERAL_AREA("General work area"),
+    FIRE_ALARM("Fire alarm"),
+    EMERGENCY_EXIT("Emergency exit"),
+    BOILER("Boiler"),
+    SEWING_LINE("Sewing line", legacy = true),
+    FIRE_SAFETY("Fire safety point", legacy = true),
+    GENERAL_AREA("General work area", legacy = true),
+    ;
+
+    companion object {
+        /** Types offered for new equipment. */
+        val current: List<CheckpointType> = entries.filterNot { it.legacy }
+    }
 }
 
 enum class UserRole(val label: String) {
@@ -21,11 +36,19 @@ enum class Priority(val label: String, val defaultDueDays: Int) {
     LOW("Low", 14),
 }
 
-/** Corrective action lifecycle: OPEN -> RESOLVED (by anyone) -> VERIFIED (by an admin); admins can reopen. */
+/**
+ * Corrective action lifecycle: OPEN -> IN_PROGRESS -> RESOLVED -> VERIFIED.
+ * Anyone signed in may start work and report the fix; only an admin may verify,
+ * or send a resolution back to IN_PROGRESS.
+ */
 enum class ActionStatus(val label: String) {
     OPEN("Open"),
-    RESOLVED("Awaiting verification"),
+    IN_PROGRESS("In progress"),
+    RESOLVED("Resolved – awaiting verification"),
     VERIFIED("Verified"),
+    ;
+
+    val isActive: Boolean get() = this == OPEN || this == IN_PROGRESS
 }
 
 /** Answer recorded for one checklist item. */

@@ -16,7 +16,7 @@ import com.safestitch.app.domain.Priority
 import com.safestitch.app.domain.UserRole
 
 // ---------------------------------------------------------------------------------------------
-//  Accounts
+//  Accounts (never synced)
 // ---------------------------------------------------------------------------------------------
 
 /** Local account. [passwordHash] is a salted PBKDF2 hash (see PasswordHasher); never a password. */
@@ -81,9 +81,8 @@ data class AreaPath(
 // ---------------------------------------------------------------------------------------------
 
 /**
- * A QR-tagged piece of equipment or place ("Fire extinguisher FE-12", "Sewing line 4").
- * [areaId] links it into the location hierarchy; [area] is the optional exact spot
- * ("next to stair B"). Before database version 2, [area] was the only location field.
+ * A QR-tagged piece of equipment ("Fire extinguisher FE-12"). [areaId] links it into the location
+ * hierarchy; [area] is the optional exact spot. Before database version 2, [area] was the only location.
  */
 @Entity(tableName = "checkpoints", indices = [Index(value = ["code"], unique = true), Index("areaId")])
 data class CheckpointEntity(
@@ -112,7 +111,7 @@ data class TemplateQuestionEntity(
 )
 
 // ---------------------------------------------------------------------------------------------
-//  Inspections
+//  Inspections: a historical snapshot (questions, equipment and location are copied at start)
 // ---------------------------------------------------------------------------------------------
 
 @Entity(
@@ -133,9 +132,15 @@ data class InspectionEntity(
     val generalNotes: String = "",
     val reportFileName: String? = null,
     val inspectorUserId: Long? = null,
+    /** Equipment snapshot taken when the inspection started (kept even if the equipment is edited later). */
+    @ColumnInfo(defaultValue = "") val equipmentCode: String = "",
+    @ColumnInfo(defaultValue = "") val equipmentName: String = "",
+    val equipmentType: CheckpointType? = null,
     /** Last change relevant to sync; compared with [syncedAt]. */
     @ColumnInfo(defaultValue = "0") val updatedAt: Long = 0,
     val syncedAt: Long? = null,
+    /** Set when the server reported a conflicting record; shown on the Sync screen. */
+    val syncConflict: String? = null,
 )
 
 @Entity(
@@ -154,20 +159,25 @@ data class ChecklistItemEntity(
     val critical: Boolean,
     val result: ItemResult = ItemResult.UNANSWERED,
     val note: String = "",
-    /** Finding priority and due date, set when the item fails. */
+    /** Finding details, set when the item fails: priority, due date and the person responsible for the fix. */
     val priority: Priority? = null,
     val dueAt: Long? = null,
+    val responsibleName: String? = null,
+    val responsibleUserId: Long? = null,
 ) {
     fun toOutcome() = ItemOutcome(result = result, critical = critical, note = note, priority = priority, dueAt = dueAt)
 }
 
-/** A photo stored in the app's private files/photos folder. [itemId] is null for general photos. */
+/**
+ * A photo stored in the app's private files/photos folder.
+ * [itemId] null = general photo. [actionId] set = after-fix photo added while resolving that corrective action.
+ */
 @Entity(
     tableName = "photos",
     foreignKeys = [
         ForeignKey(entity = InspectionEntity::class, parentColumns = ["id"], childColumns = ["inspectionId"], onDelete = ForeignKey.CASCADE),
     ],
-    indices = [Index("inspectionId")],
+    indices = [Index("inspectionId"), Index("actionId")],
 )
 data class PhotoEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -175,7 +185,14 @@ data class PhotoEntity(
     val itemId: Long? = null,
     val fileName: String,
     val takenAt: Long,
-)
+    val actionId: Long? = null,
+    /** SHA-256 of the file, computed when it is first uploaded. */
+    val sha256: String? = null,
+    val syncedAt: Long? = null,
+    val syncConflict: String? = null,
+) {
+    val isAfterFix: Boolean get() = actionId != null
+}
 
 // ---------------------------------------------------------------------------------------------
 //  Corrective actions: exactly one per failed item of a submitted inspection
@@ -198,16 +215,43 @@ data class CorrectiveActionEntity(
     val priority: Priority,
     val dueAt: Long,
     val status: ActionStatus = ActionStatus.OPEN,
+    /** Person responsible for the fix. */
+    @ColumnInfo(defaultValue = "") val responsibleName: String = "",
+    val responsibleUserId: Long? = null,
+    @ColumnInfo(defaultValue = "") val createdByName: String = "",
     val createdAt: Long,
+    val startedByName: String? = null,
+    val startedAt: Long? = null,
     val resolutionNote: String? = null,
     val resolvedByName: String? = null,
     val resolvedAt: Long? = null,
     val verifiedByName: String? = null,
     val verifiedAt: Long? = null,
-    /** Admin's reason when sending a resolution back. */
+    /** Admin's reason when a resolution was sent back. */
     val adminComment: String? = null,
     @ColumnInfo(defaultValue = "0") val updatedAt: Long = 0,
     val syncedAt: Long? = null,
+    val syncConflict: String? = null,
+)
+
+/** Audit trail: one row per status change of a corrective action (who, when, from, to). */
+@Entity(
+    tableName = "action_events",
+    foreignKeys = [
+        ForeignKey(entity = CorrectiveActionEntity::class, parentColumns = ["id"], childColumns = ["actionId"], onDelete = ForeignKey.CASCADE),
+    ],
+    indices = [Index("actionId")],
+)
+data class ActionEventEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val actionId: Long,
+    /** Null for the creation event. */
+    val fromStatus: ActionStatus?,
+    val toStatus: ActionStatus,
+    val byName: String,
+    val byUserId: Long? = null,
+    val at: Long,
+    @ColumnInfo(defaultValue = "") val note: String = "",
 )
 
 /** A corrective action with the context needed to show it (result of a JOIN). */
@@ -226,6 +270,15 @@ data class ActionRow(
     val inspectionCompletedAt: Long?,
 )
 
+/** A corrective action with its audit trail and after-fix photos (used by sync). */
+data class ActionWithHistory(
+    @Embedded val action: CorrectiveActionEntity,
+    @Relation(parentColumn = "id", entityColumn = "actionId")
+    val events: List<ActionEventEntity>,
+    @Relation(parentColumn = "id", entityColumn = "actionId")
+    val photos: List<PhotoEntity>,
+)
+
 data class InspectionWithDetails(
     @Embedded val inspection: InspectionEntity,
     @Relation(parentColumn = "checkpointId", entityColumn = "id")
@@ -240,6 +293,11 @@ data class InspectionWithDetails(
     val sortedItems: List<ChecklistItemEntity> get() = items.sortedBy { it.position }
     val sortedPhotos: List<PhotoEntity> get() = photos.sortedBy { it.takenAt }
     val isCompleted: Boolean get() = inspection.completedAt != null
+
+    /** Snapshot values (as inspected), falling back to the current equipment for very old rows. */
+    val equipmentName: String get() = inspection.equipmentName.ifBlank { checkpoint.name }
+    val equipmentCode: String get() = inspection.equipmentCode.ifBlank { checkpoint.code }
+    val equipmentType: CheckpointType get() = inspection.equipmentType ?: checkpoint.type
 
     fun summary(): InspectionSummary = InspectionSummary.of(items.map { it.toOutcome() })
 }

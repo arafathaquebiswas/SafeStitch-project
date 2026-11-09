@@ -20,6 +20,6 @@ object FindingDefaults {
     fun endOfDay(date: LocalDate, zone: ZoneId = ZoneId.systemDefault()): Long =
         date.atTime(LocalTime.of(23, 59)).atZone(zone).toInstant().toEpochMilli()
 
-    /** Open actions past their due date. Resolved actions are waiting for the admin, not overdue. */
-    fun isOverdue(status: ActionStatus, dueAt: Long, now: Long): Boolean = status == ActionStatus.OPEN && dueAt < now
+    /** Open or in-progress actions past their due date. Resolved actions are waiting for the admin, not overdue. */
+    fun isOverdue(status: ActionStatus, dueAt: Long, now: Long): Boolean = status.isActive && dueAt < now
 }

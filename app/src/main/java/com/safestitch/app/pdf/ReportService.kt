@@ -38,7 +38,7 @@ class ReportService(
         val finishedAt = completedAt ?: details.inspection.completedAt ?: System.currentTimeMillis()
         val effective = details.copy(inspection = details.inspection.copy(completedAt = finishedAt))
         reportsDir.mkdirs()
-        val name = ReportFileNames.report(details.checkpoint.code, inspectionId, finishedAt)
+        val name = ReportFileNames.report(details.equipmentCode, inspectionId, finishedAt)
         val target = File(reportsDir, name)
         val temp = File(reportsDir, "$name.part")
         try {

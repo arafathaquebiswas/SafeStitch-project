@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "fe04f3ec09903ae2b9b73c3573fdd92d",
+    "identityHash": "5de8d7c23a1ebc852a1f366576ff94f5",
     "entities": [
       {
         "tableName": "checkpoints",
@@ -79,7 +79,7 @@
       },
       {
         "tableName": "inspections",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `checkpointId` INTEGER NOT NULL, `inspectorName` TEXT NOT NULL, `siteName` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, `completedAt` INTEGER, `generalNotes` TEXT NOT NULL, `reportFileName` TEXT, `inspectorUserId` INTEGER, `updatedAt` INTEGER NOT NULL DEFAULT 0, `syncedAt` INTEGER, FOREIGN KEY(`checkpointId`) REFERENCES `checkpoints`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `checkpointId` INTEGER NOT NULL, `inspectorName` TEXT NOT NULL, `siteName` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, `completedAt` INTEGER, `generalNotes` TEXT NOT NULL, `reportFileName` TEXT, `inspectorUserId` INTEGER, `equipmentCode` TEXT NOT NULL DEFAULT '', `equipmentName` TEXT NOT NULL DEFAULT '', `equipmentType` TEXT, `updatedAt` INTEGER NOT NULL DEFAULT 0, `syncedAt` INTEGER, `syncConflict` TEXT, FOREIGN KEY(`checkpointId`) REFERENCES `checkpoints`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -133,6 +133,25 @@
             "affinity": "INTEGER"
           },
           {
+            "fieldPath": "equipmentCode",
+            "columnName": "equipmentCode",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "equipmentName",
+            "columnName": "equipmentName",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "equipmentType",
+            "columnName": "equipmentType",
+            "affinity": "TEXT"
+          },
+          {
             "fieldPath": "updatedAt",
             "columnName": "updatedAt",
             "affinity": "INTEGER",
@@ -143,6 +162,11 @@
             "fieldPath": "syncedAt",
             "columnName": "syncedAt",
             "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "syncConflict",
+            "columnName": "syncConflict",
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -178,7 +202,7 @@
       },
       {
         "tableName": "checklist_items",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `inspectionId` INTEGER NOT NULL, `position` INTEGER NOT NULL, `section` TEXT NOT NULL, `question` TEXT NOT NULL, `critical` INTEGER NOT NULL, `result` TEXT NOT NULL, `note` TEXT NOT NULL, `priority` TEXT, `dueAt` INTEGER, FOREIGN KEY(`inspectionId`) REFERENCES `inspections`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `inspectionId` INTEGER NOT NULL, `position` INTEGER NOT NULL, `section` TEXT NOT NULL, `question` TEXT NOT NULL, `critical` INTEGER NOT NULL, `result` TEXT NOT NULL, `note` TEXT NOT NULL, `priority` TEXT, `dueAt` INTEGER, `responsibleName` TEXT, `responsibleUserId` INTEGER, FOREIGN KEY(`inspectionId`) REFERENCES `inspections`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -237,6 +261,16 @@
             "fieldPath": "dueAt",
             "columnName": "dueAt",
             "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "responsibleName",
+            "columnName": "responsibleName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "responsibleUserId",
+            "columnName": "responsibleUserId",
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -272,7 +306,7 @@
       },
       {
         "tableName": "photos",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `inspectionId` INTEGER NOT NULL, `itemId` INTEGER, `fileName` TEXT NOT NULL, `takenAt` INTEGER NOT NULL, FOREIGN KEY(`inspectionId`) REFERENCES `inspections`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `inspectionId` INTEGER NOT NULL, `itemId` INTEGER, `fileName` TEXT NOT NULL, `takenAt` INTEGER NOT NULL, `actionId` INTEGER, `sha256` TEXT, `syncedAt` INTEGER, `syncConflict` TEXT, FOREIGN KEY(`inspectionId`) REFERENCES `inspections`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -302,6 +336,26 @@
             "columnName": "takenAt",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "actionId",
+            "columnName": "actionId",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "sha256",
+            "columnName": "sha256",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "syncedAt",
+            "columnName": "syncedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "syncConflict",
+            "columnName": "syncConflict",
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -319,6 +373,15 @@
             ],
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_photos_inspectionId` ON `${TABLE_NAME}` (`inspectionId`)"
+          },
+          {
+            "name": "index_photos_actionId",
+            "unique": false,
+            "columnNames": [
+              "actionId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_photos_actionId` ON `${TABLE_NAME}` (`actionId`)"
           }
         ],
         "foreignKeys": [
@@ -655,7 +718,7 @@
       },
       {
         "tableName": "corrective_actions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `inspectionId` INTEGER NOT NULL, `itemId` INTEGER NOT NULL, `description` TEXT NOT NULL, `priority` TEXT NOT NULL, `dueAt` INTEGER NOT NULL, `status` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `resolutionNote` TEXT, `resolvedByName` TEXT, `resolvedAt` INTEGER, `verifiedByName` TEXT, `verifiedAt` INTEGER, `adminComment` TEXT, `updatedAt` INTEGER NOT NULL DEFAULT 0, `syncedAt` INTEGER, FOREIGN KEY(`inspectionId`) REFERENCES `inspections`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`itemId`) REFERENCES `checklist_items`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `inspectionId` INTEGER NOT NULL, `itemId` INTEGER NOT NULL, `description` TEXT NOT NULL, `priority` TEXT NOT NULL, `dueAt` INTEGER NOT NULL, `status` TEXT NOT NULL, `responsibleName` TEXT NOT NULL DEFAULT '', `responsibleUserId` INTEGER, `createdByName` TEXT NOT NULL DEFAULT '', `createdAt` INTEGER NOT NULL, `startedByName` TEXT, `startedAt` INTEGER, `resolutionNote` TEXT, `resolvedByName` TEXT, `resolvedAt` INTEGER, `verifiedByName` TEXT, `verifiedAt` INTEGER, `adminComment` TEXT, `updatedAt` INTEGER NOT NULL DEFAULT 0, `syncedAt` INTEGER, `syncConflict` TEXT, FOREIGN KEY(`inspectionId`) REFERENCES `inspections`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`itemId`) REFERENCES `checklist_items`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -700,10 +763,39 @@
             "notNull": true
           },
           {
+            "fieldPath": "responsibleName",
+            "columnName": "responsibleName",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "responsibleUserId",
+            "columnName": "responsibleUserId",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "createdByName",
+            "columnName": "createdByName",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
             "fieldPath": "createdAt",
             "columnName": "createdAt",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "startedByName",
+            "columnName": "startedByName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "startedAt",
+            "columnName": "startedAt",
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "resolutionNote",
@@ -746,6 +838,11 @@
             "fieldPath": "syncedAt",
             "columnName": "syncedAt",
             "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "syncConflict",
+            "columnName": "syncConflict",
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -807,11 +904,94 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "action_events",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `actionId` INTEGER NOT NULL, `fromStatus` TEXT, `toStatus` TEXT NOT NULL, `byName` TEXT NOT NULL, `byUserId` INTEGER, `at` INTEGER NOT NULL, `note` TEXT NOT NULL DEFAULT '', FOREIGN KEY(`actionId`) REFERENCES `corrective_actions`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actionId",
+            "columnName": "actionId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fromStatus",
+            "columnName": "fromStatus",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "toStatus",
+            "columnName": "toStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "byName",
+            "columnName": "byName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "byUserId",
+            "columnName": "byUserId",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "at",
+            "columnName": "at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_action_events_actionId",
+            "unique": false,
+            "columnNames": [
+              "actionId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_action_events_actionId` ON `${TABLE_NAME}` (`actionId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "corrective_actions",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "actionId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fe04f3ec09903ae2b9b73c3573fdd92d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5de8d7c23a1ebc852a1f366576ff94f5')"
     ]
   }
 }

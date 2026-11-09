@@ -72,6 +72,10 @@ mkdir -p "$WORK"
 ok "bundletool build-apks --connected-device (APK set generated from the release AAB)"
 
 if (( FRESH )); then "$ADB" -s "$SERIAL" uninstall "$PACKAGE" >/dev/null 2>&1 || true; fi
+# The workflow starts by creating the first admin, so the app must have no accounts yet.
+if (( ! FRESH )) && "$ADB" -s "$SERIAL" shell pm path "$PACKAGE" >/dev/null 2>&1; then
+  fail "$PACKAGE is already installed on this device. Rerun with --fresh (deletes its data on the device) or use a test emulator."
+fi
 "${BUNDLETOOL[@]}" install-apks --apks="$WORK/SafeStitch.apks" --device-id="$SERIAL" --adb="$ADB" \
   || fail "bundletool install-apks failed. If SafeStitch from Google Play or another key is installed, remove it or rerun with --fresh."
 PKG_INFO="$("$ADB" -s "$SERIAL" shell dumpsys package "$PACKAGE")"
@@ -97,11 +101,11 @@ if "$ADB" -s "$SERIAL" shell ping -c 1 -W 3 8.8.8.8 >/dev/null 2>&1; then
 fi
 ok "Airplane mode on; internet unreachable (ping 8.8.8.8 fails)"
 
-echo "    Running one complete inspection on the device ..."
-python3 -I "$ROOT/scripts/smoke/ui_flow.py" --adb "$ADB" --serial "$SERIAL" --package "$PACKAGE" --out "$WORK" \
+echo "    Running the full workflow on the device (admin + inspector, inspection, PDF, corrective action) ..."
+python3 -I "$ROOT/scripts/smoke/ui_flow.py" --adb "$ADB" --serial "$SERIAL" --package "$PACKAGE" --out "$WORK" workflow \
   | tee "$WORK/result.log" | grep -v '^{' || true
 RESULT_JSON="$(tail -1 "$WORK/result.log")"
-[[ "$RESULT_JSON" == *'"result": "PASS"'* ]] || fail "On-device inspection test failed. Screenshot: $WORK/failure.png"
+[[ "$RESULT_JSON" == *'"result": "PASS"'* ]] || fail "On-device workflow test failed. Screenshot: $WORK/failure-workflow.png"
 
 echo
 echo "On-device smoke test PASSED on $DEVICE_DESC."

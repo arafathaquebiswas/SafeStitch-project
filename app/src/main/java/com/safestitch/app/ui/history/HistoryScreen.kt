@@ -75,9 +75,9 @@ class HistoryViewModel(repository: InspectionRepository, catalog: CatalogReposit
             val path = d.checkpoint.areaId?.let(byArea::get)
             HistoryEntry(
                 inspectionId = d.inspection.id,
-                equipmentName = d.checkpoint.name,
-                equipmentCode = d.checkpoint.code,
-                type = d.checkpoint.type,
+                equipmentName = d.equipmentName,
+                equipmentCode = d.equipmentCode,
+                type = d.equipmentType,
                 factoryId = path?.factoryId,
                 buildingId = path?.buildingId,
                 floorId = path?.floorId,

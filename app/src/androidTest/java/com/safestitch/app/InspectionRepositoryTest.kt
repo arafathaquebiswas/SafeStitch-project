@@ -83,7 +83,7 @@ class InspectionRepositoryTest {
             assertEquals(1, summary.failed)
             assertEquals(Outcome.PASS, summary.outcome) // 11/12 = 91%, failed item is not critical
 
-            assertEquals(1, repository.submitInspection(inspectionId, System.currentTimeMillis(), "report.pdf"))
+            assertEquals(1, repository.submitInspection(inspectionId, System.currentTimeMillis(), "report.pdf").createdActions)
             assertNotEquals(inspectionId, repository.startOrResumeInspection(checkpointId, "Inspector", null))
         }
     }

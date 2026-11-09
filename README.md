@@ -37,30 +37,40 @@ It runs on Android 9 (API 28) and newer.
 
 ## What the app does
 
-- **Checkpoints with QR labels.** Register each place or machine once: code, name, area, and
-  type. The type decides the checklist. Print a sheet of QR labels from the **Checkpoints**
-  screen (PDF icon), cut them out and stick them up.
-- **Scan to inspect.** **Scan QR** opens the camera; scanning a label opens that checkpoint's
-  checklist, and an unfinished inspection is resumed. An unknown code opens the
-  "New checkpoint" form. If a label is damaged, type the code instead.
-- **Checklists.** Each item is answered Pass, Fail or N/A. A failed item needs a note
-  describing the problem and the corrective action. Critical items are marked.
-  - Built-in checklists: sewing line (machine safety and stitch quality, including
-    broken-needle control), fire safety point, electrical panel and general work area. All of
-    them also include the common workplace-safety items.
-  - Scoring: a checkpoint passes at 80% or more, unless a critical item failed.
-- **Camera photos.** Attach photos to a checklist item or to the inspection in general.
-- **Offline storage.** Inspections are saved on the phone as you go, in an on-device
-  database, so nothing is lost if the app closes. The app has **no internet permission at
-  all**.
-- **PDF report.** **Complete & create PDF** produces an A4 report containing:
-  - the result, score, failed items and notes;
-  - the photos and the checkpoint's QR code;
-  - sign-off lines for the inspector and supervisor.
-
-  You can then **Open** it, **Share** it (email, WhatsApp, Drive, print) or use
-  **Save a copy…** to store it in Downloads.
-- **Settings.** The default inspector name and site are filled into new inspections.
+- **Accounts.** The first person to open the app creates the **admin** account. Admins add
+  inspectors and other admins (**Admin tools › Users**), reset passwords and deactivate
+  accounts. Passwords are stored only as salted hashes, on the phone.
+- **Locations.** **Admin tools › Locations**: factory › building › floor › area.
+- **Equipment with QR labels.** Five types, each with its own checklist: **Fire extinguisher,
+  Electrical panel, Fire alarm, Emergency exit, Boiler**. Equipment created before these types
+  existed keeps its original type (Sewing line, Fire safety point, General work area) until an
+  admin changes it. Admins print a sheet of QR labels (Inspect tab › PDF icon).
+- **Find equipment.** Scan its QR label with the camera, read a QR code from a picture, type the
+  code, or search and filter by location on the **Inspect** tab. An unfinished inspection is
+  resumed; an unknown code opens the "New equipment" form.
+- **Editable checklists.** **Admin tools › Checklist questions**: add, edit, reorder or switch
+  off questions per type. Each inspection keeps a snapshot of its questions, equipment name and
+  location, so later edits never change past reports.
+- **Inspections.** Pass / Fail / N/A per item; critical items fail the whole checkpoint; the
+  pass mark is 80%. A failed item needs a note, a priority, a due date and a **responsible
+  person** (the inspector by default). Camera photos per item or in general. Everything is
+  saved as you go, so a draft survives the app or phone restarting.
+- **Corrective actions.** Submitting creates **exactly one** corrective action per failed item
+  (submitting twice never creates a second one). Each moves **Open → In progress → Resolved →
+  Verified**: anyone signed in can start work and report the fix (with optional after-fix
+  photos); **only an admin can verify** or send it back. Every step records who did it and when.
+- **PDF report.** An A4 report with the result, score, findings, corrective actions and their
+  history, all photos, the equipment's QR code and sign-off lines. **Open PDF** shows it inside
+  the app (no PDF app needed); **Share** and **Save a copy…** send or store it.
+- **History and dashboard.** History filters by status, result, period, location, inspector,
+  type and text. Home shows inspection totals, pass rate and average score, corrective actions
+  by status, overdue items and pass rate per building.
+- **Works offline.** Everything is stored on the phone. The internet is used **only** if an admin
+  turns on the optional sync (**Admin tools › Sync**, off by default): submitted inspections,
+  corrective-action updates and their photos are then uploaded to your server when the phone is
+  online. Accounts, passwords and password hashes are never uploaded. The queue survives
+  restarts; retries never create duplicates; conflicting records are listed on the Sync screen.
+  Release builds only connect to `https://` servers.
 
 ## Install the test APK on your phone
 
@@ -148,7 +158,7 @@ After any change, run:
 
 It runs, in order:
 1. Lint and the unit tests, then builds the debug APK (`:app:assembleDebug`).
-2. Checks that the debug APK is signed and has **no internet permission**, then copies it to
+2. Checks that the debug APK is signed and asks for no unexpected permissions, then copies it to
    `deliverables/SafeStitch-debug.apk`.
 3. Checks your upload key, then builds the signed release bundle (`:app:bundleRelease`).
 4. Checks the release bundle:
@@ -156,7 +166,7 @@ It runs, in order:
    - `jarsigner -verify`;
    - the signing certificate matches your **upload certificate** (not a debug key);
    - the manifest has the right package, version and targetSdk ≥ 36, is not debuggable and
-     has no internet permission.
+     asks for no unexpected permissions, and only allows https connections.
 5. Only then copies it to `deliverables/SafeStitch-release.aab`, and writes the checksums to
    `deliverables/BUILD-INFO.txt`.
 
@@ -231,8 +241,9 @@ You need a Google Play Console developer account (play.google.com/console).
 6. **Roll out.** Click **Next › Save and publish** (or **Start rollout to Internal testing**).
    - Play Console may first ask you to finish items under **Dashboard › Set up your app**:
      privacy policy, app access, ads, content rating, target audience and **Data safety**.
-   - For Data safety: SafeStitch has no internet permission and sends no data off the phone.
-     The camera is used only to take photos stored on the device.
+   - For Data safety: with sync off (the default) nothing leaves the phone. If you turn sync on,
+     inspection data and photos are sent to *your* server over https. The camera is used only
+     for QR scanning and inspection photos.
 7. **Install as a tester.** Open the **Copy link** URL from the Testers tab on your phone,
    accept the invitation, and install from the Play Store.
 

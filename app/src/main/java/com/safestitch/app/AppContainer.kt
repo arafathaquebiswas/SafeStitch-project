@@ -25,5 +25,5 @@ class AppContainer(context: Context) {
         InspectionRepository(database, photoStorage).also { repo -> repo.onSyncableChange = { syncManager.requestSync() } }
     }
     val reportService: ReportService by lazy { ReportService(appContext, repository, photoStorage) }
-    val syncManager: SyncManager by lazy { SyncManager(appContext, repository, catalog) }
+    val syncManager: SyncManager by lazy { SyncManager(appContext, repository, catalog, photoStorage) }
 }

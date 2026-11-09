@@ -77,7 +77,7 @@ class CheckpointFormViewModel(
     var code by mutableStateOf(scannedCode.orEmpty())
     var name by mutableStateOf("")
     var spot by mutableStateOf("")
-    var type by mutableStateOf(CheckpointType.SEWING_LINE)
+    var type by mutableStateOf(CheckpointType.FIRE_EXTINGUISHER)
     var location by mutableStateOf(LocationSelection())
     var error by mutableStateOf<String?>(null)
         private set
@@ -226,7 +226,7 @@ fun CheckpointFormScreen(
             )
             Text("Type (decides the checklist)", style = MaterialTheme.typography.titleSmall)
             Column(Modifier.selectableGroup()) {
-                CheckpointType.entries.forEach { option ->
+                (CheckpointType.current + listOfNotNull(vm.type.takeIf { it.legacy })).forEach { option ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -236,7 +236,7 @@ fun CheckpointFormScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         RadioButton(selected = vm.type == option, onClick = null)
-                        Text(option.label, modifier = Modifier.padding(start = 12.dp))
+                        Text(option.label + if (option.legacy) " (earlier type)" else "", modifier = Modifier.padding(start = 12.dp))
                     }
                 }
             }

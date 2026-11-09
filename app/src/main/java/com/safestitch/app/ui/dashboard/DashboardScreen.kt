@@ -186,17 +186,29 @@ fun DashboardScreen(
                         Kpi("Drafts in progress", s.drafts.toString(), "kpi-drafts"),
                     )
                 }
+                item {
+                    KpiRow(
+                        Kpi("Inspections (all time)", s.totalInspections.toString(), "kpi-total-inspections"),
+                        Kpi("Failed · ${s.windowDays} days", s.failed.toString(), "kpi-failed"),
+                    )
+                }
                 item { SectionTitle("Corrective actions") }
                 item {
                     KpiRow(
                         Kpi("Open", s.openActions.toString(), "kpi-open-actions", onClick = onOpenActions),
-                        Kpi("Overdue", s.overdueActions.toString(), "kpi-overdue", if (s.overdueActions > 0) LocalStatusColors.current.fail else null, onOpenActions),
+                        Kpi("In progress", s.inProgressActions.toString(), "kpi-in-progress", onClick = onOpenActions),
                     )
                 }
                 item {
                     KpiRow(
+                        Kpi("Overdue", s.overdueActions.toString(), "kpi-overdue", if (s.overdueActions > 0) LocalStatusColors.current.fail else null, onOpenActions),
                         Kpi("Awaiting verification", s.awaitingVerification.toString(), "kpi-awaiting", onClick = onOpenActions),
+                    )
+                }
+                item {
+                    KpiRow(
                         Kpi("Critical / high not verified", s.openCriticalOrHigh.toString(), "kpi-critical", onClick = onOpenActions),
+                        Kpi("All corrective actions", s.totalActions.toString(), "kpi-total-actions", onClick = onOpenActions),
                     )
                 }
                 item {

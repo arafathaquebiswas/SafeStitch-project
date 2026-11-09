@@ -54,4 +54,16 @@ class QrCodecTest {
         val noise = ByteArray(width * height) { random.nextInt(256).toByte() }
         assertNull(QrCodec.decodeLuminance(noise, width, width, height))
     }
+
+    @Test
+    fun decodesFromAPictureWithColouredBackground() {
+        val payload = QrPayload.forCheckpoint("FE-0042")
+        val (gray, width, height) = render(payload, scale = 7, padding = 60)
+        // ARGB picture: QR printed on a light beige label.
+        val pixels = IntArray(width * height) { i ->
+            if (gray[i].toInt() == 0) 0xFF111111.toInt() else 0xFFF3E9D2.toInt()
+        }
+        assertEquals(payload, QrCodec.decodeArgb(pixels, width, height))
+        assertNull(QrCodec.decodeArgb(IntArray(100 * 100) { 0xFFFFFFFF.toInt() }, 100, 100))
+    }
 }

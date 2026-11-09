@@ -44,7 +44,7 @@ class ReportPdfWriter(
             val inspection = details.inspection
             val generatedAt = format(clock())
             val pager = PdfPager(document) { page ->
-                "SafeStitch $appVersion  ·  Report R${inspection.id}  ·  ${details.checkpoint.code}  ·  " +
+                "SafeStitch $appVersion  ·  Report R${inspection.id}  ·  ${details.equipmentCode}  ·  " +
                     "Generated offline $generatedAt  ·  Page $page"
             }
             pager.newPage()
@@ -77,7 +77,7 @@ class ReportPdfWriter(
         val right = PdfStyle.text(11f, Color.WHITE, bold = true).apply { textAlign = Paint.Align.RIGHT }
         c.drawText("Report R${details.inspection.id}", pager.right - 14f, top + 25f, right)
         val rightSmall = PdfStyle.text(9f, Color.WHITE).apply { textAlign = Paint.Align.RIGHT }
-        c.drawText(details.checkpoint.type.label, pager.right - 14f, top + 43f, rightSmall)
+        c.drawText(details.equipmentType.label, pager.right - 14f, top + 43f, rightSmall)
         pager.y = top + 54f + 14f
     }
 
@@ -85,8 +85,8 @@ class ReportPdfWriter(
         val inspection = details.inspection
         val checkpoint = details.checkpoint
         val rows = listOf(
-            "Checkpoint" to "${checkpoint.name} (${checkpoint.code})",
-            "Type" to checkpoint.type.label,
+            "Equipment" to "${details.equipmentName} (${details.equipmentCode})",
+            "Type" to details.equipmentType.label,
             "Location" to inspection.siteName.ifBlank { "—" },
             "Exact spot" to checkpoint.area.ifBlank { "—" },
             "Inspector" to inspection.inspectorName.ifBlank { "—" },
@@ -108,7 +108,7 @@ class ReportPdfWriter(
             y += max(layout.height.toFloat(), 12f) + 5f
         }
         val qrX = pager.right - qrSize
-        PdfStyle.drawQr(c, QrPayload.forCheckpoint(checkpoint.code), qrX, top, qrSize)
+        PdfStyle.drawQr(c, QrPayload.forCheckpoint(details.equipmentCode), qrX, top, qrSize)
         val caption = PdfStyle.text(7f, PdfStyle.MUTED).apply { textAlign = Paint.Align.CENTER }
         c.drawText("Checkpoint QR", qrX + qrSize / 2, top + qrSize + 10f, caption)
         pager.y = max(y, top + qrSize + 14f) + 8f
@@ -271,6 +271,7 @@ class ReportPdfWriter(
             val top = pager.y
             val color = when (status) {
                 ActionStatus.OPEN -> PdfStyle.FAIL
+                ActionStatus.IN_PROGRESS -> PdfStyle.BRAND
                 ActionStatus.RESOLVED -> PdfStyle.NEUTRAL
                 ActionStatus.VERIFIED -> PdfStyle.PASS
             }
@@ -279,10 +280,20 @@ class ReportPdfWriter(
             PdfStyle.drawLayout(c, title, pager.left, top + 2f)
             pager.y = top + max(title.height.toFloat(), 16f) + 4f
             val lines = buildString {
-                append("Priority ${priority?.label ?: "—"} · due ${due?.let(::formatDate) ?: "—"}")
+                val responsible = action?.responsibleName?.ifBlank { null } ?: item.responsibleName ?: details.inspection.inspectorName
+                append("Priority ${priority?.label ?: "—"} · due ${due?.let(::formatDate) ?: "—"} · responsible: $responsible")
                 append("\nFinding: ").append(action?.description ?: item.note.trim())
-                action?.resolutionNote?.let { append("\nFix: ").append(it).append(" (").append(action.resolvedByName.orEmpty()).append(")") }
-                action?.verifiedAt?.let { append("\nVerified by ").append(action.verifiedByName.orEmpty()).append(" on ").append(formatDate(it)) }
+                if (action != null) {
+                    append("\nOpened by ").append(action.createdByName.ifBlank { details.inspection.inspectorName }).append(" on ").append(format(action.createdAt))
+                    action.startedAt?.let { append("\nIn progress: ").append(action.startedByName.orEmpty()).append(" on ").append(format(it)) }
+                    action.resolvedAt?.let {
+                        append("\nResolved: ").append(action.resolvedByName.orEmpty()).append(" on ").append(format(it))
+                        action.resolutionNote?.let { note -> append(" – ").append(note) }
+                    }
+                    action.verifiedAt?.let { append("\nVerified: ").append(action.verifiedByName.orEmpty()).append(" on ").append(format(it)) }
+                    val afterFix = details.photos.count { it.actionId == action.id }
+                    if (afterFix > 0) append("\nAfter-fix photos: ").append(afterFix)
+                }
             }
             pager.flowText(lines, small, spacingAfter = 6f)
             pager.canvas.drawLine(pager.left, pager.y, pager.right, pager.y, PdfStyle.stroke(PdfStyle.RULE, 0.5f))
@@ -293,7 +304,9 @@ class ReportPdfWriter(
     private fun formatDate(millis: Long): String = dayFormat.format(Instant.ofEpochMilli(millis).atZone(zone))
 
     private fun caption(number: Int, photo: PhotoEntity, itemLabel: String?): String =
-        "Photo $number  ·  ${format(photo.takenAt)}\n${itemLabel ?: "General photo"}"
+        "Photo $number  ·  ${format(photo.takenAt)}" +
+            (if (photo.isAfterFix) "  ·  AFTER FIX (action #${photo.actionId})" else "") +
+            "\n${itemLabel ?: "General photo"}"
 
     private fun drawSignOff(pager: PdfPager, details: InspectionWithDetails) {
         pager.ensure(96f)

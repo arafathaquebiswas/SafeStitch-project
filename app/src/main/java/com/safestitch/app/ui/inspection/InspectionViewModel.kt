@@ -5,10 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.safestitch.app.data.AuthRepository
 import com.safestitch.app.data.InspectionRepository
 import com.safestitch.app.data.db.ChecklistItemEntity
 import com.safestitch.app.data.db.InspectionWithDetails
 import com.safestitch.app.data.db.PhotoEntity
+import com.safestitch.app.data.db.UserEntity
 import com.safestitch.app.domain.CompletionRules
 import com.safestitch.app.domain.FindingDefaults
 import com.safestitch.app.domain.InspectionSummary
@@ -35,6 +37,7 @@ class InspectionViewModel(
     private val inspectionId: Long,
     private val repository: InspectionRepository,
     private val reportService: ReportService,
+    auth: AuthRepository,
 ) : ViewModel() {
     sealed interface Event {
         data object Completed : Event
@@ -49,11 +52,15 @@ class InspectionViewModel(
                     details = it,
                     sections = it.sortedItems.groupBy { item -> item.section }.toList(),
                     summary = it.summary(),
-                    photosByItem = it.sortedPhotos.groupBy { photo -> photo.itemId },
+                    photosByItem = it.sortedPhotos.filterNot { p -> p.isAfterFix }.groupBy { photo -> photo.itemId },
                 )
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    /** People who can be made responsible for fixing a finding. */
+    val people: StateFlow<List<UserEntity>> = auth.observeUsers().map { list -> list.filter { it.active } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     private val channel = Channel<Event>(Channel.BUFFERED)
     val events = channel.receiveAsFlow()
@@ -86,6 +93,7 @@ class InspectionViewModel(
 
     fun setResult(item: ChecklistItemEntity, result: ItemResult) = enqueue { repository.setItemResult(item, result) }
     fun setNote(itemId: Long, note: String) = enqueue { repository.setItemNote(itemId, note) }
+    fun setResponsible(itemId: Long, person: UserEntity) = enqueue { repository.setResponsible(itemId, person.displayName, person.id) }
 
     /** Changing the priority resets the due date to that priority's default (pick another date afterwards if needed). */
     fun setPriority(itemId: Long, priority: Priority) = enqueue {
@@ -102,13 +110,20 @@ class InspectionViewModel(
         completionProblems = emptyList()
     }
 
-    /** Validates, writes the PDF, then submits (creating one corrective action per failed item). */
+    /**
+     * Validates, writes the PDF, then submits (creating one corrective action per failed item).
+     * Pressing Submit again, or retrying after a crash, never creates a second inspection or action.
+     */
     fun complete() {
         if (completing) return
         completing = true
         enqueue {
             try {
                 val details = repository.getInspection(inspectionId) ?: return@enqueue
+                if (details.isCompleted) {
+                    channel.send(Event.Completed)
+                    return@enqueue
+                }
                 val problems = CompletionRules.problems(details.items.map { it.toOutcome() }, details.inspection.inspectorName)
                 if (problems.isNotEmpty()) {
                     completionProblems = problems
@@ -116,7 +131,11 @@ class InspectionViewModel(
                 }
                 val completedAt = System.currentTimeMillis()
                 val file = reportService.generateReport(inspectionId, completedAt)
-                repository.submitInspection(inspectionId, completedAt, file.name)
+                val result = repository.submitInspection(inspectionId, completedAt, file.name)
+                if (result.alreadySubmitted) {
+                    val stored = repository.getInspection(inspectionId)?.inspection?.reportFileName
+                    if (stored != file.name) reportService.deleteReport(file.name)
+                }
                 channel.send(Event.Completed)
             } catch (e: CancellationException) {
                 throw e

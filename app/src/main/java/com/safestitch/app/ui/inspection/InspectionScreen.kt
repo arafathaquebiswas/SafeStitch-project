@@ -67,6 +67,8 @@ import com.safestitch.app.ui.components.BackButton
 import com.safestitch.app.ui.components.DueDateButton
 import com.safestitch.app.ui.components.PhotoThumbnail
 import com.safestitch.app.ui.components.PrioritySelector
+import com.safestitch.app.ui.components.SelectField
+import com.safestitch.app.ui.components.SelectOption
 import com.safestitch.app.ui.components.StatusChip
 import com.safestitch.app.ui.components.formatDateTime
 import com.safestitch.app.ui.components.resultColor
@@ -84,7 +86,7 @@ fun InspectionScreen(
     onCompleted: () -> Unit,
     onDeleted: () -> Unit,
 ) {
-    val vm = viewModel { InspectionViewModel(inspectionId, container.repository, container.reportService) }
+    val vm = viewModel { InspectionViewModel(inspectionId, container.repository, container.reportService, container.auth) }
     val state by vm.state.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     var confirmDelete by remember { mutableStateOf(false) }
@@ -106,7 +108,7 @@ fun InspectionScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text(current?.details?.checkpoint?.name ?: "Inspection", maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(current?.details?.equipmentName ?: "Inspection", maxLines = 1, overflow = TextOverflow.Ellipsis)
                         current?.details?.checkpoint?.let {
                             Text("${it.code}  ·  ${it.type.label}", style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
@@ -277,6 +279,14 @@ private fun ChecklistItemCard(
                 )
             }
             if (failed) {
+                val people by vm.people.collectAsStateWithLifecycle()
+                SelectField(
+                    label = "Responsible for the fix",
+                    selectedLabel = item.responsibleName ?: "—",
+                    options = people.map { SelectOption(it, "${it.displayName} (${it.role.label})") },
+                    onSelect = { vm.setResponsible(item.id, it) },
+                    testTag = "$tag-responsible",
+                )
                 Text("Finding priority", style = MaterialTheme.typography.labelLarge)
                 PrioritySelector(selected = item.priority, onSelect = { vm.setPriority(item.id, it) }, tagPrefix = "$tag-priority")
                 DueDateButton(dueAt = item.dueAt, onPick = { vm.setDueDate(item, it) }, testTag = "$tag-due")

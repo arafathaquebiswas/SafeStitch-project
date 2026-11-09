@@ -266,11 +266,14 @@ fun SyncScreen(container: AppContainer, onBack: () -> Unit) {
     val config by sync.config.collectAsStateWithLifecycle()
     val status by sync.status.collectAsStateWithLifecycle()
     val pending by remember { sync.pendingCount }.collectAsStateWithLifecycle(0)
+    val pendingPhotos by remember { sync.pendingPhotoCount }.collectAsStateWithLifecycle(0)
+    val conflicts by remember { sync.conflicts }.collectAsStateWithLifecycle(emptyList())
     val phase by remember { sync.phase }.collectAsStateWithLifecycle(SyncPhase.OFF)
     var enabled by rememberSaveable { mutableStateOf(config.enabled) }
     var url by rememberSaveable { mutableStateOf(config.serverUrl) }
     var apiKey by rememberSaveable { mutableStateOf(config.apiKey) }
     var error by remember { mutableStateOf<String?>(null) }
+    var confirmResend by remember { mutableStateOf(false) }
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -281,13 +284,14 @@ fun SyncScreen(container: AppContainer, onBack: () -> Unit) {
         snackbarHost = { SnackbarHost(snackbar) },
     ) { padding ->
         Column(
-            Modifier.padding(padding).fillMaxSize().imePadding().verticalScroll(rememberScrollState()).padding(16.dp),
+            Modifier.padding(padding).fillMaxSize().imePadding().verticalScroll(rememberScrollState()).padding(16.dp).testTag("sync-screen"),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
-                "SafeStitch always works offline. Turn on sync to also upload submitted inspections and corrective-action " +
-                    "updates to your company server. While the phone is offline, changes wait in a queue and are sent " +
-                    "automatically when a connection returns. Passwords, photos and PDFs are never uploaded.",
+                "Off by default. SafeStitch always works offline. When sync is on, submitted inspections, corrective-action " +
+                    "changes and their photos are uploaded to your server. While the phone is offline they wait in a queue " +
+                    "that survives restarts, and they are sent automatically when a connection returns. Account names, " +
+                    "passwords and password hashes are never uploaded.",
                 style = MaterialTheme.typography.bodyMedium,
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -312,13 +316,15 @@ fun SyncScreen(container: AppContainer, onBack: () -> Unit) {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false),
                 modifier = Modifier.fillMaxWidth().testTag("sync-key"),
             )
-            if (BuildConfig.DEBUG) {
-                Text(
-                    "Test build: http://10.0.2.2 (emulator → Mac) and http://localhost are allowed for testing. Release builds require https.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            Text(
+                if (BuildConfig.DEBUG) {
+                    "Test build: http://10.0.2.2 (emulator → this computer) and http://localhost are allowed for testing. Release builds require https."
+                } else {
+                    "Only secure https:// addresses are allowed."
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             error?.let { Text(it, color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("sync-error")) }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(
@@ -328,18 +334,61 @@ fun SyncScreen(container: AppContainer, onBack: () -> Unit) {
                     },
                     modifier = Modifier.testTag("sync-save"),
                 ) { Text("Save") }
-                OutlinedButton(onClick = { sync.requestSync() }, enabled = config.enabled, modifier = Modifier.testTag("sync-now")) { Text("Sync now") }
+                OutlinedButton(onClick = { sync.syncNow() }, enabled = config.enabled, modifier = Modifier.testTag("sync-now")) { Text("Sync now") }
             }
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
                 Column(Modifier.padding(16.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text("Status: ${phase.label}", style = MaterialTheme.typography.titleSmall, modifier = Modifier.testTag("sync-phase"))
-                    Text("Waiting to upload: $pending", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("sync-pending"))
+                    Text("Waiting to upload: $pending record(s), $pendingPhotos photo(s)", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("sync-pending"))
                     status.lastSuccessAt?.let { Text("Last successful sync: ${formatDateTime(it)}", style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("sync-last-success")) }
                     status.lastSummary?.let { Text(it, style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("sync-summary")) }
                     status.lastError?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error, modifier = Modifier.testTag("sync-last-error")) }
                     Text("Device ID: ${sync.deviceId.take(8)}…", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
+            Text(
+                "Conflicts: ${conflicts.size}",
+                style = MaterialTheme.typography.titleMedium,
+                color = if (conflicts.isEmpty()) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.error,
+                modifier = Modifier.testTag("sync-conflicts"),
+            )
+            if (conflicts.isEmpty()) {
+                Text("None. The server and this phone agree.", style = MaterialTheme.typography.bodySmall)
+            }
+            conflicts.forEach { conflict ->
+                Card(Modifier.fillMaxWidth().testTag("conflict-${conflict.kind.name}-${conflict.localId}")) {
+                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text(conflict.label, style = MaterialTheme.typography.titleSmall)
+                        Text(conflict.message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            TextButton(onClick = { scope.launch { container.repository.resolveConflict(conflict, sendMine = false) } }) { Text("Keep server copy") }
+                            TextButton(onClick = { scope.launch { container.repository.resolveConflict(conflict, sendMine = true) } }) { Text("Send mine again") }
+                        }
+                    }
+                }
+            }
+            TextButton(onClick = { confirmResend = true }, enabled = config.enabled, modifier = Modifier.testTag("sync-resend-all")) {
+                Text("Re-upload everything")
+            }
         }
+    }
+
+    if (confirmResend) {
+        AlertDialog(
+            onDismissRequest = { confirmResend = false },
+            title = { Text("Re-upload everything?") },
+            text = { Text("All submitted inspections, corrective actions and photos are sent again. The server recognises copies it already has, so nothing is duplicated.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmResend = false
+                    scope.launch {
+                        container.repository.resetSyncState()
+                        sync.syncNow()
+                        snackbar.showSnackbar("Re-upload queued.")
+                    }
+                }) { Text("Re-upload") }
+            },
+            dismissButton = { TextButton(onClick = { confirmResend = false }) { Text("Cancel") } },
+        )
     }
 }

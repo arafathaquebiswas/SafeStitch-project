@@ -33,11 +33,14 @@ data class DashboardStats(
     val passRatePercent: Int?,
     val averageScorePercent: Int?,
     val drafts: Int,
+    val totalInspections: Int,
     val openActions: Int,
+    val inProgressActions: Int,
     val overdueActions: Int,
     val awaitingVerification: Int,
     val openCriticalOrHigh: Int,
     val verifiedInWindow: Int,
+    val totalActions: Int,
     /** Share of actions verified in the window that had been resolved by their due date. */
     val onTimeClosurePercent: Int?,
     /** Completed inspections in the window per location, worst pass rate first. */
@@ -48,10 +51,11 @@ internal fun percent(part: Int, whole: Int): Int? = if (whole <= 0) null else (p
 
 /**
  * Dashboard rules (unit-tested):
- *  - The window covers inspections COMPLETED in the last [windowDays] days (drafts are counted separately).
- *  - Pass rate = passed / completed in the window; average score = mean of their scores.
- *  - Open = status OPEN; overdue = OPEN and past due; awaiting verification = RESOLVED.
- *  - Critical/high open = OPEN or RESOLVED with priority CRITICAL or HIGH (not yet verified).
+ *  - The window covers inspections SUBMITTED in the last [windowDays] days (drafts are counted separately).
+ *  - Pass rate = passed / submitted in the window; average score = mean of their scores.
+ *  - Open = OPEN; in progress = IN_PROGRESS; overdue = OPEN or IN_PROGRESS past the due date;
+ *    awaiting verification = RESOLVED.
+ *  - Critical/high not verified = any status except VERIFIED with priority CRITICAL or HIGH.
  *  - On-time closure = of actions verified in the window, the share resolved on or before the due date.
  */
 object DashboardCalculator {
@@ -75,13 +79,16 @@ object DashboardCalculator {
             passRatePercent = percent(passed, completed.size),
             averageScorePercent = if (completed.isEmpty()) null else completed.map { it.scorePercent }.average().roundToInt(),
             drafts = inspections.count { it.completedAt == null },
+            totalInspections = inspections.size,
             openActions = actions.count { it.status == ActionStatus.OPEN },
+            inProgressActions = actions.count { it.status == ActionStatus.IN_PROGRESS },
             overdueActions = actions.count { FindingDefaults.isOverdue(it.status, it.dueAt, now) },
             awaitingVerification = actions.count { it.status == ActionStatus.RESOLVED },
             openCriticalOrHigh = actions.count {
                 it.status != ActionStatus.VERIFIED && (it.priority == Priority.CRITICAL || it.priority == Priority.HIGH)
             },
             verifiedInWindow = verifiedInWindow.size,
+            totalActions = actions.size,
             onTimeClosurePercent = percent(onTime, verifiedInWindow.size),
             byLocation = completed
                 .groupBy { it.locationGroup.ifBlank { "No location set" } }

@@ -151,6 +151,7 @@ fun SafeStitchNavHost(container: AppContainer, user: UserEntity, modifier: Modif
                     container = container,
                     inspectionId = route.inspectionId,
                     itemId = route.itemId.takeIf { it > 0 },
+                    actionId = route.actionId.takeIf { it > 0 },
                     onDone = { nav.popBackStack() },
                 )
             }
@@ -174,6 +175,7 @@ fun SafeStitchNavHost(container: AppContainer, user: UserEntity, modifier: Modif
                     actionId = entry.toRoute<ActionDetailRoute>().actionId,
                     onBack = { nav.popBackStack() },
                     onOpenInspection = { nav.navigate(ReportRoute(it)) },
+                    onAddAfterFixPhoto = { inspectionId, actionId -> nav.navigate(PhotoCaptureRoute(inspectionId, actionId = actionId)) },
                 )
             }
             composable<SettingsRoute> {

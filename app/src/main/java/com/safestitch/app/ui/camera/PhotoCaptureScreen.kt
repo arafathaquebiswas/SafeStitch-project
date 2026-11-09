@@ -3,6 +3,7 @@ package com.safestitch.app.ui.camera
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -42,24 +43,32 @@ import com.safestitch.app.data.InspectionRepository
 import com.safestitch.app.data.PhotoStorage
 import com.safestitch.app.ui.components.BackButton
 import com.safestitch.app.ui.components.CameraPermissionGate
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.io.File
 
+/** Takes one photo: inspection evidence (for an item or general), or an after-fix photo for a corrective action. */
 class PhotoCaptureViewModel(
     private val inspectionId: Long,
     private val itemId: Long?,
+    private val actionId: Long?,
     private val repository: InspectionRepository,
     val photoStorage: PhotoStorage,
 ) : ViewModel() {
-    var subtitle by mutableStateOf("General photo")
+    sealed interface Event {
+        data object Done : Event
+        data class Error(val message: String) : Event
+    }
+
+    var subtitle by mutableStateOf(if (actionId != null) "After-fix photo · action #$actionId" else "General photo")
         private set
-    private val done = Channel<Unit>(Channel.BUFFERED)
-    val doneEvents = done.receiveAsFlow()
+    private val channel = Channel<Event>(Channel.BUFFERED)
+    val events = channel.receiveAsFlow()
 
     init {
-        if (itemId != null) {
+        if (actionId == null && itemId != null) {
             viewModelScope.launch {
                 repository.getInspection(inspectionId)?.items?.firstOrNull { it.id == itemId }?.let {
                     subtitle = "Item ${it.position + 1}: ${it.question}"
@@ -70,36 +79,50 @@ class PhotoCaptureViewModel(
 
     fun onSaved(file: File) {
         viewModelScope.launch {
-            repository.addPhoto(inspectionId, itemId, file.name)
-            done.send(Unit)
+            try {
+                if (actionId != null) repository.addAfterFixPhoto(actionId, file.name) else repository.addPhoto(inspectionId, itemId, file.name)
+                channel.send(Event.Done)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                file.delete()
+                channel.send(Event.Error(e.message ?: "Could not save the photo."))
+            }
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PhotoCaptureScreen(container: AppContainer, inspectionId: Long, itemId: Long?, onDone: () -> Unit) {
-    val vm = viewModel { PhotoCaptureViewModel(inspectionId, itemId, container.repository, container.photoStorage) }
+fun PhotoCaptureScreen(container: AppContainer, inspectionId: Long, itemId: Long?, actionId: Long?, onDone: () -> Unit) {
+    val vm = viewModel { PhotoCaptureViewModel(inspectionId, itemId, actionId, container.repository, container.photoStorage) }
     val context = LocalContext.current
     val view = LocalView.current
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
     var capturing by remember { mutableStateOf(false) }
     val imageCapture = remember {
-        ImageCapture.Builder()
-            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-            .setJpegQuality(85)
-            .build()
+        ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY).setJpegQuality(85).build()
     }
     val useCases = remember { listOf(imageCapture) }
 
-    LaunchedEffect(vm) { vm.doneEvents.collect { onDone() } }
+    LaunchedEffect(vm) {
+        vm.events.collect {
+            when (it) {
+                PhotoCaptureViewModel.Event.Done -> onDone()
+                is PhotoCaptureViewModel.Event.Error -> {
+                    capturing = false
+                    snackbar.showSnackbar(it.message)
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    androidx.compose.foundation.layout.Column {
+                    Column {
                         Text("Take photo")
                         Text(vm.subtitle, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
@@ -110,7 +133,7 @@ fun PhotoCaptureScreen(container: AppContainer, inspectionId: Long, itemId: Long
         snackbarHost = { SnackbarHost(snackbar) },
     ) { padding ->
         CameraPermissionGate(
-            explanation = "SafeStitch needs the camera to attach photos of problems to the inspection report.",
+            explanation = "SafeStitch needs the camera to attach photos to inspections and corrective actions.",
             modifier = Modifier.padding(padding).fillMaxSize(),
         ) {
             Box(Modifier.padding(padding).fillMaxSize()) {
@@ -129,9 +152,7 @@ fun PhotoCaptureScreen(container: AppContainer, inspectionId: Long, itemId: Long
                             ImageCapture.OutputFileOptions.Builder(file).build(),
                             ContextCompat.getMainExecutor(context),
                             object : ImageCapture.OnImageSavedCallback {
-                                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                                    vm.onSaved(file)
-                                }
+                                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) = vm.onSaved(file)
 
                                 override fun onError(exception: ImageCaptureException) {
                                     capturing = false
@@ -141,11 +162,7 @@ fun PhotoCaptureScreen(container: AppContainer, inspectionId: Long, itemId: Long
                             },
                         )
                     },
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .navigationBarsPadding()
-                        .padding(bottom = 32.dp)
-                        .testTag("shutter"),
+                    modifier = Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(bottom = 32.dp).testTag("shutter"),
                 ) {
                     if (capturing) {
                         CircularProgressIndicator(modifier = Modifier.size(28.dp), strokeWidth = 3.dp)

@@ -57,7 +57,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ChecklistEditorScreen(container: AppContainer, onBack: () -> Unit) {
-    var type by rememberSaveable { mutableStateOf(CheckpointType.SEWING_LINE) }
+    var type by rememberSaveable { mutableStateOf(CheckpointType.FIRE_EXTINGUISHER) }
     val questions by remember(type) { container.catalog.observeQuestions(type) }.collectAsStateWithLifecycle(emptyList())
     val scope = rememberCoroutineScope()
     var editing by remember { mutableStateOf<TemplateQuestionEntity?>(null) }
@@ -82,7 +82,7 @@ fun ChecklistEditorScreen(container: AppContainer, onBack: () -> Unit) {
             item {
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(CheckpointType.entries) { t ->
-                        FilterChip(selected = t == type, onClick = { type = t }, label = { Text(t.label) }, modifier = Modifier.testTag("type-${t.name}"))
+                        FilterChip(selected = t == type, onClick = { type = t }, label = { Text(t.label + if (t.legacy) " (earlier)" else "") }, modifier = Modifier.testTag("type-${t.name}"))
                     }
                 }
             }

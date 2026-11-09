@@ -15,8 +15,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable data class InspectionRoute(val inspectionId: Long)
 
-/** [itemId] <= 0 means a general photo that is not tied to one checklist item. */
-@Serializable data class PhotoCaptureRoute(val inspectionId: Long, val itemId: Long = -1L)
+/** [itemId] <= 0 means a general photo; [actionId] > 0 means an after-fix photo for that corrective action. */
+@Serializable data class PhotoCaptureRoute(val inspectionId: Long, val itemId: Long = -1L, val actionId: Long = -1L)
 
 @Serializable data class ReportRoute(val inspectionId: Long)
 @Serializable data class PdfViewerRoute(val inspectionId: Long)

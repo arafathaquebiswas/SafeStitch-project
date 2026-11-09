@@ -18,7 +18,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import android.graphics.BitmapFactory
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
+import com.safestitch.app.qr.QrCodec
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -112,6 +120,28 @@ class ScanViewModel(
             }
         }
     }
+
+    /** Reads a QR code from a picture chosen with the system photo picker (works offline). */
+    fun onImage(context: android.content.Context, uri: android.net.Uri) {
+        if (busy) return
+        viewModelScope.launch {
+            val text = withContext(Dispatchers.Default) {
+                runCatching {
+                    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                    context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
+                    var sample = 1
+                    while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= 1600) sample *= 2
+                    val bitmap = context.contentResolver.openInputStream(uri)?.use {
+                        BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = sample })
+                    } ?: return@runCatching null
+                    val pixels = IntArray(bitmap.width * bitmap.height)
+                    bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+                    QrCodec.decodeArgb(pixels, bitmap.width, bitmap.height).also { bitmap.recycle() }
+                }.getOrNull()
+            }
+            if (text == null) channel.send(Event.Invalid("No QR code was found in that picture.")) else onCode(text)
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -130,6 +160,9 @@ fun ScanScreen(
     var manualCode by rememberSaveable { mutableStateOf("") }
     var camera by remember { mutableStateOf<Camera?>(null) }
     var torchOn by remember { mutableStateOf(false) }
+    val pickImage = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) vm.onImage(context, uri)
+    }
 
     val analysisExecutor = remember { Executors.newSingleThreadExecutor() }
     val mainExecutor = remember { ContextCompat.getMainExecutor(context) }
@@ -225,9 +258,14 @@ fun ScanScreen(
                 }
             }
             Text(
-                "Point the camera at the checkpoint's QR label. It opens the checklist automatically.",
+                "Point the camera at the equipment's QR label. It opens the checklist automatically.",
                 style = MaterialTheme.typography.bodyMedium,
             )
+            OutlinedButton(
+                onClick = { pickImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                enabled = !vm.busy,
+                modifier = Modifier.fillMaxWidth().testTag("scan-image"),
+            ) { Text("Scan a QR code from a picture") }
             OutlinedTextField(
                 value = manualCode,
                 onValueChange = { manualCode = it.take(QrPayload.MAX_CODE_LENGTH) },

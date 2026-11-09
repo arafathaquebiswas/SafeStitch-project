@@ -7,16 +7,72 @@ data class ChecklistTemplateItem(
 )
 
 /**
- * Built-in garment-factory checklists. Items are copied into each new inspection, so
- * editing these later never changes inspections that were already recorded.
+ * Built-in starting checklists. They are copied into the editable template_questions table when the
+ * database is created; admins then edit them in the app. Items are copied into each new inspection,
+ * so later edits never change inspections that were already recorded.
  */
 object ChecklistTemplates {
+    const val EXTINGUISHER = "Fire extinguisher"
+    const val ELECTRICAL = "Electrical safety"
+    const val ALARM = "Fire alarm"
+    const val EXIT = "Emergency exit"
+    const val BOILER = "Boiler safety"
+
+    // Legacy sections (equipment created before the five current types)
     const val WORKPLACE = "Workplace safety"
     const val MACHINE = "Machine safety"
     const val STITCH = "Stitch quality"
     const val FIRE = "Fire protection"
-    const val ELECTRICAL = "Electrical safety"
     const val HOUSEKEEPING = "Housekeeping & storage"
+
+    private val fireExtinguisher = listOf(
+        ChecklistTemplateItem(EXTINGUISHER, "Extinguisher is in its marked place and mounted at the right height"),
+        ChecklistTemplateItem(EXTINGUISHER, "Pressure gauge reads in the green (charged) zone", critical = true),
+        ChecklistTemplateItem(EXTINGUISHER, "Safety pin and tamper seal are intact", critical = true),
+        ChecklistTemplateItem(EXTINGUISHER, "Service tag shows a check within the last 12 months", critical = true),
+        ChecklistTemplateItem(EXTINGUISHER, "Hose and nozzle are undamaged and unblocked"),
+        ChecklistTemplateItem(EXTINGUISHER, "Correct type for the risk (e.g. CO2 near electrical panels)"),
+        ChecklistTemplateItem(EXTINGUISHER, "Access is clear and the location sign is visible"),
+    )
+
+    private val electrical = listOf(
+        ChecklistTemplateItem(ELECTRICAL, "Panel door is closed, labelled and free of obstruction"),
+        ChecklistTemplateItem(ELECTRICAL, "No exposed live parts or damaged insulation", critical = true),
+        ChecklistTemplateItem(ELECTRICAL, "Circuit breakers are labelled"),
+        ChecklistTemplateItem(ELECTRICAL, "No signs of overheating, burning or sparking", critical = true),
+        ChecklistTemplateItem(ELECTRICAL, "Insulating rubber mat is in front of the panel"),
+        ChecklistTemplateItem(ELECTRICAL, "No daisy-chained extension cords or overloaded sockets"),
+    )
+
+    private val fireAlarm = listOf(
+        ChecklistTemplateItem(ALARM, "Control panel shows normal status with no faults", critical = true),
+        ChecklistTemplateItem(ALARM, "Manual call point is accessible, unobstructed and undamaged", critical = true),
+        ChecklistTemplateItem(ALARM, "Sounders are audible in the area (last weekly test recorded)", critical = true),
+        ChecklistTemplateItem(ALARM, "Smoke/heat detectors are clean, uncovered and undamaged"),
+        ChecklistTemplateItem(ALARM, "Weekly test log is up to date"),
+        ChecklistTemplateItem(ALARM, "Backup battery / power indicator is normal"),
+    )
+
+    private val emergencyExit = listOf(
+        ChecklistTemplateItem(EXIT, "Exit door opens outward easily and is not locked during working hours", critical = true),
+        ChecklistTemplateItem(EXIT, "Exit route is clear of materials and obstructions", critical = true),
+        ChecklistTemplateItem(EXIT, "Exit sign is lit and visible", critical = true),
+        ChecklistTemplateItem(EXIT, "Emergency lighting works along the route"),
+        ChecklistTemplateItem(EXIT, "Stairs and handrails are in good condition"),
+        ChecklistTemplateItem(EXIT, "Assembly point direction signs are posted"),
+    )
+
+    private val boiler = listOf(
+        ChecklistTemplateItem(BOILER, "Boiler is run only by a certified operator who is present", critical = true),
+        ChecklistTemplateItem(BOILER, "Safety valve is tested and not tampered with", critical = true),
+        ChecklistTemplateItem(BOILER, "Pressure and water-level gauges are readable and within limits", critical = true),
+        ChecklistTemplateItem(BOILER, "Valid boiler inspection certificate is displayed"),
+        ChecklistTemplateItem(BOILER, "No steam, water or fuel leaks"),
+        ChecklistTemplateItem(BOILER, "Boiler room is ventilated and clear of combustible materials"),
+        ChecklistTemplateItem(BOILER, "Daily operation log is up to date"),
+    )
+
+    // --- legacy checklists (unchanged from database version 1) ---------------------------------
 
     private val workplace = listOf(
         ChecklistTemplateItem(WORKPLACE, "Emergency exit route is clear and unobstructed", critical = true),
@@ -34,11 +90,7 @@ object ChecklistTemplates {
         ChecklistTemplateItem(STITCH, "Seams are free of skipped, broken or loose stitches"),
         ChecklistTemplateItem(STITCH, "Thread tension is balanced (no puckering or looping)"),
         ChecklistTemplateItem(STITCH, "No needle holes or fabric damage along the seams"),
-        ChecklistTemplateItem(
-            STITCH,
-            "Broken-needle log is up to date and all fragments are accounted for",
-            critical = true,
-        ),
+        ChecklistTemplateItem(STITCH, "Broken-needle log is up to date and all fragments are accounted for", critical = true),
     )
 
     private val fireSafety = listOf(
@@ -50,15 +102,6 @@ object ChecklistTemplates {
         ChecklistTemplateItem(FIRE, "Evacuation plan is posted and up to date"),
     )
 
-    private val electrical = listOf(
-        ChecklistTemplateItem(ELECTRICAL, "Panel door is closed, labelled and free of obstruction"),
-        ChecklistTemplateItem(ELECTRICAL, "No exposed live parts or damaged insulation", critical = true),
-        ChecklistTemplateItem(ELECTRICAL, "Circuit breakers are labelled"),
-        ChecklistTemplateItem(ELECTRICAL, "No signs of overheating, burning or sparking", critical = true),
-        ChecklistTemplateItem(ELECTRICAL, "Insulating rubber mat is in front of the panel"),
-        ChecklistTemplateItem(ELECTRICAL, "No daisy-chained extension cords or overloaded sockets"),
-    )
-
     private val housekeeping = listOf(
         ChecklistTemplateItem(HOUSEKEEPING, "Materials are stacked safely and below sprinkler clearance"),
         ChecklistTemplateItem(HOUSEKEEPING, "Chemicals are labelled and stored in a ventilated area", critical = true),
@@ -67,9 +110,13 @@ object ChecklistTemplates {
     )
 
     fun forType(type: CheckpointType): List<ChecklistTemplateItem> = when (type) {
-        CheckpointType.SEWING_LINE -> sewingLine
-        CheckpointType.FIRE_SAFETY -> fireSafety
+        CheckpointType.FIRE_EXTINGUISHER -> fireExtinguisher
         CheckpointType.ELECTRICAL -> electrical
-        CheckpointType.GENERAL_AREA -> housekeeping
-    } + workplace
+        CheckpointType.FIRE_ALARM -> fireAlarm
+        CheckpointType.EMERGENCY_EXIT -> emergencyExit
+        CheckpointType.BOILER -> boiler
+        CheckpointType.SEWING_LINE -> sewingLine + workplace
+        CheckpointType.FIRE_SAFETY -> fireSafety + workplace
+        CheckpointType.GENERAL_AREA -> housekeeping + workplace
+    }
 }

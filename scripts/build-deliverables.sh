@@ -99,11 +99,13 @@ SRC_APK="app/build/outputs/apk/debug/app-debug.apk"
 APK_BADGING="$("$AAPT2" dump badging "$SRC_APK")" || fail "aapt2 could not read the debug APK."
 grep -qF "package: name='$APP_ID.debug'" <<<"$APK_BADGING" || fail "The debug APK has an unexpected package name."
 APK_PERMISSIONS="$("$AAPT2" dump permissions "$SRC_APK")" || fail "aapt2 could not read the debug APK permissions."
-if grep -qF "android.permission.INTERNET" <<<"$APK_PERMISSIONS"; then
-  fail "The debug APK requests the INTERNET permission, but SafeStitch must stay offline."
+# Allowed: camera, plus network access used ONLY by the optional sync (off by default).
+SENSITIVE_RE='permission\.(ACCESS_(FINE|COARSE|BACKGROUND)_LOCATION|RECORD_AUDIO|READ_CONTACTS|READ_(EXTERNAL_STORAGE|MEDIA_[A-Z_]+)|WRITE_EXTERNAL_STORAGE|READ_PHONE_STATE|READ_SMS|SEND_SMS|CALL_PHONE|BODY_SENSORS|MANAGE_EXTERNAL_STORAGE|QUERY_ALL_PACKAGES|SYSTEM_ALERT_WINDOW)'
+if grep -Eq "$SENSITIVE_RE" <<<"$APK_PERMISSIONS"; then
+  fail "The debug APK requests an unexpected sensitive permission: $(grep -Eo "$SENSITIVE_RE" <<<"$APK_PERMISSIONS" | head -1)"
 fi
 cp "$SRC_APK" "$DEBUG_APK"
-ok "deliverables/SafeStitch-debug.apk ($(du -h "$DEBUG_APK" | cut -f1 | tr -d ' '), app ID $APP_ID.debug, no INTERNET permission)"
+ok "deliverables/SafeStitch-debug.apk ($(du -h "$DEBUG_APK" | cut -f1 | tr -d ' '), app ID $APP_ID.debug, no unexpected permissions)"
 
 # --- 2. Upload key ----------------------------------------------------------------------
 step "Checking the upload key"
@@ -167,10 +169,26 @@ M_DEBUGGABLE="$(manifest /manifest/application/@android:debuggable)"
 [[ "$M_DEBUGGABLE" != "true" ]] || fail "The release bundle is marked debuggable."
 (( M_TARGET >= 36 )) || fail "targetSdkVersion is $M_TARGET; Google Play requires 36 or higher."
 AAB_MANIFEST="$("${BUNDLETOOL[@]}" dump manifest --bundle="$SRC_AAB")" || fail "bundletool could not read the bundle manifest."
-if grep -qF "android.permission.INTERNET" <<<"$AAB_MANIFEST"; then
-  fail "The release bundle requests the INTERNET permission, but SafeStitch must stay offline."
+if grep -Eq "$SENSITIVE_RE" <<<"$AAB_MANIFEST"; then
+  fail "The release bundle requests an unexpected sensitive permission."
 fi
-ok "Manifest: $M_PACKAGE, versionName $M_NAME, versionCode $M_CODE, minSdk $M_MIN, targetSdk $M_TARGET, not debuggable, no INTERNET"
+if grep -q 'usesCleartextTraffic.*true' <<<"$AAB_MANIFEST"; then
+  fail "The release bundle allows unencrypted (http) traffic."
+fi
+# The release network security config must forbid plain http everywhere (debug builds allow 10.0.2.2/localhost for testing).
+UNIVERSAL_DIR="$(mktemp -d)"
+"${BUNDLETOOL[@]}" build-apks --bundle="$SRC_AAB" --output="$UNIVERSAL_DIR/u.apks" --mode=universal \
+  --ks="$HOME/.android/debug.keystore" --ks-pass=pass:android --ks-key-alias=androiddebugkey --key-pass=pass:android >/dev/null \
+  || fail "bundletool could not build a universal APK to inspect."
+unzip -q -o "$UNIVERSAL_DIR/u.apks" universal.apk -d "$UNIVERSAL_DIR"
+NSC_PATH="$("$AAPT2" dump resources "$UNIVERSAL_DIR/universal.apk" | grep -A2 'xml/network_security_config' | grep -Eo 'res/[^ ]+\.xml' | head -1)"
+[[ -n "$NSC_PATH" ]] || fail "network_security_config not found in the release build."
+NSC="$("$AAPT2" dump xmltree --file "$NSC_PATH" "$UNIVERSAL_DIR/universal.apk")"
+if ! grep -q 'cleartextTrafficPermitted.*=false' <<<"$NSC" || grep -q 'domain-config' <<<"$NSC"; then
+  fail "The release build's network security config allows plain http."
+fi
+rm -rf "$UNIVERSAL_DIR"
+ok "Manifest: $M_PACKAGE, versionName $M_NAME, versionCode $M_CODE, minSdk $M_MIN, targetSdk $M_TARGET, not debuggable, https-only network config, no unexpected permissions"
 
 cp "$SRC_AAB" "$RELEASE_AAB"
 cmp -s "$SRC_AAB" "$RELEASE_AAB" || fail "Copying the bundle to $RELEASE_AAB failed."
@@ -188,7 +206,7 @@ Release signed by upload certificate SHA-256:
   $ACTUAL_SHA256
 Checks passed: lintDebug, testDebugUnitTest, assembleDebug, apksigner verify (APK),
 bundleRelease (incl. lintVitalRelease + R8), bundletool validate, jarsigner verify,
-upload-certificate match, manifest (package/version/targetSdk/not debuggable/no INTERNET).
+upload-certificate match, manifest (package/version/targetSdk/not debuggable/permissions), release network config https-only.
 EOF
 
 # --- 4. Optional on-device test ---------------------------------------------------------

@@ -145,6 +145,9 @@ interface InspectionDao {
 
     @Insert suspend fun insertItems(items: List<ChecklistItemEntity>)
 
+    @Query("SELECT * FROM checklist_items WHERE id = :itemId")
+    suspend fun getItem(itemId: Long): ChecklistItemEntity?
+
     @Query("UPDATE checklist_items SET result = :result WHERE id = :itemId")
     suspend fun setItemResult(itemId: Long, result: ItemResult)
 
@@ -153,6 +156,9 @@ interface InspectionDao {
 
     @Query("UPDATE checklist_items SET priority = :priority, dueAt = :dueAt WHERE id = :itemId")
     suspend fun setFinding(itemId: Long, priority: Priority?, dueAt: Long?)
+
+    @Query("UPDATE checklist_items SET responsibleName = :name, responsibleUserId = :userId WHERE id = :itemId")
+    suspend fun setResponsible(itemId: Long, name: String, userId: Long?)
 
     @Query("UPDATE inspections SET generalNotes = :notes WHERE id = :id")
     suspend fun setGeneralNotes(id: Long, notes: String)
@@ -169,6 +175,11 @@ interface InspectionDao {
     @Query("DELETE FROM inspections WHERE id = :id")
     suspend fun delete(id: Long)
 
+    @Query("SELECT COUNT(*) FROM inspections WHERE checkpointId = :checkpointId")
+    suspend fun countForCheckpoint(checkpointId: Long): Int
+
+    // --- photos -------------------------------------------------------------------------------
+
     @Insert suspend fun insertPhoto(photo: PhotoEntity): Long
 
     @Query("SELECT * FROM photos WHERE id = :id")
@@ -183,22 +194,88 @@ interface InspectionDao {
 
     @Transaction
     @Query(
-        "SELECT * FROM inspections WHERE completedAt IS NOT NULL AND (syncedAt IS NULL OR syncedAt < updatedAt) " +
-            "ORDER BY completedAt LIMIT :limit",
+        "SELECT * FROM inspections WHERE completedAt IS NOT NULL AND syncConflict IS NULL " +
+            "AND (syncedAt IS NULL OR syncedAt < updatedAt) ORDER BY completedAt LIMIT :limit",
     )
     suspend fun pendingSync(limit: Int): List<InspectionWithDetails>
 
-    @Query("SELECT COUNT(*) FROM inspections WHERE completedAt IS NOT NULL AND (syncedAt IS NULL OR syncedAt < updatedAt)")
+    @Query(
+        "SELECT COUNT(*) FROM inspections WHERE completedAt IS NOT NULL AND syncConflict IS NULL " +
+            "AND (syncedAt IS NULL OR syncedAt < updatedAt)",
+    )
     fun observePendingSyncCount(): Flow<Int>
 
-    @Query("UPDATE inspections SET syncedAt = :at WHERE id IN (:ids)")
+    @Query("UPDATE inspections SET syncedAt = :at WHERE id IN (:ids) AND syncConflict IS NULL")
     suspend fun markSynced(ids: List<Long>, at: Long)
+
+    @Query("UPDATE inspections SET syncConflict = :message, syncedAt = updatedAt WHERE id = :id")
+    suspend fun setConflict(id: Long, message: String)
+
+    @Query("UPDATE inspections SET syncConflict = NULL, updatedAt = :at WHERE id = :id")
+    suspend fun clearConflictForResend(id: Long, at: Long)
+
+    @Query("UPDATE inspections SET syncConflict = NULL WHERE id = :id")
+    suspend fun acceptServerVersion(id: Long)
+
+    @Query("SELECT * FROM inspections WHERE syncConflict IS NOT NULL")
+    fun observeConflicts(): Flow<List<InspectionEntity>>
+
+    @Query("UPDATE inspections SET syncedAt = NULL, syncConflict = NULL WHERE completedAt IS NOT NULL")
+    suspend fun resetSync()
+
+    /** Photos whose parent record is already on the server: inspection synced, and for after-fix photos the action too. */
+    @Query(
+        "SELECT p.* FROM photos p JOIN inspections i ON i.id = p.inspectionId " +
+            "WHERE i.completedAt IS NOT NULL AND p.syncedAt IS NULL AND p.syncConflict IS NULL " +
+            "AND i.syncedAt IS NOT NULL AND i.syncConflict IS NULL " +
+            "AND (p.actionId IS NULL OR EXISTS (SELECT 1 FROM corrective_actions ca WHERE ca.id = p.actionId " +
+            "AND ca.syncedAt IS NOT NULL AND ca.syncedAt >= ca.updatedAt)) ORDER BY p.id LIMIT :limit",
+    )
+    suspend fun pendingPhotos(limit: Int): List<PhotoEntity>
+
+    @Query(
+        "SELECT COUNT(*) FROM photos p JOIN inspections i ON i.id = p.inspectionId " +
+            "WHERE i.completedAt IS NOT NULL AND p.syncedAt IS NULL AND p.syncConflict IS NULL",
+    )
+    fun observePendingPhotoCount(): Flow<Int>
+
+    @Query("UPDATE photos SET sha256 = :sha WHERE id = :id")
+    suspend fun setPhotoSha(id: Long, sha: String)
+
+    @Query("UPDATE photos SET syncedAt = :at WHERE id = :id")
+    suspend fun markPhotoSynced(id: Long, at: Long)
+
+    @Query("UPDATE photos SET syncConflict = :message WHERE id = :id")
+    suspend fun setPhotoConflict(id: Long, message: String)
+
+    @Query("UPDATE photos SET syncConflict = NULL, syncedAt = NULL WHERE id = :id")
+    suspend fun clearPhotoConflict(id: Long)
+
+    @Query("UPDATE photos SET syncConflict = NULL, syncedAt = :at WHERE id = :id")
+    suspend fun acceptServerPhoto(id: Long, at: Long)
+
+    @Query("SELECT * FROM photos WHERE syncConflict IS NOT NULL")
+    fun observePhotoConflicts(): Flow<List<PhotoEntity>>
+
+    @Query("UPDATE photos SET syncedAt = NULL, syncConflict = NULL")
+    suspend fun resetPhotoSync()
 }
 
 @Dao
 interface CorrectiveActionDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(actions: List<CorrectiveActionEntity>): List<Long>
+
+    @Insert suspend fun insertEvent(event: ActionEventEntity): Long
+
+    @Query("SELECT * FROM action_events WHERE actionId = :actionId ORDER BY at, id")
+    fun observeEvents(actionId: Long): Flow<List<ActionEventEntity>>
+
+    @Query("SELECT * FROM action_events WHERE actionId IN (:actionIds) ORDER BY at, id")
+    suspend fun eventsFor(actionIds: List<Long>): List<ActionEventEntity>
+
+    @Query("SELECT * FROM photos WHERE actionId IN (:actionIds) ORDER BY id")
+    suspend fun afterFixPhotosFor(actionIds: List<Long>): List<PhotoEntity>
 
     @Query("SELECT * FROM corrective_actions WHERE id = :id")
     suspend fun get(id: Long): CorrectiveActionEntity?
@@ -209,9 +286,17 @@ interface CorrectiveActionDao {
     @Query("SELECT COUNT(*) FROM corrective_actions")
     suspend fun countAll(): Int
 
+    // Each transition only succeeds from the expected previous status (returns rows changed).
+
+    @Query(
+        "UPDATE corrective_actions SET status = 'IN_PROGRESS', startedByName = :by, startedAt = :at, updatedAt = :at " +
+            "WHERE id = :id AND status = 'OPEN'",
+    )
+    suspend fun start(id: Long, by: String, at: Long): Int
+
     @Query(
         "UPDATE corrective_actions SET status = 'RESOLVED', resolutionNote = :note, resolvedByName = :by, " +
-            "resolvedAt = :at, updatedAt = :at WHERE id = :id AND status = 'OPEN'",
+            "resolvedAt = :at, updatedAt = :at WHERE id = :id AND status = 'IN_PROGRESS'",
     )
     suspend fun resolve(id: Long, note: String, by: String, at: Long): Int
 
@@ -222,10 +307,10 @@ interface CorrectiveActionDao {
     suspend fun verify(id: Long, by: String, at: Long): Int
 
     @Query(
-        "UPDATE corrective_actions SET status = 'OPEN', adminComment = :comment, resolvedAt = NULL, updatedAt = :at " +
-            "WHERE id = :id AND status = 'RESOLVED'",
+        "UPDATE corrective_actions SET status = 'IN_PROGRESS', adminComment = :comment, resolvedAt = NULL, " +
+            "resolvedByName = NULL, updatedAt = :at WHERE id = :id AND status = 'RESOLVED'",
     )
-    suspend fun reopen(id: Long, comment: String, at: Long): Int
+    suspend fun sendBack(id: Long, comment: String, at: Long): Int
 
     @Query(
         "UPDATE corrective_actions SET priority = :priority, dueAt = :dueAt, updatedAt = :at " +
@@ -233,25 +318,52 @@ interface CorrectiveActionDao {
     )
     suspend fun reschedule(id: Long, priority: Priority, dueAt: Long, at: Long): Int
 
+    @Query(
+        "UPDATE corrective_actions SET responsibleName = :name, responsibleUserId = :userId, updatedAt = :at " +
+            "WHERE id = :id AND status != 'VERIFIED'",
+    )
+    suspend fun reassign(id: Long, name: String, userId: Long?, at: Long): Int
+
+    @Query("UPDATE corrective_actions SET updatedAt = :at WHERE id = :id")
+    suspend fun touch(id: Long, at: Long)
+
     @Query("$ROW_SELECT ORDER BY ca.dueAt, ca.id")
     fun observeRows(): Flow<List<ActionRow>>
 
     @Query("$ROW_SELECT WHERE ca.id = :id")
     fun observeRow(id: Long): Flow<ActionRow?>
 
-    @Query("$ROW_SELECT WHERE ca.syncedAt IS NULL OR ca.syncedAt < ca.updatedAt ORDER BY ca.id LIMIT :limit")
+    // --- sync -----------------------------------------------------------------------------------
+
+    @Query("$ROW_SELECT WHERE ca.syncConflict IS NULL AND (ca.syncedAt IS NULL OR ca.syncedAt < ca.updatedAt) ORDER BY ca.id LIMIT :limit")
     suspend fun pendingSync(limit: Int): List<ActionRow>
 
-    @Query("SELECT COUNT(*) FROM corrective_actions WHERE syncedAt IS NULL OR syncedAt < updatedAt")
+    @Query("SELECT COUNT(*) FROM corrective_actions WHERE syncConflict IS NULL AND (syncedAt IS NULL OR syncedAt < updatedAt)")
     fun observePendingSyncCount(): Flow<Int>
 
-    @Query("UPDATE corrective_actions SET syncedAt = :at WHERE id IN (:ids)")
+    @Query("UPDATE corrective_actions SET syncedAt = :at WHERE id IN (:ids) AND syncConflict IS NULL")
     suspend fun markSynced(ids: List<Long>, at: Long)
+
+    @Query("UPDATE corrective_actions SET syncConflict = :message, syncedAt = updatedAt WHERE id = :id")
+    suspend fun setConflict(id: Long, message: String)
+
+    @Query("UPDATE corrective_actions SET syncConflict = NULL, updatedAt = :at WHERE id = :id")
+    suspend fun clearConflictForResend(id: Long, at: Long)
+
+    @Query("UPDATE corrective_actions SET syncConflict = NULL WHERE id = :id")
+    suspend fun acceptServerVersion(id: Long)
+
+    @Query("SELECT * FROM corrective_actions WHERE syncConflict IS NOT NULL")
+    fun observeConflicts(): Flow<List<CorrectiveActionEntity>>
+
+    @Query("UPDATE corrective_actions SET syncedAt = NULL, syncConflict = NULL")
+    suspend fun resetSync()
 
     companion object {
         const val ROW_SELECT =
             "SELECT ca.*, ci.question AS question, ci.section AS section, ci.position AS itemPosition, " +
-                "c.id AS checkpointId, c.name AS checkpointName, c.code AS checkpointCode, c.areaId AS checkpointAreaId, " +
+                "c.id AS checkpointId, COALESCE(NULLIF(i.equipmentName, ''), c.name) AS checkpointName, " +
+                "COALESCE(NULLIF(i.equipmentCode, ''), c.code) AS checkpointCode, c.areaId AS checkpointAreaId, " +
                 "c.area AS spot, i.siteName AS locationSnapshot, i.inspectorName AS inspectorName, " +
                 "i.completedAt AS inspectionCompletedAt " +
                 "FROM corrective_actions ca JOIN checklist_items ci ON ci.id = ca.itemId " +

@@ -18,7 +18,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
     entities = [
         CheckpointEntity::class, InspectionEntity::class, ChecklistItemEntity::class, PhotoEntity::class,
         UserEntity::class, FactoryEntity::class, BuildingEntity::class, FloorEntity::class, AreaEntity::class,
-        TemplateQuestionEntity::class, CorrectiveActionEntity::class,
+        TemplateQuestionEntity::class, CorrectiveActionEntity::class, ActionEventEntity::class,
     ],
     version = 2,
     exportSchema = true,

@@ -22,10 +22,11 @@ class DashboardCalculatorTest {
         assertNull(s.averageScorePercent)
         assertNull(s.onTimeClosurePercent)
         assertEquals(0, s.openActions)
+        assertEquals(0, s.totalInspections)
     }
 
     @Test
-    fun windowCountsOnlyInspectionsCompletedInTheLast30Days() {
+    fun windowCountsOnlyInspectionsSubmittedInTheLast30Days() {
         val s = DashboardCalculator.compute(
             listOf(
                 insp(1, Outcome.PASS, 100),
@@ -43,15 +44,17 @@ class DashboardCalculatorTest {
         assertEquals(67, s.passRatePercent) // 2/3 = 66.7 -> 67
         assertEquals(80, s.averageScorePercent) // (100+50+90)/3
         assertEquals(1, s.drafts)
+        assertEquals(5, s.totalInspections)
     }
 
     @Test
-    fun correctiveActionCounts() {
+    fun correctiveActionCountsForAllFourStatuses() {
         val s = DashboardCalculator.compute(
             emptyList(),
             listOf(
                 action(ActionStatus.OPEN, Priority.CRITICAL, dueInDays = -2), // open, overdue, critical
                 action(ActionStatus.OPEN, Priority.LOW, dueInDays = 5), // open
+                action(ActionStatus.IN_PROGRESS, Priority.MEDIUM, dueInDays = -1), // in progress, overdue
                 action(ActionStatus.RESOLVED, Priority.HIGH, dueInDays = -1, resolvedDaysAgo = 2), // awaiting, not overdue
                 action(ActionStatus.VERIFIED, Priority.HIGH, dueInDays = -5, resolvedDaysAgo = 6, verifiedDaysAgo = 4), // on time
                 action(ActionStatus.VERIFIED, Priority.MEDIUM, dueInDays = -10, resolvedDaysAgo = 3, verifiedDaysAgo = 2), // late
@@ -60,10 +63,12 @@ class DashboardCalculatorTest {
             now,
         )
         assertEquals(2, s.openActions)
-        assertEquals(1, s.overdueActions)
+        assertEquals(1, s.inProgressActions)
+        assertEquals(2, s.overdueActions)
         assertEquals(1, s.awaitingVerification)
         assertEquals(2, s.openCriticalOrHigh)
         assertEquals(2, s.verifiedInWindow)
+        assertEquals(7, s.totalActions)
         assertEquals(50, s.onTimeClosurePercent)
     }
 

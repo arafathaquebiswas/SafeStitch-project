@@ -12,14 +12,17 @@ import com.safestitch.app.domain.FindingDefaults
  * Version 1 -> 2. Room adds the new tables/columns automatically (AutoMigration); this spec then
  * converts the existing data so nothing is lost:
  *  - every old free-text "area" becomes an Area under "My factory › Main building › Floor not set";
+ *  - each inspection gets its equipment snapshot (code, name, type) from the equipment it belongs to;
  *  - the built-in checklists become editable template questions;
- *  - failed items of completed inspections get a priority, a due date and one corrective action.
+ *  - failed items get a priority, due date and responsible person (the inspector), and each failed item
+ *    of a submitted inspection gets exactly one corrective action with a "created" history event.
+ * Photos (evidence) are not touched: rows and files stay exactly as they were.
  */
 class Migration1To2 : AutoMigrationSpec {
     override fun onPostMigrate(db: SupportSQLiteDatabase) {
         DatabaseSeed.seedQuestions(db)
         DatabaseSeed.migrateLegacyLocations(db)
-        DatabaseSeed.backfillFindings(db)
+        DatabaseSeed.backfillSnapshotsAndFindings(db)
     }
 }
 
@@ -54,12 +57,18 @@ object DatabaseSeed {
         legacyAreas.forEach { legacy ->
             val areaId = insert(db, "areas", ContentValues().apply { put("floorId", floorId); put("name", legacy.ifBlank { "General area" }) })
             // The old text now lives in the area name, so the "exact spot" starts empty.
-            db.execSQL("UPDATE checkpoints SET areaId = ?, area = '' WHERE TRIM(area) = ?", arrayOf<Any>(areaId, legacy))
+            // "areaId IS NULL": equipment already moved (and its text cleared) must not match the blank-area pass.
+            db.execSQL("UPDATE checkpoints SET areaId = ?, area = '' WHERE areaId IS NULL AND TRIM(area) = ?", arrayOf<Any>(areaId, legacy))
         }
     }
 
-    fun backfillFindings(db: SupportSQLiteDatabase) {
-        db.execSQL("UPDATE inspections SET updatedAt = COALESCE(completedAt, startedAt)")
+    fun backfillSnapshotsAndFindings(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "UPDATE inspections SET updatedAt = COALESCE(completedAt, startedAt), " +
+                "equipmentCode = (SELECT c.code FROM checkpoints c WHERE c.id = inspections.checkpointId), " +
+                "equipmentName = (SELECT c.name FROM checkpoints c WHERE c.id = inspections.checkpointId), " +
+                "equipmentType = (SELECT c.type FROM checkpoints c WHERE c.id = inspections.checkpointId)",
+        )
         db.execSQL(
             "UPDATE checklist_items SET priority = CASE WHEN critical = 1 THEN 'CRITICAL' ELSE 'MEDIUM' END " +
                 "WHERE result = 'FAIL' AND priority IS NULL",
@@ -70,10 +79,19 @@ object DatabaseSeed {
                 "WHERE result = 'FAIL' AND dueAt IS NULL",
         )
         db.execSQL(
-            "INSERT OR IGNORE INTO corrective_actions (inspectionId, itemId, description, priority, dueAt, status, createdAt, updatedAt) " +
-                "SELECT ci.inspectionId, ci.id, ci.note, ci.priority, ci.dueAt, 'OPEN', i.completedAt, i.completedAt " +
-                "FROM checklist_items ci JOIN inspections i ON i.id = ci.inspectionId " +
+            "UPDATE checklist_items SET responsibleName = (SELECT i.inspectorName FROM inspections i " +
+                "WHERE i.id = checklist_items.inspectionId) WHERE result = 'FAIL' AND responsibleName IS NULL",
+        )
+        db.execSQL(
+            "INSERT OR IGNORE INTO corrective_actions (inspectionId, itemId, description, priority, dueAt, status, " +
+                "responsibleName, createdByName, createdAt, updatedAt) " +
+                "SELECT ci.inspectionId, ci.id, ci.note, ci.priority, ci.dueAt, 'OPEN', ci.responsibleName, i.inspectorName, " +
+                "i.completedAt, i.completedAt FROM checklist_items ci JOIN inspections i ON i.id = ci.inspectionId " +
                 "WHERE ci.result = 'FAIL' AND i.completedAt IS NOT NULL",
+        )
+        db.execSQL(
+            "INSERT INTO action_events (actionId, fromStatus, toStatus, byName, at, note) " +
+                "SELECT ca.id, NULL, 'OPEN', ca.createdByName, ca.createdAt, 'Created when the app was upgraded' FROM corrective_actions ca",
         )
     }
 

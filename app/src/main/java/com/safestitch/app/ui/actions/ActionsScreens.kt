@@ -1,6 +1,5 @@
 package com.safestitch.app.ui.actions
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,6 +56,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.safestitch.app.AppContainer
 import com.safestitch.app.data.InspectionRepository
+import com.safestitch.app.data.db.ActionEventEntity
 import com.safestitch.app.data.db.ActionRow
 import com.safestitch.app.data.db.UserEntity
 import com.safestitch.app.domain.ActionStatus
@@ -66,6 +66,8 @@ import com.safestitch.app.ui.components.BackButton
 import com.safestitch.app.ui.components.DueDateButton
 import com.safestitch.app.ui.components.PhotoThumbnail
 import com.safestitch.app.ui.components.PrioritySelector
+import com.safestitch.app.ui.components.SelectField
+import com.safestitch.app.ui.components.SelectOption
 import com.safestitch.app.ui.components.StatusChip
 import com.safestitch.app.ui.components.actionStatusColor
 import com.safestitch.app.ui.components.formatDate
@@ -79,7 +81,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 enum class ActionFilter(val label: String) {
+    TODO("To do"),
     OPEN("Open"),
+    IN_PROGRESS("In progress"),
     OVERDUE("Overdue"),
     AWAITING("Awaiting verification"),
     VERIFIED("Verified"),
@@ -87,7 +91,9 @@ enum class ActionFilter(val label: String) {
     ;
 
     fun matches(row: ActionRow, now: Long): Boolean = when (this) {
+        TODO -> row.action.status.isActive
         OPEN -> row.action.status == ActionStatus.OPEN
+        IN_PROGRESS -> row.action.status == ActionStatus.IN_PROGRESS
         OVERDUE -> FindingDefaults.isOverdue(row.action.status, row.action.dueAt, now)
         AWAITING -> row.action.status == ActionStatus.RESOLVED
         VERIFIED -> row.action.status == ActionStatus.VERIFIED
@@ -97,7 +103,7 @@ enum class ActionFilter(val label: String) {
 
 class ActionsViewModel(repository: InspectionRepository) : ViewModel() {
     val rows: StateFlow<List<ActionRow>?> = repository.observeActionRows().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
-    var filter by mutableStateOf(ActionFilter.OPEN)
+    var filter by mutableStateOf(ActionFilter.TODO)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -131,7 +137,7 @@ fun ActionsScreen(container: AppContainer, onOpen: (Long) -> Unit) {
             }
             item {
                 Text(
-                    "${shown.size} corrective action${if (shown.size == 1) "" else "s"} · ${all.size} in total",
+                    "${shown.size} shown · ${all.size} corrective action${if (all.size == 1) "" else "s"} in total",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.testTag("actions-count"),
@@ -140,10 +146,7 @@ fun ActionsScreen(container: AppContainer, onOpen: (Long) -> Unit) {
             if (rows != null && all.isEmpty()) {
                 item {
                     Card(Modifier.fillMaxWidth()) {
-                        Text(
-                            "No corrective actions yet. Every failed checklist item creates one when the inspection is submitted.",
-                            modifier = Modifier.padding(20.dp),
-                        )
+                        Text("No corrective actions yet. Every failed checklist item creates one when the inspection is submitted.", modifier = Modifier.padding(20.dp))
                     }
                 }
             }
@@ -171,7 +174,7 @@ private fun ActionCard(row: ActionRow, now: Long, onClick: () -> Unit) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
-                "Due ${formatDate(a.dueAt)}",
+                "Responsible: ${a.responsibleName.ifBlank { "—" }}  ·  Due ${formatDate(a.dueAt)}",
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = if (overdue) FontWeight.Bold else FontWeight.Normal,
                 color = if (overdue) LocalStatusColors.current.fail else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -182,6 +185,7 @@ private fun ActionCard(row: ActionRow, now: Long, onClick: () -> Unit) {
 
 class ActionDetailViewModel(actionId: Long, private val repository: InspectionRepository) : ViewModel() {
     val row: StateFlow<ActionRow?> = repository.observeActionRow(actionId).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+    val events: StateFlow<List<ActionEventEntity>> = repository.observeActionEvents(actionId).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     var message by mutableStateOf<String?>(null)
     var busy by mutableStateOf(false)
         private set
@@ -205,15 +209,34 @@ class ActionDetailViewModel(actionId: Long, private val repository: InspectionRe
     fun photos(itemId: Long) = repository.observePhotosForItem(itemId)
 }
 
+private fun eventText(e: ActionEventEntity): String {
+    val what = when {
+        e.fromStatus == null -> "Created (Open)"
+        e.fromStatus == e.toStatus -> "Updated"
+        e.fromStatus == ActionStatus.RESOLVED && e.toStatus == ActionStatus.IN_PROGRESS -> "Sent back: ${ActionStatus.RESOLVED.label} → ${e.toStatus.label}"
+        else -> "${e.fromStatus.label} → ${e.toStatus.label}"
+    }
+    return "$what · ${e.byName} · ${formatDateTime(e.at)}" + if (e.note.isNotBlank()) "\n    ${e.note}" else ""
+}
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun ActionDetailScreen(container: AppContainer, user: UserEntity, actionId: Long, onBack: () -> Unit, onOpenInspection: (Long) -> Unit) {
+fun ActionDetailScreen(
+    container: AppContainer,
+    user: UserEntity,
+    actionId: Long,
+    onBack: () -> Unit,
+    onOpenInspection: (Long) -> Unit,
+    onAddAfterFixPhoto: (inspectionId: Long, actionId: Long) -> Unit,
+) {
     val vm = viewModel { ActionDetailViewModel(actionId, container.repository) }
     val row by vm.row.collectAsStateWithLifecycle()
+    val events by vm.events.collectAsStateWithLifecycle()
+    val users by remember { container.auth.observeUsers() }.collectAsStateWithLifecycle(emptyList())
     val snackbar = remember { SnackbarHostState() }
     var resolution by rememberSaveable { mutableStateOf("") }
-    var reopenOpen by remember { mutableStateOf(false) }
-    var reopenComment by rememberSaveable { mutableStateOf("") }
+    var sendBackOpen by remember { mutableStateOf(false) }
+    var sendBackComment by rememberSaveable { mutableStateOf("") }
 
     LaunchedEffect(vm.message) {
         vm.message?.let {
@@ -234,8 +257,10 @@ fun ActionDetailScreen(container: AppContainer, user: UserEntity, actionId: Long
         val a = r.action
         val now = System.currentTimeMillis()
         val photos by remember(a.itemId) { vm.photos(a.itemId) }.collectAsStateWithLifecycle(emptyList())
+        val evidence = photos.filter { it.actionId == null }
+        val afterFix = photos.filter { it.actionId == a.id }
         Column(
-            Modifier.padding(padding).fillMaxSize().imePadding().verticalScroll(rememberScrollState()).padding(16.dp),
+            Modifier.padding(padding).fillMaxSize().imePadding().verticalScroll(rememberScrollState()).padding(16.dp).testTag("action-detail"),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -245,48 +270,41 @@ fun ActionDetailScreen(container: AppContainer, user: UserEntity, actionId: Long
             }
             Text("${r.itemPosition + 1}. ${r.question}", style = MaterialTheme.typography.titleMedium)
             Text("Finding: ${a.description.ifBlank { "—" }}", style = MaterialTheme.typography.bodyLarge)
+            Text("Responsible: ${a.responsibleName.ifBlank { "—" }}", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("action-responsible"))
             Text("Due ${formatDate(a.dueAt)}", style = MaterialTheme.typography.bodyMedium)
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text("${r.checkpointName} (${r.checkpointCode})", style = MaterialTheme.typography.titleSmall)
                     Text(listOf(r.locationSnapshot, r.spot).filter { it.isNotBlank() }.joinToString("  ·  ").ifBlank { "Location not set" }, style = MaterialTheme.typography.bodySmall)
-                    Text(
-                        "Found by ${r.inspectorName}" + (r.inspectionCompletedAt?.let { " on ${formatDateTime(it)}" } ?: ""),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
                     TextButton(onClick = { onOpenInspection(a.inspectionId) }, modifier = Modifier.testTag("open-inspection")) { Text("Open inspection report") }
                 }
             }
-            if (photos.isNotEmpty()) {
+            if (evidence.isNotEmpty()) {
+                Text("Evidence photos", style = MaterialTheme.typography.titleSmall)
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(photos, key = { it.id }) { PhotoThumbnail(container.photoStorage.file(it.fileName), onClick = {}) }
+                    items(evidence, key = { it.id }) { PhotoThumbnail(container.photoStorage.file(it.fileName), onClick = {}) }
                 }
             }
-            a.adminComment?.takeIf { it.isNotBlank() }?.let {
+            if (afterFix.isNotEmpty()) {
+                Text("After-fix photos (${afterFix.size})", style = MaterialTheme.typography.titleSmall, modifier = Modifier.testTag("after-fix-count"))
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(afterFix, key = { it.id }) { PhotoThumbnail(container.photoStorage.file(it.fileName), onClick = {}) }
+                }
+            }
+            a.adminComment?.takeIf { it.isNotBlank() && a.status != ActionStatus.VERIFIED }?.let {
                 Text("Admin's note: $it", style = MaterialTheme.typography.bodyMedium, color = LocalStatusColors.current.fail)
             }
-            if (a.resolvedAt != null || a.status != ActionStatus.OPEN) {
-                Card(Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text("Fix reported", style = MaterialTheme.typography.titleSmall)
-                        Text(a.resolutionNote.orEmpty(), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("resolution-text"))
-                        Text(
-                            "by ${a.resolvedByName.orEmpty()}" + (a.resolvedAt?.let { " · ${formatDateTime(it)}" } ?: ""),
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                        if (a.status == ActionStatus.VERIFIED) {
-                            Text(
-                                "Verified by ${a.verifiedByName.orEmpty()}" + (a.verifiedAt?.let { " · ${formatDateTime(it)}" } ?: ""),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = LocalStatusColors.current.pass,
-                                modifier = Modifier.testTag("verified-text"),
-                            )
-                        }
-                    }
-                }
-            }
+
             when (a.status) {
-                ActionStatus.OPEN -> {
+                ActionStatus.OPEN -> Button(
+                    onClick = { vm.run("Work started (In progress).") { container.repository.startAction(a.id, user) } },
+                    enabled = !vm.busy,
+                    modifier = Modifier.fillMaxWidth().testTag("start-action"),
+                ) { Text("Start work") }
+                ActionStatus.IN_PROGRESS -> {
+                    OutlinedButton(onClick = { onAddAfterFixPhoto(a.inspectionId, a.id) }, modifier = Modifier.fillMaxWidth().testTag("after-fix-photo")) {
+                        Text(if (afterFix.isEmpty()) "Add after-fix photo (optional)" else "Add another after-fix photo")
+                    }
                     OutlinedTextField(
                         value = resolution,
                         onValueChange = { resolution = it.take(1_000) },
@@ -302,21 +320,50 @@ fun ActionDetailScreen(container: AppContainer, user: UserEntity, actionId: Long
                     ) { Text("Mark as resolved") }
                 }
                 ActionStatus.RESOLVED -> if (user.isAdmin) {
+                    Text("Fix reported: ${a.resolutionNote.orEmpty()}", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("resolution-text"))
                     Button(
                         onClick = { vm.run("Verified and closed.") { container.repository.verifyAction(a.id, user) } },
                         enabled = !vm.busy,
                         modifier = Modifier.fillMaxWidth().testTag("verify-action"),
                     ) { Text("Verify & close") }
-                    OutlinedButton(onClick = { reopenOpen = true }, enabled = !vm.busy, modifier = Modifier.fillMaxWidth().testTag("reopen-action")) {
-                        Text("Not fixed: reopen")
+                    OutlinedButton(onClick = { sendBackOpen = true }, enabled = !vm.busy, modifier = Modifier.fillMaxWidth().testTag("reopen-action")) {
+                        Text("Not fixed: send back")
                     }
                 } else {
-                    Text("Waiting for an admin to verify the fix.", style = MaterialTheme.typography.bodyMedium)
+                    Text("Fix reported: ${a.resolutionNote.orEmpty()}", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("resolution-text"))
+                    Text(
+                        "Only an admin can verify this fix.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.testTag("verify-locked"),
+                    )
                 }
-                ActionStatus.VERIFIED -> Text("Closed.", style = MaterialTheme.typography.bodyMedium, color = LocalStatusColors.current.pass)
+                ActionStatus.VERIFIED -> Text(
+                    "Closed: verified by ${a.verifiedByName.orEmpty()}" + (a.verifiedAt?.let { " on ${formatDateTime(it)}" } ?: ""),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = LocalStatusColors.current.pass,
+                    modifier = Modifier.testTag("verified-text"),
+                )
             }
+
+            Text("History", style = MaterialTheme.typography.titleSmall)
+            Card(Modifier.fillMaxWidth()) {
+                Text(
+                    events.joinToString("\n") { "• " + eventText(it) },
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(14.dp).testTag("action-history"),
+                )
+            }
+
             if (user.isAdmin && a.status != ActionStatus.VERIFIED) {
-                Text("Admin: priority and due date", style = MaterialTheme.typography.titleSmall)
+                Text("Admin: responsible person, priority and due date", style = MaterialTheme.typography.titleSmall)
+                SelectField(
+                    label = "Responsible person",
+                    selectedLabel = a.responsibleName.ifBlank { "—" },
+                    options = users.filter { it.active }.map { SelectOption(it, "${it.displayName} (${it.role.label})") },
+                    onSelect = { u -> vm.run("Responsible person changed.") { container.repository.reassignAction(a.id, user, u.displayName, u.id) } },
+                    testTag = "action-responsible-select",
+                )
                 PrioritySelector(
                     selected = a.priority,
                     onSelect = { p: Priority ->
@@ -333,15 +380,15 @@ fun ActionDetailScreen(container: AppContainer, user: UserEntity, actionId: Long
         }
     }
 
-    if (reopenOpen) {
+    if (sendBackOpen) {
         AlertDialog(
             modifier = Modifier.semantics { testTagsAsResourceId = true },
-            onDismissRequest = { reopenOpen = false },
-            title = { Text("Reopen corrective action") },
+            onDismissRequest = { sendBackOpen = false },
+            title = { Text("Send back to In progress") },
             text = {
                 OutlinedTextField(
-                    value = reopenComment,
-                    onValueChange = { reopenComment = it.take(500) },
+                    value = sendBackComment,
+                    onValueChange = { sendBackComment = it.take(500) },
                     label = { Text("Why is it not fixed?") },
                     modifier = Modifier.fillMaxWidth().testTag("reopen-comment"),
                 )
@@ -349,15 +396,15 @@ fun ActionDetailScreen(container: AppContainer, user: UserEntity, actionId: Long
             confirmButton = {
                 TextButton(
                     onClick = {
-                        reopenOpen = false
-                        val r = row ?: return@TextButton
-                        vm.run("Reopened.") { container.repository.reopenAction(r.action.id, user, reopenComment) }
+                        sendBackOpen = false
+                        val current = row ?: return@TextButton
+                        vm.run("Sent back to In progress.") { container.repository.sendBackAction(current.action.id, user, sendBackComment) }
                     },
-                    enabled = reopenComment.isNotBlank(),
+                    enabled = sendBackComment.isNotBlank(),
                     modifier = Modifier.testTag("reopen-confirm"),
-                ) { Text("Reopen") }
+                ) { Text("Send back") }
             },
-            dismissButton = { TextButton(onClick = { reopenOpen = false }) { Text("Cancel") } },
+            dismissButton = { TextButton(onClick = { sendBackOpen = false }) { Text("Cancel") } },
         )
     }
 }

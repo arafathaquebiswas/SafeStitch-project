@@ -182,6 +182,7 @@ fun priorityColor(priority: Priority): Color = when (priority) {
 @Composable
 fun actionStatusColor(status: ActionStatus): Color = when (status) {
     ActionStatus.OPEN -> LocalStatusColors.current.fail
+    ActionStatus.IN_PROGRESS -> MaterialTheme.colorScheme.primary
     ActionStatus.RESOLVED -> LocalStatusColors.current.draft
     ActionStatus.VERIFIED -> LocalStatusColors.current.pass
 }

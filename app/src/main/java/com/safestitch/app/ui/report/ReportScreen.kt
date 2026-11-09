@@ -209,7 +209,7 @@ fun ReportScreen(
                         Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Button(onClick = onViewPdf, modifier = Modifier.testTag("open-pdf")) { Text("Open PDF") }
                             OutlinedButton(
-                                onClick = { FileSharing.sharePdf(context, file, "SafeStitch report – ${current.details.checkpoint.name}") },
+                                onClick = { FileSharing.sharePdf(context, file, "SafeStitch report – ${current.details.equipmentName}") },
                                 modifier = Modifier.testTag("share-pdf"),
                             ) {
                                 Icon(painterResource(R.drawable.ic_share), contentDescription = null, modifier = Modifier.size(18.dp))
@@ -287,8 +287,8 @@ private fun SummaryCard(state: ReportUiState) {
     val inspection = state.details.inspection
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(state.details.checkpoint.name, style = MaterialTheme.typography.titleLarge)
-            Text("${state.details.checkpoint.code}  ·  ${state.details.checkpoint.type.label}", style = MaterialTheme.typography.bodySmall)
+            Text(state.details.equipmentName, style = MaterialTheme.typography.titleLarge)
+            Text("${state.details.equipmentCode}  ·  ${state.details.equipmentType.label}", style = MaterialTheme.typography.bodySmall)
             if (inspection.siteName.isNotBlank()) Text(inspection.siteName, style = MaterialTheme.typography.bodySmall)
             Text(
                 "Result: ${summary.outcome.label}",
