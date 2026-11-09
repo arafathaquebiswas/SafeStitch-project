@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,12 +59,15 @@ import com.safestitch.app.R
 import com.safestitch.app.data.InspectionRepository
 import com.safestitch.app.data.db.InspectionWithDetails
 import com.safestitch.app.domain.InspectionSummary
-import com.safestitch.app.domain.ItemResult
 import com.safestitch.app.pdf.PdfInfo
 import com.safestitch.app.pdf.ReportService
 import com.safestitch.app.ui.components.BackButton
+import com.safestitch.app.ui.components.StatusChip
+import com.safestitch.app.ui.components.actionStatusColor
+import com.safestitch.app.ui.components.formatDate
 import com.safestitch.app.ui.components.formatDateTime
 import com.safestitch.app.ui.components.outcomeColor
+import com.safestitch.app.ui.components.priorityColor
 import com.safestitch.app.util.FileSharing
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.SharingStarted
@@ -82,9 +86,8 @@ data class ReportUiState(
 
 class ReportViewModel(
     private val inspectionId: Long,
-    repository: InspectionRepository,
+    private val repository: InspectionRepository,
     private val reportService: ReportService,
-    private val onRegenerated: suspend (String) -> Unit,
 ) : ViewModel() {
     val state: StateFlow<ReportUiState?> = repository.observeInspection(inspectionId)
         .map { details ->
@@ -108,14 +111,15 @@ class ReportViewModel(
         }
     }
 
+    /** Re-creates the PDF, e.g. to include the latest corrective-action status. */
     fun regenerate() {
         if (working) return
         working = true
         viewModelScope.launch {
             try {
                 val file = reportService.generateReport(inspectionId, completedAt = null)
-                onRegenerated(file.name)
-                message = "PDF created again."
+                repository.setReportFile(inspectionId, file.name)
+                message = "PDF created again with the latest corrective-action status."
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
@@ -146,12 +150,14 @@ class ReportViewModel(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReportScreen(container: AppContainer, inspectionId: Long, onBack: () -> Unit) {
-    val vm = viewModel {
-        ReportViewModel(inspectionId, container.repository, container.reportService) { name ->
-            container.repository.setReportFile(inspectionId, name)
-        }
-    }
+fun ReportScreen(
+    container: AppContainer,
+    inspectionId: Long,
+    onBack: () -> Unit,
+    onViewPdf: () -> Unit,
+    onOpenAction: (Long) -> Unit,
+) {
+    val vm = viewModel { ReportViewModel(inspectionId, container.repository, container.reportService) }
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbar = remember { SnackbarHostState() }
@@ -170,9 +176,7 @@ fun ReportScreen(container: AppContainer, inspectionId: Long, onBack: () -> Unit
         }
     }
     val current = state
-    LaunchedEffect(current?.file?.path, current?.file?.lastModified()) {
-        current?.file?.let(vm::loadPreview)
-    }
+    LaunchedEffect(current?.file?.path, current?.file?.lastModified()) { current?.file?.let(vm::loadPreview) }
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Inspection report") }, navigationIcon = { BackButton(onBack) }) },
@@ -183,11 +187,7 @@ fun ReportScreen(container: AppContainer, inspectionId: Long, onBack: () -> Unit
             return@Scaffold
         }
         Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+            modifier = Modifier.padding(padding).fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             SummaryCard(current)
@@ -206,15 +206,8 @@ fun ReportScreen(container: AppContainer, inspectionId: Long, onBack: () -> Unit
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.testTag("pdf-status"),
                         )
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Button(
-                                onClick = {
-                                    if (!FileSharing.openPdf(context, file)) {
-                                        scope.launch { snackbar.showSnackbar("No PDF viewer installed. Use Share or Save a copy instead.") }
-                                    }
-                                },
-                                modifier = Modifier.testTag("open-pdf"),
-                            ) { Text("Open") }
+                        Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Button(onClick = onViewPdf, modifier = Modifier.testTag("open-pdf")) { Text("Open PDF") }
                             OutlinedButton(
                                 onClick = { FileSharing.sharePdf(context, file, "SafeStitch report – ${current.details.checkpoint.name}") },
                                 modifier = Modifier.testTag("share-pdf"),
@@ -224,14 +217,18 @@ fun ReportScreen(container: AppContainer, inspectionId: Long, onBack: () -> Unit
                                 Text("Share")
                             }
                         }
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            OutlinedButton(
+                        Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            OutlinedButton(onClick = { pendingSave = file; saveLauncher.launch(file.name) }, modifier = Modifier.testTag("save-pdf")) {
+                                Text("Save a copy…")
+                            }
+                            TextButton(
                                 onClick = {
-                                    pendingSave = file
-                                    saveLauncher.launch(file.name)
+                                    if (!FileSharing.openPdf(context, file)) {
+                                        scope.launch { snackbar.showSnackbar("No other PDF app installed. Use Open PDF instead.") }
+                                    }
                                 },
-                                modifier = Modifier.testTag("save-pdf"),
-                            ) { Text("Save a copy…") }
+                                modifier = Modifier.testTag("open-external"),
+                            ) { Text("Other app") }
                             TextButton(onClick = vm::regenerate, enabled = !vm.working, modifier = Modifier.testTag("regenerate-pdf")) {
                                 Text(if (vm.working) "Creating…" else "Create again")
                             }
@@ -244,6 +241,31 @@ fun ReportScreen(container: AppContainer, inspectionId: Long, onBack: () -> Unit
                     }
                 }
             }
+            if (current.details.actions.isNotEmpty()) {
+                Card(Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            "Corrective actions (${current.details.actions.size})",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.testTag("report-actions-title"),
+                        )
+                        val itemsById = current.details.items.associateBy { it.id }
+                        current.details.actions.sortedBy { it.id }.forEach { action ->
+                            val item = itemsById[action.itemId]
+                            Card(onClick = { onOpenAction(action.id) }, modifier = Modifier.fillMaxWidth().testTag("report-action-${action.id}")) {
+                                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Text("${(item?.position ?: 0) + 1}. ${item?.question.orEmpty()}", style = MaterialTheme.typography.bodyMedium)
+                                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                                        StatusChip(action.priority.label, priorityColor(action.priority))
+                                        StatusChip(action.status.label, actionStatusColor(action.status))
+                                        Text("Due ${formatDate(action.dueAt)}", style = MaterialTheme.typography.bodySmall)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             vm.preview?.let { bitmap ->
                 Text("Preview of page 1", style = MaterialTheme.typography.titleSmall)
                 Card(Modifier.fillMaxWidth()) {
@@ -251,11 +273,7 @@ fun ReportScreen(container: AppContainer, inspectionId: Long, onBack: () -> Unit
                         bitmap = bitmap,
                         contentDescription = "First page of the PDF report",
                         contentScale = ContentScale.FillWidth,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(bitmap.width.toFloat() / bitmap.height)
-                            .background(Color.White)
-                            .testTag("pdf-preview"),
+                        modifier = Modifier.fillMaxWidth().aspectRatio(bitmap.width.toFloat() / bitmap.height).background(Color.White).testTag("pdf-preview"),
                     )
                 }
             }
@@ -267,14 +285,14 @@ fun ReportScreen(container: AppContainer, inspectionId: Long, onBack: () -> Unit
 private fun SummaryCard(state: ReportUiState) {
     val summary = state.summary
     val inspection = state.details.inspection
-    val color = outcomeColor(summary.outcome)
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(state.details.checkpoint.name, style = MaterialTheme.typography.titleLarge)
             Text("${state.details.checkpoint.code}  ·  ${state.details.checkpoint.type.label}", style = MaterialTheme.typography.bodySmall)
+            if (inspection.siteName.isNotBlank()) Text(inspection.siteName, style = MaterialTheme.typography.bodySmall)
             Text(
                 "Result: ${summary.outcome.label}",
-                color = color,
+                color = outcomeColor(summary.outcome),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.testTag("report-outcome"),
@@ -285,14 +303,7 @@ private fun SummaryCard(state: ReportUiState) {
                 style = MaterialTheme.typography.bodyMedium,
             )
             Text("Inspector: ${inspection.inspectorName}", style = MaterialTheme.typography.bodyMedium)
-            inspection.completedAt?.let { Text("Completed ${formatDateTime(it)}", style = MaterialTheme.typography.bodySmall) }
-            val failed = state.details.sortedItems.filter { it.result == ItemResult.FAIL }
-            if (failed.isNotEmpty()) {
-                Text("Failed items", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 6.dp))
-                failed.forEach {
-                    Text("${it.position + 1}. ${it.question}\n    ${it.note}", style = MaterialTheme.typography.bodySmall)
-                }
-            }
+            inspection.completedAt?.let { Text("Submitted ${formatDateTime(it)}", style = MaterialTheme.typography.bodySmall) }
         }
     }
 }

@@ -38,19 +38,20 @@ class InspectionRepositoryTest {
     fun tearDown() = database.close()
 
     @Test
-    fun newCheckpointStartsInspectionFromTemplateAndResumesDraft() {
+    fun newEquipmentStartsInspectionFromSeededQuestionsAndResumesDraft() {
         runBlocking {
             assertNull(repository.findCheckpointByCode("SAFESTITCH:CP:SS-T-1"))
             val checkpointId = repository.createCheckpoint("ss-t-1", "Fire point 1", "Floor 2", CheckpointType.FIRE_SAFETY)
             assertEquals(checkpointId, repository.findCheckpointByCode("SAFESTITCH:CP:SS-T-1")?.id)
 
-            val inspectionId = repository.startOrResumeInspection(checkpointId, "R. Ahmed", "Unit 3")
+            val inspectionId = repository.startOrResumeInspection(checkpointId, "R. Ahmed", 5)
             val details = repository.getInspection(inspectionId)!!
             assertEquals(ChecklistTemplates.forType(CheckpointType.FIRE_SAFETY).size, details.items.size)
             assertEquals("R. Ahmed", details.inspection.inspectorName)
+            assertEquals(5L, details.inspection.inspectorUserId)
             assertTrue(details.items.all { it.result == ItemResult.UNANSWERED })
 
-            assertEquals(inspectionId, repository.startOrResumeInspection(checkpointId, "Other", "Other"))
+            assertEquals(inspectionId, repository.startOrResumeInspection(checkpointId, "Other", 6))
         }
     }
 
@@ -68,13 +69,13 @@ class InspectionRepositoryTest {
     }
 
     @Test
-    fun answersPersistAndCompletionStartsAFreshInspectionNextTime() {
+    fun answersPersistAndSubmittingStartsAFreshInspectionNextTime() {
         runBlocking {
             val checkpointId = repository.createCheckpoint("E-9", "Panel 9", "", CheckpointType.ELECTRICAL)
-            val inspectionId = repository.startOrResumeInspection(checkpointId, "Inspector", "")
+            val inspectionId = repository.startOrResumeInspection(checkpointId, "Inspector", null)
             val items = repository.getInspection(inspectionId)!!.sortedItems
-            items.forEach { repository.setItemResult(it.id, ItemResult.PASS) }
-            repository.setItemResult(items.first().id, ItemResult.FAIL)
+            items.forEach { repository.setItemResult(it, ItemResult.PASS) }
+            repository.setItemResult(items.first(), ItemResult.FAIL)
             repository.setItemNote(items.first().id, "Door hinge broken")
 
             val summary = repository.getInspection(inspectionId)!!.summary()
@@ -82,8 +83,8 @@ class InspectionRepositoryTest {
             assertEquals(1, summary.failed)
             assertEquals(Outcome.PASS, summary.outcome) // 11/12 = 91%, failed item is not critical
 
-            repository.markCompleted(inspectionId, System.currentTimeMillis(), "report.pdf")
-            assertNotEquals(inspectionId, repository.startOrResumeInspection(checkpointId, "Inspector", ""))
+            assertEquals(1, repository.submitInspection(inspectionId, System.currentTimeMillis(), "report.pdf"))
+            assertNotEquals(inspectionId, repository.startOrResumeInspection(checkpointId, "Inspector", null))
         }
     }
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Camera is used for QR scanning and inspection photos. The app still installs on
          devices without a camera; QR codes can then be typed in by hand. -->
@@ -9,13 +8,9 @@
         android:required="false" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- SafeStitch is offline-only. Strip network permissions even if a library asks for them. -->
-    <uses-permission
-        android:name="android.permission.INTERNET"
-        tools:node="remove" />
-    <uses-permission
-        android:name="android.permission.ACCESS_NETWORK_STATE"
-        tools:node="remove" />
+    <!-- Used ONLY by the optional sync (off by default; an admin turns it on). Everything else works offline.
+         ACCESS_NETWORK_STATE is added by WorkManager so uploads wait until the phone is online. -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".SafeStitchApp"
@@ -24,6 +19,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SafeStitch">

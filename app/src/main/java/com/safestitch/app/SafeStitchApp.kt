@@ -9,5 +9,7 @@ class SafeStitchApp : Application() {
     override fun onCreate() {
         super.onCreate()
         container = AppContainer(this)
+        // If sync is enabled, upload anything still queued from earlier (waits for a network).
+        container.syncManager.requestSync()
     }
 }

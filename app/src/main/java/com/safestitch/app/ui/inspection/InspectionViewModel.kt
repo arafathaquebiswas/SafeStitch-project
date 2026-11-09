@@ -6,13 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.safestitch.app.data.InspectionRepository
-import com.safestitch.app.data.SettingsRepository
 import com.safestitch.app.data.db.ChecklistItemEntity
 import com.safestitch.app.data.db.InspectionWithDetails
 import com.safestitch.app.data.db.PhotoEntity
 import com.safestitch.app.domain.CompletionRules
+import com.safestitch.app.domain.FindingDefaults
 import com.safestitch.app.domain.InspectionSummary
 import com.safestitch.app.domain.ItemResult
+import com.safestitch.app.domain.Priority
 import com.safestitch.app.pdf.ReportService
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.Channel
@@ -33,7 +34,6 @@ data class InspectionUiState(
 class InspectionViewModel(
     private val inspectionId: Long,
     private val repository: InspectionRepository,
-    private val settings: SettingsRepository,
     private val reportService: ReportService,
 ) : ViewModel() {
     sealed interface Event {
@@ -74,7 +74,7 @@ class InspectionViewModel(
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
-                    channel.send(Event.Error("Could not save: ${e.message}"))
+                    channel.send(Event.Error(e.message ?: "Could not save."))
                 }
             }
         }
@@ -84,16 +84,25 @@ class InspectionViewModel(
         writes.trySend(block)
     }
 
-    fun setResult(itemId: Long, result: ItemResult) = enqueue { repository.setItemResult(itemId, result) }
+    fun setResult(item: ChecklistItemEntity, result: ItemResult) = enqueue { repository.setItemResult(item, result) }
     fun setNote(itemId: Long, note: String) = enqueue { repository.setItemNote(itemId, note) }
-    fun setHeader(inspectorName: String, siteName: String) = enqueue { repository.updateHeader(inspectionId, inspectorName, siteName) }
+
+    /** Changing the priority resets the due date to that priority's default (pick another date afterwards if needed). */
+    fun setPriority(itemId: Long, priority: Priority) = enqueue {
+        repository.setFinding(itemId, priority, FindingDefaults.dueAt(priority, System.currentTimeMillis()))
+    }
+
+    fun setDueDate(item: ChecklistItemEntity, dueAt: Long) = enqueue {
+        repository.setFinding(item.id, item.priority ?: FindingDefaults.priorityFor(item.critical), dueAt)
+    }
+
     fun setGeneralNotes(notes: String) = enqueue { repository.setGeneralNotes(inspectionId, notes) }
     fun deletePhoto(photoId: Long) = enqueue { repository.deletePhoto(photoId) }
     fun dismissProblems() {
         completionProblems = emptyList()
     }
 
-    /** Validates, writes the PDF and marks the inspection completed (after all pending saves). */
+    /** Validates, writes the PDF, then submits (creating one corrective action per failed item). */
     fun complete() {
         if (completing) return
         completing = true
@@ -107,15 +116,12 @@ class InspectionViewModel(
                 }
                 val completedAt = System.currentTimeMillis()
                 val file = reportService.generateReport(inspectionId, completedAt)
-                repository.markCompleted(inspectionId, completedAt, file.name)
-                if (settings.settings.value.inspectorName.isBlank()) {
-                    settings.update(details.inspection.inspectorName, details.inspection.siteName)
-                }
+                repository.submitInspection(inspectionId, completedAt, file.name)
                 channel.send(Event.Completed)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                channel.send(Event.Error("Could not create the PDF: ${e.message}"))
+                channel.send(Event.Error("Could not submit: ${e.message}"))
             } finally {
                 completing = false
             }

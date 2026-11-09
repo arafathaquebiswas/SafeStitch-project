@@ -12,6 +12,7 @@ import android.text.style.StyleSpan
 import com.safestitch.app.data.PhotoStorage
 import com.safestitch.app.data.db.InspectionWithDetails
 import com.safestitch.app.data.db.PhotoEntity
+import com.safestitch.app.domain.ActionStatus
 import com.safestitch.app.domain.InspectionSummary
 import com.safestitch.app.domain.ItemResult
 import com.safestitch.app.domain.Outcome
@@ -34,6 +35,7 @@ class ReportPdfWriter(
     private val clock: () -> Long = System::currentTimeMillis,
 ) {
     private val dateFormat = DateTimeFormatter.ofPattern("d MMM yyyy, HH:mm", Locale.ENGLISH)
+    private val dayFormat = DateTimeFormatter.ofPattern("d MMM yyyy", Locale.ENGLISH)
 
     /** Writes the report to [out] and returns the number of pages. */
     fun write(details: InspectionWithDetails, out: File): Int {
@@ -54,6 +56,7 @@ class ReportPdfWriter(
                 pager.heading("General notes", keepWithNext = 30f)
                 pager.flowText(inspection.generalNotes.trim(), PdfStyle.text(9.5f))
             }
+            drawCorrectiveActions(pager, details)
             drawPhotos(pager, details)
             drawSignOff(pager, details)
             pager.finish()
@@ -84,8 +87,8 @@ class ReportPdfWriter(
         val rows = listOf(
             "Checkpoint" to "${checkpoint.name} (${checkpoint.code})",
             "Type" to checkpoint.type.label,
-            "Area / line" to checkpoint.area.ifBlank { "—" },
-            "Site / factory" to inspection.siteName.ifBlank { "—" },
+            "Location" to inspection.siteName.ifBlank { "—" },
+            "Exact spot" to checkpoint.area.ifBlank { "—" },
             "Inspector" to inspection.inspectorName.ifBlank { "—" },
             "Started" to format(inspection.startedAt),
             "Completed" to (inspection.completedAt?.let(::format) ?: "Not completed (draft)"),
@@ -176,6 +179,11 @@ class ReportPdfWriter(
                 val photoCount = photosPerItem[item.id]?.size ?: 0
                 val extra = buildString {
                     if (item.note.isNotBlank()) append("Note: ").append(item.note.trim())
+                    if (item.result == ItemResult.FAIL && item.priority != null) {
+                        if (isNotEmpty()) append("   ")
+                        append("Priority ${item.priority.label}")
+                        item.dueAt?.let { append(" · due ").append(formatDate(it)) }
+                    }
                     if (photoCount > 0) {
                         if (isNotEmpty()) append("   ")
                         append(if (photoCount == 1) "[1 photo]" else "[$photoCount photos]")
@@ -241,6 +249,48 @@ class ReportPdfWriter(
             pager.y += boxHeight + captionHeight + 14f
         }
     }
+
+    /**
+     * One corrective action per failed item. On submission the actions are not stored yet, so they are
+     * derived from the failed items (status Open); a regenerated PDF shows the stored status.
+     */
+    private fun drawCorrectiveActions(pager: PdfPager, details: InspectionWithDetails) {
+        val failed = details.sortedItems.filter { it.result == ItemResult.FAIL }
+        if (failed.isEmpty()) return
+        val stored = details.actions.associateBy { it.itemId }
+        pager.heading("Corrective actions (${failed.size})", keepWithNext = 50f)
+        val textPaint = PdfStyle.text(9.5f)
+        val small = PdfStyle.text(8.5f, PdfStyle.MUTED)
+        failed.forEach { item ->
+            val action = stored[item.id]
+            val priority = action?.priority ?: item.priority
+            val due = action?.dueAt ?: item.dueAt
+            val status = action?.status ?: ActionStatus.OPEN
+            pager.ensure(46f)
+            val c = pager.canvas
+            val top = pager.y
+            val color = when (status) {
+                ActionStatus.OPEN -> PdfStyle.FAIL
+                ActionStatus.RESOLVED -> PdfStyle.NEUTRAL
+                ActionStatus.VERIFIED -> PdfStyle.PASS
+            }
+            PdfStyle.badge(c, status.label.uppercase(Locale.ENGLISH), color, RectF(pager.right - 120f, top + 2f, pager.right, top + 16f))
+            val title = PdfStyle.layout("${item.position + 1}. ${item.question}", textPaint, (pager.width - 130f).toInt())
+            PdfStyle.drawLayout(c, title, pager.left, top + 2f)
+            pager.y = top + max(title.height.toFloat(), 16f) + 4f
+            val lines = buildString {
+                append("Priority ${priority?.label ?: "—"} · due ${due?.let(::formatDate) ?: "—"}")
+                append("\nFinding: ").append(action?.description ?: item.note.trim())
+                action?.resolutionNote?.let { append("\nFix: ").append(it).append(" (").append(action.resolvedByName.orEmpty()).append(")") }
+                action?.verifiedAt?.let { append("\nVerified by ").append(action.verifiedByName.orEmpty()).append(" on ").append(formatDate(it)) }
+            }
+            pager.flowText(lines, small, spacingAfter = 6f)
+            pager.canvas.drawLine(pager.left, pager.y, pager.right, pager.y, PdfStyle.stroke(PdfStyle.RULE, 0.5f))
+            pager.y += 6f
+        }
+    }
+
+    private fun formatDate(millis: Long): String = dayFormat.format(Instant.ofEpochMilli(millis).atZone(zone))
 
     private fun caption(number: Int, photo: PhotoEntity, itemLabel: String?): String =
         "Photo $number  ·  ${format(photo.takenAt)}\n${itemLabel ?: "General photo"}"

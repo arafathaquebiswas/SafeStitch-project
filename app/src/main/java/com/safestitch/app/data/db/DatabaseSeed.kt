@@ -1,0 +1,82 @@
+package com.safestitch.app.data.db
+
+import android.content.ContentValues
+import android.database.sqlite.SQLiteDatabase
+import androidx.room.migration.AutoMigrationSpec
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.safestitch.app.domain.CheckpointType
+import com.safestitch.app.domain.ChecklistTemplates
+import com.safestitch.app.domain.FindingDefaults
+
+/**
+ * Version 1 -> 2. Room adds the new tables/columns automatically (AutoMigration); this spec then
+ * converts the existing data so nothing is lost:
+ *  - every old free-text "area" becomes an Area under "My factory › Main building › Floor not set";
+ *  - the built-in checklists become editable template questions;
+ *  - failed items of completed inspections get a priority, a due date and one corrective action.
+ */
+class Migration1To2 : AutoMigrationSpec {
+    override fun onPostMigrate(db: SupportSQLiteDatabase) {
+        DatabaseSeed.seedQuestions(db)
+        DatabaseSeed.migrateLegacyLocations(db)
+        DatabaseSeed.backfillFindings(db)
+    }
+}
+
+object DatabaseSeed {
+    fun seedQuestions(db: SupportSQLiteDatabase) {
+        CheckpointType.entries.forEach { type ->
+            ChecklistTemplates.forType(type).forEachIndexed { index, item ->
+                db.insert(
+                    "template_questions",
+                    SQLiteDatabase.CONFLICT_ABORT,
+                    ContentValues().apply {
+                        put("type", type.name)
+                        put("position", index)
+                        put("section", item.section)
+                        put("question", item.question)
+                        put("critical", if (item.critical) 1 else 0)
+                        put("active", 1)
+                    },
+                )
+            }
+        }
+    }
+
+    fun migrateLegacyLocations(db: SupportSQLiteDatabase) {
+        val legacyAreas = db.query("SELECT DISTINCT TRIM(area) FROM checkpoints").use { cursor ->
+            buildList { while (cursor.moveToNext()) add(cursor.getString(0).orEmpty()) }
+        }
+        if (legacyAreas.isEmpty()) return
+        val factoryId = insert(db, "factories", ContentValues().apply { put("name", "My factory") })
+        val buildingId = insert(db, "buildings", ContentValues().apply { put("factoryId", factoryId); put("name", "Main building") })
+        val floorId = insert(db, "floors", ContentValues().apply { put("buildingId", buildingId); put("name", "Floor not set") })
+        legacyAreas.forEach { legacy ->
+            val areaId = insert(db, "areas", ContentValues().apply { put("floorId", floorId); put("name", legacy.ifBlank { "General area" }) })
+            // The old text now lives in the area name, so the "exact spot" starts empty.
+            db.execSQL("UPDATE checkpoints SET areaId = ?, area = '' WHERE TRIM(area) = ?", arrayOf<Any>(areaId, legacy))
+        }
+    }
+
+    fun backfillFindings(db: SupportSQLiteDatabase) {
+        db.execSQL("UPDATE inspections SET updatedAt = COALESCE(completedAt, startedAt)")
+        db.execSQL(
+            "UPDATE checklist_items SET priority = CASE WHEN critical = 1 THEN 'CRITICAL' ELSE 'MEDIUM' END " +
+                "WHERE result = 'FAIL' AND priority IS NULL",
+        )
+        db.execSQL(
+            "UPDATE checklist_items SET dueAt = (SELECT COALESCE(i.completedAt, i.startedAt) FROM inspections i " +
+                "WHERE i.id = checklist_items.inspectionId) + (CASE WHEN critical = 1 THEN 1 ELSE 7 END) * ${FindingDefaults.DAY_MILLIS} " +
+                "WHERE result = 'FAIL' AND dueAt IS NULL",
+        )
+        db.execSQL(
+            "INSERT OR IGNORE INTO corrective_actions (inspectionId, itemId, description, priority, dueAt, status, createdAt, updatedAt) " +
+                "SELECT ci.inspectionId, ci.id, ci.note, ci.priority, ci.dueAt, 'OPEN', i.completedAt, i.completedAt " +
+                "FROM checklist_items ci JOIN inspections i ON i.id = ci.inspectionId " +
+                "WHERE ci.result = 'FAIL' AND i.completedAt IS NOT NULL",
+        )
+    }
+
+    private fun insert(db: SupportSQLiteDatabase, table: String, values: ContentValues): Long =
+        db.insert(table, SQLiteDatabase.CONFLICT_ABORT, values)
+}

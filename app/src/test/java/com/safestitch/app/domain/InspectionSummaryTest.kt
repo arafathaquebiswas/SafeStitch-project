@@ -55,16 +55,18 @@ class InspectionSummaryTest {
             listOf(item(ItemResult.UNANSWERED), item(ItemResult.FAIL), item(ItemResult.PASS)),
             inspectorName = " ",
         )
-        assertEquals(3, problems.size)
+        assertEquals(4, problems.size)
         assertTrue(problems[0].contains("inspector"))
         assertTrue(problems[1].contains("1 checklist item"))
         assertTrue(problems[2].contains("1 failed item"))
+        assertTrue(problems[3].contains("priority and a due date"))
     }
 
     @Test
     fun completionRulesPassWhenEverythingIsFilledIn() {
+        val failed = ItemOutcome(ItemResult.FAIL, critical = false, note = "Guard missing; maintenance called", priority = Priority.HIGH, dueAt = 1L)
         val problems = CompletionRules.problems(
-            listOf(item(ItemResult.PASS), item(ItemResult.FAIL, note = "Guard missing; maintenance called"), item(ItemResult.NOT_APPLICABLE)),
+            listOf(item(ItemResult.PASS), failed, item(ItemResult.NOT_APPLICABLE)),
             inspectorName = "R. Ahmed",
         )
         assertTrue(problems.isEmpty())

@@ -35,23 +35,33 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.safestitch.app.AppContainer
+import com.safestitch.app.data.CatalogRepository
 import com.safestitch.app.data.DuplicateCheckpointCodeException
 import com.safestitch.app.data.InspectionRepository
-import com.safestitch.app.data.SettingsRepository
+import com.safestitch.app.data.db.AreaPath
+import com.safestitch.app.data.db.UserEntity
 import com.safestitch.app.domain.CheckpointType
 import com.safestitch.app.domain.QrPayload
 import com.safestitch.app.ui.components.BackButton
+import com.safestitch.app.ui.components.LocationSelection
+import com.safestitch.app.ui.components.LocationSelector
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class CheckpointFormViewModel(
     private val repository: InspectionRepository,
-    private val settings: SettingsRepository,
+    catalog: CatalogRepository,
+    private val user: UserEntity,
     val scannedCode: String?,
     private val checkpointId: Long?,
 ) : ViewModel() {
@@ -62,11 +72,13 @@ class CheckpointFormViewModel(
 
     private val channel = Channel<Event>(Channel.BUFFERED)
     val events = channel.receiveAsFlow()
+    val paths: StateFlow<List<AreaPath>> = catalog.observeAreaPaths().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     var code by mutableStateOf(scannedCode.orEmpty())
     var name by mutableStateOf("")
-    var area by mutableStateOf("")
+    var spot by mutableStateOf("")
     var type by mutableStateOf(CheckpointType.SEWING_LINE)
+    var location by mutableStateOf(LocationSelection())
     var error by mutableStateOf<String?>(null)
         private set
     var saving by mutableStateOf(false)
@@ -78,11 +90,12 @@ class CheckpointFormViewModel(
     init {
         if (checkpointId != null) {
             viewModelScope.launch {
-                repository.getCheckpoint(checkpointId)?.let {
-                    code = it.code
-                    name = it.name
-                    area = it.area
-                    type = it.type
+                repository.getCheckpoint(checkpointId)?.let { cp ->
+                    code = cp.code
+                    name = cp.name
+                    spot = cp.area
+                    type = cp.type
+                    location = LocationSelection.of(cp.areaId?.let { id -> catalog.observeAreaPaths().first().firstOrNull { it.areaId == id } })
                 }
             }
         }
@@ -93,21 +106,21 @@ class CheckpointFormViewModel(
         error = null
         val normalized = QrPayload.parseCheckpointCode(code)
         when {
-            normalized == null -> error = "Enter the checkpoint code printed on (or planned for) its QR label."
-            name.isBlank() -> error = "Give the checkpoint a name, for example \"Sewing line 4\"."
+            normalized == null -> error = "Enter the code printed on (or planned for) its QR label."
+            name.isBlank() -> error = "Give the equipment a name, for example \"Fire extinguisher FE-12\"."
+            !location.isEmpty && location.areaId == null -> error = "Choose down to the area, or set the factory back to \"Not set\"."
         }
         if (error != null || normalized == null) return
         saving = true
         viewModelScope.launch {
             try {
                 if (checkpointId != null) {
-                    repository.updateCheckpoint(checkpointId, name, area, type)
+                    repository.updateCheckpoint(checkpointId, name, spot, type, location.areaId)
                     channel.send(Event.Saved)
                 } else {
-                    val newId = repository.createCheckpoint(normalized, name, area, type)
+                    val newId = repository.createCheckpoint(normalized, name, spot, type, location.areaId)
                     if (scannedCode != null) {
-                        val defaults = settings.settings.value
-                        channel.send(Event.InspectionReady(repository.startOrResumeInspection(newId, defaults.inspectorName, defaults.siteName)))
+                        channel.send(Event.InspectionReady(repository.startOrResumeInspection(newId, user.displayName, user.id)))
                     } else {
                         channel.send(Event.Saved)
                     }
@@ -129,13 +142,15 @@ class CheckpointFormViewModel(
 @Composable
 fun CheckpointFormScreen(
     container: AppContainer,
+    user: UserEntity,
     scannedCode: String?,
     checkpointId: Long?,
     onBack: () -> Unit,
     onSaved: () -> Unit,
     onInspectionReady: (Long) -> Unit,
 ) {
-    val vm = viewModel { CheckpointFormViewModel(container.repository, container.settings, scannedCode, checkpointId) }
+    val vm = viewModel { CheckpointFormViewModel(container.repository, container.catalog, user, scannedCode, checkpointId) }
+    val paths by vm.paths.collectAsStateWithLifecycle()
     LaunchedEffect(vm) {
         vm.events.collect {
             when (it) {
@@ -148,7 +163,7 @@ fun CheckpointFormScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (vm.isEditing) "Edit checkpoint" else "New checkpoint") },
+                title = { Text(if (vm.isEditing) "Edit equipment" else "New equipment") },
                 navigationIcon = { BackButton(onBack) },
             )
         },
@@ -174,7 +189,7 @@ fun CheckpointFormScreen(
             OutlinedTextField(
                 value = vm.code,
                 onValueChange = { vm.code = it.take(QrPayload.MAX_CODE_LENGTH) },
-                label = { Text("Checkpoint code (on the QR label)") },
+                label = { Text("Equipment code (on the QR label)") },
                 readOnly = vm.codeLocked,
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters, imeAction = ImeAction.Next),
@@ -184,16 +199,27 @@ fun CheckpointFormScreen(
                 value = vm.name,
                 onValueChange = { vm.name = it.take(80) },
                 label = { Text("Name") },
-                placeholder = { Text("e.g. Sewing line 4") },
+                placeholder = { Text("e.g. Fire extinguisher FE-12") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Next),
                 modifier = Modifier.fillMaxWidth().testTag("cp-name"),
             )
+            Text("Location", style = MaterialTheme.typography.titleSmall)
+            if (paths.isEmpty()) {
+                Text(
+                    "No locations yet. An admin can add factory › building › floor › area under Admin › Locations; " +
+                        "you can assign this equipment later.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            } else {
+                LocationSelector(paths, vm.location, { vm.location = it }, noneLabel = "Not set", tagPrefix = "cp-loc")
+            }
             OutlinedTextField(
-                value = vm.area,
-                onValueChange = { vm.area = it.take(80) },
-                label = { Text("Area / floor (optional)") },
-                placeholder = { Text("e.g. Floor 2, Building B") },
+                value = vm.spot,
+                onValueChange = { vm.spot = it.take(80) },
+                label = { Text("Exact spot (optional)") },
+                placeholder = { Text("e.g. next to stair B") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Done),
                 modifier = Modifier.fillMaxWidth().testTag("cp-area"),
@@ -217,16 +243,12 @@ fun CheckpointFormScreen(
             vm.error?.let {
                 Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("cp-error"))
             }
-            Button(
-                onClick = vm::save,
-                enabled = !vm.saving,
-                modifier = Modifier.fillMaxWidth().testTag("cp-save"),
-            ) {
+            Button(onClick = vm::save, enabled = !vm.saving, modifier = Modifier.fillMaxWidth().testTag("cp-save")) {
                 Text(
                     when {
                         vm.scannedCode != null -> "Save and start inspection"
                         vm.isEditing -> "Save changes"
-                        else -> "Save checkpoint"
+                        else -> "Save equipment"
                     },
                 )
             }

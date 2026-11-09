@@ -59,7 +59,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.safestitch.app.AppContainer
 import com.safestitch.app.R
 import com.safestitch.app.data.InspectionRepository
-import com.safestitch.app.data.SettingsRepository
+import com.safestitch.app.data.db.UserEntity
 import com.safestitch.app.domain.QrPayload
 import com.safestitch.app.qr.QrCodeAnalyzer
 import com.safestitch.app.ui.camera.CameraPreview
@@ -74,7 +74,7 @@ import java.util.concurrent.Executors
 
 class ScanViewModel(
     private val repository: InspectionRepository,
-    private val settings: SettingsRepository,
+    private val user: UserEntity,
 ) : ViewModel() {
     sealed interface Event {
         data class InspectionReady(val inspectionId: Long) : Event
@@ -101,8 +101,7 @@ class ScanViewModel(
                 if (checkpoint == null) {
                     channel.send(Event.NewCheckpoint(code))
                 } else {
-                    val defaults = settings.settings.value
-                    channel.send(Event.InspectionReady(repository.startOrResumeInspection(checkpoint.id, defaults.inspectorName, defaults.siteName)))
+                    channel.send(Event.InspectionReady(repository.startOrResumeInspection(checkpoint.id, user.displayName, user.id)))
                 }
             } catch (e: CancellationException) {
                 throw e
@@ -119,11 +118,12 @@ class ScanViewModel(
 @Composable
 fun ScanScreen(
     container: AppContainer,
+    user: UserEntity,
     onBack: () -> Unit,
     onInspectionReady: (Long) -> Unit,
     onNewCheckpoint: (String) -> Unit,
 ) {
-    val vm = viewModel { ScanViewModel(container.repository, container.settings) }
+    val vm = viewModel { ScanViewModel(container.repository, user) }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }

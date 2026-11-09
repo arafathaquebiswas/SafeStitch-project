@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -60,12 +59,14 @@ import com.safestitch.app.AppContainer
 import com.safestitch.app.R
 import com.safestitch.app.data.PhotoStorage
 import com.safestitch.app.data.db.ChecklistItemEntity
-import com.safestitch.app.data.db.InspectionEntity
+import com.safestitch.app.data.db.InspectionWithDetails
 import com.safestitch.app.data.db.PhotoEntity
 import com.safestitch.app.domain.InspectionSummary
 import com.safestitch.app.domain.ItemResult
 import com.safestitch.app.ui.components.BackButton
+import com.safestitch.app.ui.components.DueDateButton
 import com.safestitch.app.ui.components.PhotoThumbnail
+import com.safestitch.app.ui.components.PrioritySelector
 import com.safestitch.app.ui.components.StatusChip
 import com.safestitch.app.ui.components.formatDateTime
 import com.safestitch.app.ui.components.resultColor
@@ -83,9 +84,7 @@ fun InspectionScreen(
     onCompleted: () -> Unit,
     onDeleted: () -> Unit,
 ) {
-    val vm = viewModel {
-        InspectionViewModel(inspectionId, container.repository, container.settings, container.reportService)
-    }
+    val vm = viewModel { InspectionViewModel(inspectionId, container.repository, container.reportService) }
     val state by vm.state.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     var confirmDelete by remember { mutableStateOf(false) }
@@ -121,24 +120,15 @@ fun InspectionScreen(
                 },
             )
         },
-        bottomBar = {
-            if (current != null) {
-                CompleteBar(summary = current.summary, completing = vm.completing, onComplete = vm::complete)
-            }
-        },
+        bottomBar = { if (current != null) SubmitBar(current.summary, vm.completing, vm::complete) },
         snackbarHost = { SnackbarHost(snackbar) },
     ) { padding ->
         if (current == null) {
-            Box(Modifier.padding(padding).fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
+            Box(Modifier.padding(padding).fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
             return@Scaffold
         }
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .imePadding()
-                .testTag("inspection-list"),
+            modifier = Modifier.fillMaxSize().imePadding().testTag("inspection-list"),
             contentPadding = PaddingValues(
                 start = 16.dp,
                 end = 16.dp,
@@ -147,7 +137,7 @@ fun InspectionScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            item(key = "header") { HeaderCard(current.details.inspection, onChange = vm::setHeader) }
+            item(key = "header") { HeaderCard(current.details) }
             item(key = "progress") { ProgressCard(current.summary) }
             current.sections.forEach { (section, items) ->
                 item(key = "section-$section") {
@@ -158,8 +148,7 @@ fun InspectionScreen(
                         item = item,
                         photos = current.photosByItem[item.id].orEmpty(),
                         photoStorage = container.photoStorage,
-                        onResult = { vm.setResult(item.id, it) },
-                        onNote = { vm.setNote(item.id, it) },
+                        vm = vm,
                         onTakePhoto = { onTakePhoto(item.id) },
                         onPhotoClick = { photoToDelete = it },
                     )
@@ -167,7 +156,7 @@ fun InspectionScreen(
             }
             item(key = "general") {
                 GeneralCard(
-                    inspection = current.details.inspection,
+                    details = current.details,
                     photos = current.photosByItem[null].orEmpty(),
                     photoStorage = container.photoStorage,
                     onNotes = vm::setGeneralNotes,
@@ -191,12 +180,7 @@ fun InspectionScreen(
             onDismissRequest = { confirmDelete = false },
             title = { Text("Delete this inspection?") },
             text = { Text("All answers, notes and photos for this inspection will be removed from the phone.") },
-            confirmButton = {
-                TextButton(onClick = {
-                    confirmDelete = false
-                    vm.delete()
-                }) { Text("Delete") }
-            },
+            confirmButton = { TextButton(onClick = { confirmDelete = false; vm.delete() }) { Text("Delete") } },
             dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text("Cancel") } },
         )
     }
@@ -205,45 +189,21 @@ fun InspectionScreen(
             onDismissRequest = { photoToDelete = null },
             title = { Text("Remove photo?") },
             text = { Text("The photo will not appear in the PDF report.") },
-            confirmButton = {
-                TextButton(onClick = {
-                    photoToDelete = null
-                    vm.deletePhoto(photo.id)
-                }) { Text("Remove") }
-            },
+            confirmButton = { TextButton(onClick = { photoToDelete = null; vm.deletePhoto(photo.id) }) { Text("Remove") } },
             dismissButton = { TextButton(onClick = { photoToDelete = null }) { Text("Keep") } },
         )
     }
 }
 
 @Composable
-private fun HeaderCard(inspection: InspectionEntity, onChange: (String, String) -> Unit) {
-    var inspector by rememberSaveable(inspection.id) { mutableStateOf(inspection.inspectorName) }
-    var site by rememberSaveable(inspection.id) { mutableStateOf(inspection.siteName) }
+private fun HeaderCard(details: InspectionWithDetails) {
+    val inspection = details.inspection
     Card(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            OutlinedTextField(
-                value = inspector,
-                onValueChange = {
-                    inspector = it.take(80)
-                    onChange(inspector, site)
-                },
-                label = { Text("Inspector name") },
-                singleLine = true,
-                isError = inspector.isBlank(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
-                modifier = Modifier.fillMaxWidth().testTag("inspector-name"),
-            )
-            OutlinedTextField(
-                value = site,
-                onValueChange = {
-                    site = it.take(80)
-                    onChange(inspector, site)
-                },
-                label = { Text("Site / factory (optional)") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
-                modifier = Modifier.fillMaxWidth().testTag("site-name"),
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text("Inspector: ${inspection.inspectorName}", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("inspector-name"))
+            Text(
+                "Location: " + listOf(inspection.siteName.ifBlank { "not set" }, details.checkpoint.area).filter { it.isNotBlank() }.joinToString("  ·  "),
+                style = MaterialTheme.typography.bodyMedium,
             )
             Text("Started ${formatDateTime(inspection.startedAt)}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
@@ -274,23 +234,21 @@ private fun ChecklistItemCard(
     item: ChecklistItemEntity,
     photos: List<PhotoEntity>,
     photoStorage: PhotoStorage,
-    onResult: (ItemResult) -> Unit,
-    onNote: (String) -> Unit,
+    vm: InspectionViewModel,
     onTakePhoto: () -> Unit,
     onPhotoClick: (PhotoEntity) -> Unit,
 ) {
     var note by rememberSaveable(item.id) { mutableStateOf(item.note) }
     var noteOpen by rememberSaveable(item.id) { mutableStateOf(false) }
     val failed = item.result == ItemResult.FAIL
-    Card(Modifier.fillMaxWidth().testTag("item-${item.position}")) {
+    val tag = "item-${item.position}"
+    Card(Modifier.fillMaxWidth().testTag(tag)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row {
                 Text("${item.position + 1}.", fontWeight = FontWeight.Bold, modifier = Modifier.width(28.dp))
                 Column(Modifier.weight(1f)) {
                     Text(item.question, style = MaterialTheme.typography.bodyLarge)
-                    if (item.critical) {
-                        Text("Critical item", style = MaterialTheme.typography.labelMedium, color = LocalStatusColors.current.fail)
-                    }
+                    if (item.critical) Text("Critical item", style = MaterialTheme.typography.labelMedium, color = LocalStatusColors.current.fail)
                 }
             }
             SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
@@ -298,13 +256,10 @@ private fun ChecklistItemCard(
                     val color = resultColor(option)
                     SegmentedButton(
                         selected = item.result == option,
-                        onClick = { onResult(if (item.result == option) ItemResult.UNANSWERED else option) },
+                        onClick = { vm.setResult(item, if (item.result == option) ItemResult.UNANSWERED else option) },
                         shape = SegmentedButtonDefaults.itemShape(index = index, count = answerOptions.size),
-                        colors = SegmentedButtonDefaults.colors(
-                            activeContainerColor = color.copy(alpha = 0.18f),
-                            activeContentColor = color,
-                        ),
-                        modifier = Modifier.testTag("item-${item.position}-${option.name}"),
+                        colors = SegmentedButtonDefaults.colors(activeContainerColor = color.copy(alpha = 0.18f), activeContentColor = color),
+                        modifier = Modifier.testTag("$tag-${option.name}"),
                     ) { Text(option.label) }
                 }
             }
@@ -313,23 +268,26 @@ private fun ChecklistItemCard(
                     value = note,
                     onValueChange = {
                         note = it.take(1_000)
-                        onNote(note)
+                        vm.setNote(item.id, note)
                     },
                     label = { Text(if (failed) "Problem and corrective action (required)" else "Note") },
                     isError = failed && note.isBlank(),
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-                    modifier = Modifier.fillMaxWidth().testTag("item-${item.position}-note"),
+                    modifier = Modifier.fillMaxWidth().testTag("$tag-note"),
                 )
             }
+            if (failed) {
+                Text("Finding priority", style = MaterialTheme.typography.labelLarge)
+                PrioritySelector(selected = item.priority, onSelect = { vm.setPriority(item.id, it) }, tagPrefix = "$tag-priority")
+                DueDateButton(dueAt = item.dueAt, onPick = { vm.setDueDate(item, it) }, testTag = "$tag-due")
+            }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                TextButton(onClick = onTakePhoto, modifier = Modifier.testTag("item-${item.position}-photo")) {
+                TextButton(onClick = onTakePhoto, modifier = Modifier.testTag("$tag-photo")) {
                     Icon(painterResource(R.drawable.ic_photo_camera), contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(6.dp))
                     Text(if (photos.isEmpty()) "Add photo" else "Photo (${photos.size})")
                 }
-                if (!failed && !noteOpen && note.isEmpty()) {
-                    TextButton(onClick = { noteOpen = true }) { Text("Add note") }
-                }
+                if (!failed && !noteOpen && note.isEmpty()) TextButton(onClick = { noteOpen = true }) { Text("Add note") }
             }
             PhotoStrip(photos, photoStorage, onPhotoClick)
         }
@@ -338,14 +296,14 @@ private fun ChecklistItemCard(
 
 @Composable
 private fun GeneralCard(
-    inspection: InspectionEntity,
+    details: InspectionWithDetails,
     photos: List<PhotoEntity>,
     photoStorage: PhotoStorage,
     onNotes: (String) -> Unit,
     onTakePhoto: () -> Unit,
     onPhotoClick: (PhotoEntity) -> Unit,
 ) {
-    var notes by rememberSaveable(inspection.id) { mutableStateOf(inspection.generalNotes) }
+    var notes by rememberSaveable(details.inspection.id) { mutableStateOf(details.inspection.generalNotes) }
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("General notes & photos", style = MaterialTheme.typography.titleMedium)
@@ -381,13 +339,10 @@ private fun PhotoStrip(photos: List<PhotoEntity>, photoStorage: PhotoStorage, on
 }
 
 @Composable
-private fun CompleteBar(summary: InspectionSummary, completing: Boolean, onComplete: () -> Unit) {
+private fun SubmitBar(summary: InspectionSummary, completing: Boolean, onComplete: () -> Unit) {
     Surface(tonalElevation = 3.dp, shadowElevation = 6.dp) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(Modifier.weight(1f)) {
@@ -403,9 +358,8 @@ private fun CompleteBar(summary: InspectionSummary, completing: Boolean, onCompl
                 }
                 Icon(painterResource(R.drawable.ic_pdf), contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(6.dp))
-                Text("Complete & create PDF")
+                Text("Submit & create PDF")
             }
         }
     }
-    Spacer(Modifier.height(0.dp))
 }

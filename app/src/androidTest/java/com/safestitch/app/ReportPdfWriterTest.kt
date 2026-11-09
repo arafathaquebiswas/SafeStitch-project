@@ -62,20 +62,21 @@ class ReportPdfWriterTest {
         ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { PdfRenderer(it).use { r -> r.pageCount } }
 
     @Test
-    fun writesMultiPageReportWithPhotos() {
+    fun writesMultiPageReportWithPhotosAndCorrectiveActions() {
         runBlocking {
             val checkpointId = repository.createCheckpoint("SS-LINE-04", "Sewing line 4", "Floor 2", CheckpointType.SEWING_LINE)
-            val inspectionId = repository.startOrResumeInspection(checkpointId, "R. Ahmed", "Unit 3")
+            val inspectionId = repository.startOrResumeInspection(checkpointId, "R. Ahmed", null)
             val items = repository.getInspection(inspectionId)!!.sortedItems
-            items.forEach { repository.setItemResult(it.id, ItemResult.PASS) }
-            repository.setItemResult(items[1].id, ItemResult.FAIL)
+            items.forEach { repository.setItemResult(it, ItemResult.PASS) }
+            repository.setItemResult(items[1], ItemResult.FAIL)
             repository.setItemNote(items[1].id, "Belt cover missing on machine 12. Maintenance fitted a new cover at 10:40.")
             repository.setGeneralNotes(inspectionId, "Line running at full capacity during inspection.")
             repository.addPhoto(inspectionId, items[1].id, fakePhoto())
             repeat(3) { repository.addPhoto(inspectionId, null, fakePhoto()) }
-            repository.markCompleted(inspectionId, System.currentTimeMillis(), "unused.pdf")
+            repository.submitInspection(inspectionId, System.currentTimeMillis(), "unused.pdf")
 
             val details = repository.getInspection(inspectionId)!!
+            assertEquals(1, details.actions.size)
             val out = File(context.cacheDir, "report-test.pdf")
             val pages = ReportPdfWriter(photos, "test").write(details, out)
 
@@ -87,7 +88,7 @@ class ReportPdfWriterTest {
     }
 
     @Test
-    fun printedQrLabelDecodesBackToTheCheckpointCode() {
+    fun printedQrLabelDecodesBackToTheEquipmentCode() {
         runBlocking {
             val id = repository.createCheckpoint("SS-FIRE-12", "Fire extinguisher 12", "Stairwell B", CheckpointType.FIRE_SAFETY)
             val checkpoint = repository.getCheckpoint(id)!!

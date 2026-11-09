@@ -5,6 +5,8 @@ data class ItemOutcome(
     val result: ItemResult,
     val critical: Boolean,
     val note: String,
+    val priority: Priority? = null,
+    val dueAt: Long? = null,
 )
 
 enum class Outcome(val label: String) {
@@ -78,6 +80,10 @@ object CompletionRules {
                     "$failedWithoutNote failed items need a note describing the problem and the corrective action."
                 },
             )
+        }
+        val failedWithoutSchedule = items.count { it.result == ItemResult.FAIL && (it.priority == null || it.dueAt == null) }
+        if (failedWithoutSchedule > 0) {
+            add("$failedWithoutSchedule failed item(s) need a priority and a due date.")
         }
     }
 }
