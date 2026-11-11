@@ -6,6 +6,7 @@ import com.safestitch.app.data.db.ActionRow
 import com.safestitch.app.data.db.CheckpointEntity
 import com.safestitch.app.data.db.ChecklistItemEntity
 import com.safestitch.app.data.db.CorrectiveActionEntity
+import com.safestitch.app.data.db.Inspection
 import com.safestitch.app.data.db.InspectionEntity
 import com.safestitch.app.data.db.InspectionWithDetails
 import com.safestitch.app.data.db.PhotoEntity
@@ -21,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class DuplicateCheckpointCodeException(code: String) :
     Exception("Equipment with code $code already exists.")
@@ -56,6 +58,64 @@ class InspectionRepository(
     fun observeInspection(id: Long): Flow<InspectionWithDetails?> = inspections.observe(id)
     suspend fun getInspection(id: Long): InspectionWithDetails? = inspections.get(id)
     suspend fun countInspectionsFor(checkpointId: Long): Int = inspections.countForCheckpoint(checkpointId)
+
+    // --- captured camera inspections (organized by status tags) -----------------------------------
+
+    fun observeCapturedInspections(): Flow<List<Inspection>> = inspections.observeCapturedInspections()
+
+    fun observeCapturedInspection(id: Long): Flow<Inspection?> = inspections.observeCapturedInspection(id)
+
+    suspend fun getCapturedInspection(id: Long): Inspection? = inspections.getCapturedInspection(id)
+
+    fun observeCapturedInspectionsByTag(tag: String): Flow<List<Inspection>> =
+        inspections.observeCapturedInspectionsByTag(tag.trim())
+
+    suspend fun recordCapturedInspection(
+        imagePath: String,
+        statusTags: List<String> = listOf(Inspection.TAG_NEEDS_REVIEW),
+        timestamp: Long = clock(),
+    ): Long = inspections.insertCapturedInspection(
+        Inspection(
+            timestamp = timestamp,
+            imagePath = imagePath,
+            statusTags = statusTags.ifEmpty { listOf(Inspection.TAG_NEEDS_REVIEW) },
+        ),
+    )
+
+    suspend fun updateCapturedInspectionTags(id: Long, statusTags: List<String>) {
+        val cleaned = statusTags.map { Inspection.normalizeTag(it) }.filter { it.isNotEmpty() }.distinct()
+        inspections.updateCapturedInspectionTags(
+            id = id,
+            statusTags = cleaned.ifEmpty { listOf(Inspection.TAG_NEEDS_REVIEW) },
+        )
+    }
+
+    suspend fun toggleCapturedInspectionTag(inspection: Inspection, tag: String) {
+        val updated = inspection.withToggledTag(tag)
+        inspections.updateCapturedInspection(updated)
+    }
+
+    suspend fun addCapturedInspectionTag(inspection: Inspection, rawTag: String) {
+        val updated = inspection.withAddedTag(rawTag)
+        if (updated != inspection) {
+            inspections.updateCapturedInspection(updated)
+        }
+    }
+
+    suspend fun removeCapturedInspectionTag(inspection: Inspection, rawTag: String) {
+        val updated = inspection.withRemovedTag(rawTag)
+        if (updated != inspection) {
+            inspections.updateCapturedInspection(updated)
+        }
+    }
+
+    suspend fun deleteCapturedInspection(id: Long) {
+        val existing = inspections.getCapturedInspection(id) ?: return
+        inspections.deleteCapturedInspection(id)
+        withContext(Dispatchers.IO) {
+            runCatching { File(existing.imagePath).takeIf { it.exists() }?.delete() }
+        }
+    }
 
     // --- equipment --------------------------------------------------------------------------------
 

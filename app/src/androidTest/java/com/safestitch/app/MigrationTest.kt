@@ -104,6 +104,7 @@ class MigrationTest {
         assertEquals("R. Ahmed", db.string("SELECT responsibleName FROM corrective_actions"))
         assertEquals(1, db.long("SELECT COUNT(*) FROM action_events"))
         assertEquals("OPEN", db.string("SELECT toStatus FROM action_events"))
+        assertEquals(3, db.long("SELECT COUNT(*) FROM captured_inspections"))
         db.close()
     }
 
@@ -124,6 +125,7 @@ class MigrationTest {
             assertEquals(1, roomDb.correctiveActionDao().observeEvents(row.action.id).first().size)
             // The draft keeps its unanswered/failed items and stays a draft.
             assertEquals(null, roomDb.inspectionDao().get(2)!!.inspection.completedAt)
+            assertEquals(3, roomDb.inspectionDao().observeCapturedInspections().first().size)
         })
     }
 

@@ -111,9 +111,18 @@ fun PhotoThumbnail(file: File, onClick: () -> Unit, modifier: Modifier = Modifie
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
     ) {
-        bitmap?.let {
-            Image(it, contentDescription = "Inspection photo", contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+        val decoded = bitmap
+        if (decoded != null) {
+            Image(decoded, contentDescription = "Inspection photo", contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+        } else {
+            Icon(
+                painterResource(R.drawable.ic_photo_camera),
+                contentDescription = "Inspection photo",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(28.dp),
+            )
         }
     }
 }

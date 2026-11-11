@@ -20,6 +20,8 @@ new_code=$((current_code + 1))
 new_name="${1:-$current_name}"
 [[ "$new_name" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.+][0-9A-Za-z.]+)?$ ]] || { echo "versionName must look like 1.0.1" >&2; exit 1; }
 
-sed -i '' -e "s/^versionCode=.*/versionCode=$new_code/" -e "s/^versionName=.*/versionName=$new_name/" "$FILE"
+tmp_file="$(mktemp)"
+sed -e "s/^versionCode=.*/versionCode=$new_code/" -e "s/^versionName=.*/versionName=$new_name/" "$FILE" > "$tmp_file"
+mv "$tmp_file" "$FILE"
 echo "Version: $current_name ($current_code)  ->  $new_name ($new_code)"
 echo "Next: ./scripts/build-deliverables.sh"

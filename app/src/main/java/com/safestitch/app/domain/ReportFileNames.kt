@@ -22,6 +22,12 @@ object ReportFileNames {
     fun labels(createdAtMillis: Long, zone: ZoneId = ZoneId.systemDefault()): String =
         "SafeStitch_QR_labels_${stamp(createdAtMillis, zone)}.pdf"
 
+    fun capturedInspection(
+        inspectionId: Long,
+        timestampMillis: Long,
+        zone: ZoneId = ZoneId.systemDefault(),
+    ): String = "SafeStitch_Captured_${stamp(timestampMillis, zone)}_C$inspectionId.pdf"
+
     private fun stamp(millis: Long, zone: ZoneId): String =
         stampFormat.format(Instant.ofEpochMilli(millis).atZone(zone))
 }

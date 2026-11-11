@@ -796,6 +796,36 @@ def features(d, qr_png):
     expect(kpi_inspections == str(total), f"dashboard total inspections {kpi_inspections} vs database {total}")
     passed("Dashboard totals match the database", f"{kpi_inspections} inspections, {kpi_total} corrective actions")
     d.screenshot("features-dashboard.png")
+    captured_flow(d)
+
+
+def captured_flow(d):
+    d.airplane(True)
+    go_home(d)
+    d.tap(rid="viewfinder-capture-fab")
+    time.sleep(2.5)
+    d.tap(rid="tab-history")
+    d.tap(rid="history-open-captured")
+    count_text = d.wait(rid="captured-inspections-count").get("text") or ""
+    expect("4 of 4" in count_text or "captured photo" in count_text, f"unexpected count: {count_text!r}")
+    root = d.dump()
+    cards = d.find_all(root, rid_prefix="captured-inspection-")
+    expect(len(cards) >= 1, "no captured inspection cards found")
+    newest_id = cards[0].get("resource-id").split("-")[-1]
+    ts_before = (d.find(root, rid=f"captured-timestamp-{newest_id}").get("text") or "").strip()
+    d.tap(rid=f"toggle-tag-{newest_id}-PASS")
+    time.sleep(1.0)
+    d.restart_app()
+    d.wait(timeout=60, rid="dash-scan")
+    d.tap(rid="tab-history")
+    d.tap(rid="history-open-captured")
+    d.wait(rid=f"captured-inspection-{newest_id}")
+    root_after = d.dump()
+    ts_after = (d.find(root_after, rid=f"captured-timestamp-{newest_id}").get("text") or "").strip()
+    expect(ts_after == ts_before, f"timestamp changed after restart: {ts_before!r} vs {ts_after!r}")
+    expect(d.find(root_after, rid=f"captured-thumbnail-{newest_id}") is not None, "thumbnail missing after restart")
+    expect(d.find(root_after, rid=f"captured-tag-{newest_id}-PASS") is not None, "PASS tag missing after restart")
+    passed("Fresh captured photo, timestamp, thumbnail, and changed tag survived app restart in airplane mode", f"id={newest_id}, timestamp={ts_after}")
 
 
 def main():
@@ -806,6 +836,7 @@ def main():
     parser.add_argument("--out", required=True)
     sub = parser.add_subparsers(dest="scenario", required=True)
     sub.add_parser("workflow")
+    sub.add_parser("captured")
     s = sub.add_parser("sync")
     s.add_argument("--server", default="http://127.0.0.1:8787")
     s.add_argument("--key", required=True)
@@ -818,6 +849,8 @@ def main():
     try:
         if args.scenario == "workflow":
             workflow(device)
+        elif args.scenario == "captured":
+            captured_flow(device)
         elif args.scenario == "sync":
             SERVER_DIR["path"] = args.server_data
             sync_flow(device, args.server, args.key)

@@ -259,6 +259,36 @@ interface InspectionDao {
 
     @Query("UPDATE photos SET syncedAt = NULL, syncConflict = NULL")
     suspend fun resetPhotoSync()
+
+    // --- captured camera inspections -----------------------------------------------------------
+
+    @Query("SELECT * FROM captured_inspections ORDER BY timestamp DESC, id DESC")
+    fun observeCapturedInspections(): Flow<List<Inspection>>
+
+    @Query(
+        "SELECT * FROM captured_inspections " +
+            "WHERE ',' || statusTags || ',' LIKE '%,' || :tag || ',%' " +
+            "ORDER BY timestamp DESC, id DESC",
+    )
+    fun observeCapturedInspectionsByTag(tag: String): Flow<List<Inspection>>
+
+    @Query("SELECT * FROM captured_inspections WHERE id = :id")
+    fun observeCapturedInspection(id: Long): Flow<Inspection?>
+
+    @Query("SELECT * FROM captured_inspections WHERE id = :id")
+    suspend fun getCapturedInspection(id: Long): Inspection?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCapturedInspection(inspection: Inspection): Long
+
+    @Update
+    suspend fun updateCapturedInspection(inspection: Inspection)
+
+    @Query("UPDATE captured_inspections SET statusTags = :statusTags WHERE id = :id")
+    suspend fun updateCapturedInspectionTags(id: Long, statusTags: List<String>)
+
+    @Query("DELETE FROM captured_inspections WHERE id = :id")
+    suspend fun deleteCapturedInspection(id: Long)
 }
 
 @Dao

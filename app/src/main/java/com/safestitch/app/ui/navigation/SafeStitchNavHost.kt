@@ -34,7 +34,9 @@ import com.safestitch.app.ui.admin.UsersScreen
 import com.safestitch.app.ui.camera.PhotoCaptureScreen
 import com.safestitch.app.ui.checkpoint.CheckpointFormScreen
 import com.safestitch.app.ui.dashboard.DashboardScreen
+import com.safestitch.app.ui.history.CapturedInspectionsScreen
 import com.safestitch.app.ui.history.HistoryScreen
+import com.safestitch.app.ui.history.InspectionDetailsScreen
 import com.safestitch.app.ui.inspect.FindEquipmentScreen
 import com.safestitch.app.ui.inspection.InspectionScreen
 import com.safestitch.app.ui.report.PdfViewerScreen
@@ -42,7 +44,7 @@ import com.safestitch.app.ui.report.ReportScreen
 import com.safestitch.app.ui.scan.ScanScreen
 import com.safestitch.app.ui.settings.SettingsScreen
 
-private data class Tab(val route: Any, val label: String, @DrawableRes val icon: Int, val tag: String)
+private data class Tab(val route: Any, val label: String, @param:DrawableRes val icon: Int, val tag: String)
 
 private val tabs = listOf(
     Tab(DashboardRoute, "Home", R.drawable.ic_home, "tab-home"),
@@ -93,6 +95,7 @@ fun SafeStitchNavHost(container: AppContainer, user: UserEntity, modifier: Modif
                     onScan = { nav.navigate(ScanRoute) },
                     onFindEquipment = { nav.navigate(InspectRoute) { launchSingleTop = true } },
                     onOpenActions = { nav.navigate(ActionsRoute) { launchSingleTop = true } },
+                    onOpenCapturedInspections = { nav.navigate(CapturedInspectionsRoute) },
                     onAdmin = { nav.navigate(AdminRoute) },
                     onSettings = { nav.navigate(SettingsRoute) },
                 )
@@ -111,7 +114,27 @@ fun SafeStitchNavHost(container: AppContainer, user: UserEntity, modifier: Modif
                 ActionsScreen(container = container, onOpen = { nav.navigate(ActionDetailRoute(it)) })
             }
             composable<HistoryRoute> {
-                HistoryScreen(container = container, onOpen = ::openInspection)
+                HistoryScreen(
+                    container = container,
+                    onOpen = ::openInspection,
+                    onOpenCapturedInspections = { nav.navigate(CapturedInspectionsRoute) },
+                    onOpenCapturedInspectionDetail = { id -> nav.navigate(CapturedInspectionDetailRoute(id)) },
+                )
+            }
+            composable<CapturedInspectionsRoute> {
+                CapturedInspectionsScreen(
+                    container = container,
+                    onBack = { nav.popBackStack() },
+                    onOpenInspection = { id -> nav.navigate(CapturedInspectionDetailRoute(id)) },
+                )
+            }
+            composable<CapturedInspectionDetailRoute> { entry ->
+                val route = entry.toRoute<CapturedInspectionDetailRoute>()
+                InspectionDetailsScreen(
+                    container = container,
+                    inspectionId = route.inspectionId,
+                    onBack = { nav.popBackStack() },
+                )
             }
             composable<ScanRoute> {
                 ScanScreen(

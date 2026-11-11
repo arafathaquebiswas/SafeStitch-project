@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable data object InspectRoute
 @Serializable data object ActionsRoute
 @Serializable data object HistoryRoute
+@Serializable data object CapturedInspectionsRoute
+@Serializable data class CapturedInspectionDetailRoute(val inspectionId: Long)
 
 @Serializable data object ScanRoute
 

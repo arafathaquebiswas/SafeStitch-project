@@ -141,6 +141,10 @@ data class InspectionEntity(
     val syncedAt: Long? = null,
     /** Set when the server reported a conflicting record; shown on the Sync screen. */
     val syncConflict: String? = null,
+    /** Capture timestamp, primary camera image file path, and status tags for organizing inspection photos. */
+    @ColumnInfo(defaultValue = "0") val timestamp: Long = startedAt,
+    @ColumnInfo(defaultValue = "") val imagePath: String = "",
+    @ColumnInfo(defaultValue = "") val statusTags: String = "",
 )
 
 @Entity(

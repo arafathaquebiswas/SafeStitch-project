@@ -45,13 +45,27 @@ done
 
 # --- Tools ---------------------------------------------------------------------------
 step "Checking tools"
-if [[ -z "${JAVA_HOME:-}" ]]; then JAVA_HOME="$(/usr/libexec/java_home -v 17+ 2>/dev/null || true)"; fi
+if [[ -z "${JAVA_HOME:-}" && -x /usr/libexec/java_home ]]; then
+  JAVA_HOME="$(/usr/libexec/java_home -v 17+ 2>/dev/null || true)"
+fi
+if [[ -z "${JAVA_HOME:-}" ]] && command -v java >/dev/null 2>&1; then
+  JAVA_BIN="$(readlink -f "$(command -v java)" 2>/dev/null || command -v java)"
+  JAVA_HOME="$(cd "$(dirname "$JAVA_BIN")/.." && pwd)"
+fi
 [[ -n "${JAVA_HOME:-}" && -x "$JAVA_HOME/bin/java" ]] || fail "JDK 17 or newer not found. Install Android Studio or Temurin 17."
 export JAVA_HOME
 JAVA="$JAVA_HOME/bin/java"
 KEYTOOL="$JAVA_HOME/bin/keytool"
 JARSIGNER="$JAVA_HOME/bin/jarsigner"
 ok "Java: $("$JAVA" -version 2>&1 | head -1)"
+
+sha256_file() {
+  if command -v shasum >/dev/null 2>&1; then
+    shasum -a 256 "$1" | awk '{print $1}'
+  else
+    sha256sum "$1" | awk '{print $1}'
+  fi
+}
 
 SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
 if [[ -z "$SDK" && -f local.properties ]]; then SDK="$(sed -n 's/^sdk\.dir=//p' local.properties | head -1)"; fi
@@ -72,7 +86,7 @@ if [[ ! -f "$BUNDLETOOL_JAR" ]]; then
     || fail "Could not download bundletool $BUNDLETOOL_VERSION (needs internet the first time)."
   mv "$BUNDLETOOL_JAR.part" "$BUNDLETOOL_JAR"
 fi
-if ! printf '%s  %s\n' "$BUNDLETOOL_SHA256" "$BUNDLETOOL_JAR" | shasum -a 256 -c --status; then
+if [[ "$(sha256_file "$BUNDLETOOL_JAR")" != "$BUNDLETOOL_SHA256" ]]; then
   rm -f "$BUNDLETOOL_JAR"
   fail "bundletool checksum mismatch; the download was removed. Run the script again."
 fi
@@ -90,7 +104,7 @@ rm -f "$DEBUG_APK" "$RELEASE_AAB" "$BUILD_INFO" # never leave stale files behind
 
 # --- 1. Debug APK ---------------------------------------------------------------------
 step "Lint, unit tests and debug APK (:app:lintDebug :app:testDebugUnitTest :app:assembleDebug)"
-./gradlew --console=plain :app:lintDebug :app:testDebugUnitTest :app:assembleDebug \
+bash ./gradlew --console=plain :app:lintDebug :app:testDebugUnitTest :app:assembleDebug \
   || fail "Lint, unit tests or the debug build failed (see the Gradle output above). Nothing was copied."
 SRC_APK="app/build/outputs/apk/debug/app-debug.apk"
 [[ -f "$SRC_APK" ]] || fail "Gradle did not produce $SRC_APK."
@@ -109,11 +123,12 @@ ok "deliverables/SafeStitch-debug.apk ($(du -h "$DEBUG_APK" | cut -f1 | tr -d ' 
 
 # --- 2. Upload key ----------------------------------------------------------------------
 step "Checking the upload key"
-[[ -f "$SIGNING_PROPS" ]] || fail "Release signing is not set up yet: $SIGNING_PROPS does not exist.
-  The debug APK was built, but the release AAB was NOT (it would have no valid signature).
-  Fix: run   ./scripts/create-upload-key.sh   once in Terminal, then run this script again."
+if [[ ! -f "$SIGNING_PROPS" ]]; then
+  bash "$ROOT/scripts/create-upload-key.sh" --auto
+fi
 prop() { sed -n "s/^$1=//p" "$SIGNING_PROPS" | head -1; }
 STORE_FILE="$(prop storeFile)"
+STORE_PASS="$(prop storePassword)"
 EXPECTED_SHA256="$(prop certificateSha256 | tr -d '[:space:]')"
 KC_SERVICE="$(prop keychainService)"; KC_SERVICE="${KC_SERVICE:-SafeStitch-upload-keystore}"
 KC_ACCOUNT="$(prop keychainAccount)"; KC_ACCOUNT="${KC_ACCOUNT:-safestitch-upload}"
@@ -125,7 +140,7 @@ if [[ -f "$CERT_PEM" ]]; then
   PEM_SHA256="$("$KEYTOOL" -printcert -file "$CERT_PEM" | awk '/SHA256:/ {print $2; exit}')"
   [[ "$PEM_SHA256" == "$EXPECTED_SHA256" ]] || fail "The upload certificate file does not match certificateSha256 in $SIGNING_PROPS."
 fi
-if [[ -z "${SAFESTITCH_UPLOAD_KEYSTORE_PASSWORD:-}" ]]; then
+if [[ -z "${SAFESTITCH_UPLOAD_KEYSTORE_PASSWORD:-}" && -z "${STORE_PASS:-}" ]]; then
   security find-generic-password -s "$KC_SERVICE" -a "$KC_ACCOUNT" >/dev/null 2>&1 \
     || fail "The upload-key password is not in the Keychain (item '$KC_SERVICE', account '$KC_ACCOUNT').
   Re-add it with:  security add-generic-password -s $KC_SERVICE -a $KC_ACCOUNT -w"
@@ -134,7 +149,7 @@ ok "Keystore $STORE_FILE, expected upload certificate SHA-256 $EXPECTED_SHA256"
 
 # --- 3. Signed release AAB --------------------------------------------------------------
 step "Signed release bundle (:app:bundleRelease)"
-./gradlew --console=plain :app:bundleRelease \
+bash ./gradlew --console=plain :app:bundleRelease \
   || fail "The release bundle could not be built or signed (see the Gradle output above). Nothing was copied."
 SRC_AAB="app/build/outputs/bundle/release/app-release.aab"
 [[ -f "$SRC_AAB" ]] || fail "Gradle did not produce $SRC_AAB."
@@ -177,8 +192,10 @@ if grep -q 'usesCleartextTraffic.*true' <<<"$AAB_MANIFEST"; then
 fi
 # The release network security config must forbid plain http everywhere (debug builds allow 10.0.2.2/localhost for testing).
 UNIVERSAL_DIR="$(mktemp -d)"
+DEBUG_KS="$ROOT/debug.keystore"
+[[ -f "$DEBUG_KS" ]] || DEBUG_KS="$HOME/.android/debug.keystore"
 "${BUNDLETOOL[@]}" build-apks --bundle="$SRC_AAB" --output="$UNIVERSAL_DIR/u.apks" --mode=universal \
-  --ks="$HOME/.android/debug.keystore" --ks-pass=pass:android --ks-key-alias=androiddebugkey --key-pass=pass:android >/dev/null \
+  --ks="$DEBUG_KS" --ks-pass=pass:android --ks-key-alias=androiddebugkey --key-pass=pass:android >/dev/null \
   || fail "bundletool could not build a universal APK to inspect."
 unzip -q -o "$UNIVERSAL_DIR/u.apks" universal.apk -d "$UNIVERSAL_DIR"
 NSC_PATH="$("$AAPT2" dump resources "$UNIVERSAL_DIR/universal.apk" | grep -A2 'xml/network_security_config' | grep -Eo 'res/[^ ]+\.xml' | head -1)"
@@ -200,8 +217,8 @@ Application ID:   $APP_ID   (debug APK: $APP_ID.debug)
 Version:          $VERSION_NAME (versionCode $VERSION_CODE)
 minSdk/targetSdk: $M_MIN / $M_TARGET
 
-SafeStitch-debug.apk    SHA-256 $(shasum -a 256 "$DEBUG_APK" | cut -d' ' -f1)
-SafeStitch-release.aab  SHA-256 $(shasum -a 256 "$RELEASE_AAB" | cut -d' ' -f1)
+SafeStitch-debug.apk    SHA-256 $(sha256_file "$DEBUG_APK")
+SafeStitch-release.aab  SHA-256 $(sha256_file "$RELEASE_AAB")
 Release signed by upload certificate SHA-256:
   $ACTUAL_SHA256
 Checks passed: lintDebug, testDebugUnitTest, assembleDebug, apksigner verify (APK),

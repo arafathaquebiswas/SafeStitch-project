@@ -65,9 +65,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
-class HistoryViewModel(repository: InspectionRepository, catalog: CatalogRepository) : ViewModel() {
+class HistoryViewModel(private val repository: InspectionRepository, catalog: CatalogRepository) : ViewModel() {
     val filter = MutableStateFlow(HistoryFilter())
     val paths: StateFlow<List<AreaPath>> = catalog.observeAreaPaths().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val capturedInspections = repository.observeCapturedInspections().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     private val entries: StateFlow<List<HistoryEntry>?> = combine(repository.observeInspections(), catalog.observeAreaPaths()) { list, paths ->
         val byArea = paths.associateBy { it.areaId }
@@ -102,12 +103,18 @@ class HistoryViewModel(repository: InspectionRepository, catalog: CatalogReposit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryScreen(container: AppContainer, onOpen: (id: Long, completed: Boolean) -> Unit) {
+fun HistoryScreen(
+    container: AppContainer,
+    onOpen: (id: Long, completed: Boolean) -> Unit,
+    onOpenCapturedInspections: () -> Unit = {},
+    onOpenCapturedInspectionDetail: (Long) -> Unit = {},
+) {
     val vm = viewModel { HistoryViewModel(container.repository, container.catalog) }
     val filter by vm.filter.collectAsStateWithLifecycle()
     val all by vm.all.collectAsStateWithLifecycle()
     val shown by vm.shown.collectAsStateWithLifecycle()
     val paths by vm.paths.collectAsStateWithLifecycle()
+    val captured by vm.capturedInspections.collectAsStateWithLifecycle()
     var moreFilters by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
@@ -116,6 +123,12 @@ fun HistoryScreen(container: AppContainer, onOpen: (id: Long, completed: Boolean
             TopAppBar(
                 title = { Text("Inspection history") },
                 actions = {
+                    TextButton(
+                        onClick = onOpenCapturedInspections,
+                        modifier = Modifier.testTag("history-open-captured"),
+                    ) {
+                        Text("Captured (${captured.size})")
+                    }
                     if (!filter.isDefault) {
                         TextButton(onClick = { vm.update { HistoryFilter() } }, modifier = Modifier.testTag("history-clear")) { Text("Clear filters") }
                     }
@@ -128,6 +141,77 @@ fun HistoryScreen(container: AppContainer, onOpen: (id: Long, completed: Boolean
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = padding.calculateTopPadding() + 8.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
+            item {
+                Card(
+                    onClick = onOpenCapturedInspections,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("history-captured-banner"),
+                ) {
+                    Row(
+                        modifier = Modifier.padding(14.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.ic_photo_camera),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(
+                                "Captured Inspection Photos (${captured.size})",
+                                style = MaterialTheme.typography.titleSmall,
+                            )
+                            Text(
+                                "Tap any captured photo below to open Inspection Details (full-res image & tag editor) or view all",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
+            }
+            if (captured.isNotEmpty()) {
+                item {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("history-captured-strip"),
+                    ) {
+                        items(captured, key = { it.id }) { item ->
+                            val primaryTag = item.normalizedTags.firstOrNull() ?: "NEEDS_REVIEW"
+                            Card(
+                                onClick = { onOpenCapturedInspectionDetail(item.id) },
+                                modifier = Modifier
+                                    .width(220.dp)
+                                    .testTag("history-captured-item-${item.id}"),
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(12.dp),
+                                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                                ) {
+                                    Text(
+                                        text = formatDateTime(item.timestamp),
+                                        style = MaterialTheme.typography.labelLarge,
+                                    )
+                                    Text(
+                                        text = java.io.File(item.imagePath).name.ifBlank { item.imagePath },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 1,
+                                    )
+                                    StatusChip(
+                                        text = formatStatusTagLabel(primaryTag),
+                                        color = statusTagColor(primaryTag),
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             item {
                 OutlinedTextField(
                     value = filter.query,

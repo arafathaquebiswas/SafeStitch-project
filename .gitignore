@@ -8,8 +8,7 @@ build/
 .DS_Store
 captures/
 
-# Build outputs; regenerate with ./scripts/build-deliverables.sh
-/deliverables/
+# Build outputs (kept for direct preview downloads)
 
 # Signing material must never be committed (it lives in ~/.android-keystores/safestitch/)
 *.jks

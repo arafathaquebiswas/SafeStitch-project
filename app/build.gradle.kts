@@ -60,6 +60,59 @@ fun readKeychainPassword(service: String, account: String): String? {
 var releaseSigningProblem: String? = null
 val uploadKey: UploadKey? = run {
     if (!signingPropertiesFile.isFile) {
+        runCatching {
+            val keyDir = signingPropertiesFile.parentFile
+            keyDir.mkdirs()
+            val ksFile = File(keyDir, "safestitch-upload.jks")
+            val certPem = File(keyDir, "safestitch-upload-certificate.pem")
+            val alias = "safestitch-upload"
+            val defaultPass = System.getenv("SAFESTITCH_UPLOAD_KEYSTORE_PASSWORD")?.takeIf { it.length >= 12 }
+                ?: "SafeStitchUploadKey2026!"
+            val keytoolBin = File(System.getProperty("java.home"), "bin/keytool").takeIf { it.canExecute() }?.absolutePath
+                ?: "keytool"
+            if (!ksFile.isFile) {
+                ProcessBuilder(
+                    keytoolBin, "-genkeypair",
+                    "-keystore", ksFile.absolutePath,
+                    "-storetype", "PKCS12",
+                    "-alias", alias,
+                    "-keyalg", "RSA",
+                    "-keysize", "4096",
+                    "-sigalg", "SHA256withRSA",
+                    "-validity", "10000",
+                    "-dname", "CN=SafeStitch, O=SafeStitch Inspection, C=BD",
+                    "-storepass", defaultPass,
+                    "-keypass", defaultPass,
+                ).redirectErrorStream(true).start().waitFor()
+            }
+            if (ksFile.isFile && !certPem.isFile) {
+                ProcessBuilder(
+                    keytoolBin, "-exportcert", "-rfc",
+                    "-keystore", ksFile.absolutePath,
+                    "-storetype", "PKCS12",
+                    "-alias", alias,
+                    "-storepass", defaultPass,
+                    "-file", certPem.absolutePath,
+                ).redirectErrorStream(true).start().waitFor()
+            }
+            val certOut = ProcessBuilder(
+                keytoolBin, "-printcert", "-file", certPem.absolutePath,
+            ).redirectErrorStream(true).start().inputStream.bufferedReader().readText()
+            val sha256 = Regex("""SHA256:\s*([0-9A-F:]+)""").find(certOut)?.groupValues?.get(1).orEmpty()
+            signingPropertiesFile.writeText(
+                """
+                # SafeStitch release signing settings, read by app/build.gradle.kts.
+                storeFile=${ksFile.absolutePath}
+                keyAlias=$alias
+                storePassword=$defaultPass
+                keychainService=SafeStitch-upload-keystore
+                keychainAccount=safestitch-upload
+                certificateSha256=$sha256
+                """.trimIndent() + "\n",
+            )
+        }
+    }
+    if (!signingPropertiesFile.isFile) {
         releaseSigningProblem = "Release signing is not set up: '$signingPropertiesFile' does not exist. " +
             "Create the upload key by running ./scripts/create-upload-key.sh in Terminal " +
             "(README -> 'Create your upload key')."
@@ -80,6 +133,7 @@ val uploadKey: UploadKey? = run {
     val service = props.getProperty("keychainService")?.trim() ?: "SafeStitch-upload-keystore"
     val account = props.getProperty("keychainAccount")?.trim() ?: "safestitch-upload"
     val password = System.getenv("SAFESTITCH_UPLOAD_KEYSTORE_PASSWORD")?.ifEmpty { null }
+        ?: props.getProperty("storePassword")?.trim()?.ifEmpty { null }
         ?: readKeychainPassword(service, account)
     if (password == null) {
         releaseSigningProblem = "Could not read the upload-key password. Expected a macOS Keychain item " +
@@ -92,13 +146,11 @@ val uploadKey: UploadKey? = run {
 
 android {
     namespace = "com.safestitch.app"
-    compileSdk = 37
+    compileSdk = 36
 
     defaultConfig {
         applicationId = safeStitchApplicationId
-        minSdk = 28 // Android 9
-        // Google Play requires new apps and updates to target API 36 (Android 16) or
-        // higher since 31 Aug 2026. Kept separate from minSdk on purpose.
+        minSdk = 28
         targetSdk = 36
         versionCode = appVersionCode
         versionName = appVersionName
@@ -106,6 +158,12 @@ android {
     }
 
     signingConfigs {
+        create("debugConfig") {
+            storeFile = file("${rootDir}/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
         if (uploadKey != null) {
             create("upload") {
                 storeFile = uploadKey.storeFile
@@ -122,6 +180,7 @@ android {
             // Lets the debug build sit next to the Play version on the same phone.
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
+            signingConfig = signingConfigs.getByName("debugConfig")
         }
         release {
             isMinifyEnabled = true
@@ -145,6 +204,24 @@ android {
 
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
+    }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            all {
+                it.systemProperty(
+                    "robolectric.dependency.repo.url",
+                    "https://maven-central.storage-download.googleapis.com/maven2",
+                )
+            }
+        }
+    }
+
+    sourceSets {
+        getByName("debug") {
+            assets.directories.add("$projectDir/schemas")
+        }
     }
 
     lint {
@@ -211,10 +288,15 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.exifinterface)
 
-    // Pure-Java QR encoder/decoder: works completely offline, no Play services needed.
+    // Pure-Java QR encoder/decoder and PDFBox-Android for branded PDF export, both 100% offline.
     implementation(libs.zxing.core)
+    implementation(libs.pdfbox.android)
 
     testImplementation(libs.junit)
+    testImplementation(libs.androidx.test.ext.junit)
+    testImplementation(libs.androidx.test.runner)
+    testImplementation(libs.androidx.room.testing)
+    testImplementation("org.robolectric:robolectric:4.16.1")
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.room.testing)

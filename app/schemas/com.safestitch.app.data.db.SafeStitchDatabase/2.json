@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "5de8d7c23a1ebc852a1f366576ff94f5",
+    "identityHash": "b3f741b095b0d616eb38fcdec83ae3df",
     "entities": [
       {
         "tableName": "checkpoints",
@@ -79,7 +79,7 @@
       },
       {
         "tableName": "inspections",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `checkpointId` INTEGER NOT NULL, `inspectorName` TEXT NOT NULL, `siteName` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, `completedAt` INTEGER, `generalNotes` TEXT NOT NULL, `reportFileName` TEXT, `inspectorUserId` INTEGER, `equipmentCode` TEXT NOT NULL DEFAULT '', `equipmentName` TEXT NOT NULL DEFAULT '', `equipmentType` TEXT, `updatedAt` INTEGER NOT NULL DEFAULT 0, `syncedAt` INTEGER, `syncConflict` TEXT, FOREIGN KEY(`checkpointId`) REFERENCES `checkpoints`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `checkpointId` INTEGER NOT NULL, `inspectorName` TEXT NOT NULL, `siteName` TEXT NOT NULL, `startedAt` INTEGER NOT NULL, `completedAt` INTEGER, `generalNotes` TEXT NOT NULL, `reportFileName` TEXT, `inspectorUserId` INTEGER, `equipmentCode` TEXT NOT NULL DEFAULT '', `equipmentName` TEXT NOT NULL DEFAULT '', `equipmentType` TEXT, `updatedAt` INTEGER NOT NULL DEFAULT 0, `syncedAt` INTEGER, `syncConflict` TEXT, `timestamp` INTEGER NOT NULL DEFAULT 0, `imagePath` TEXT NOT NULL DEFAULT '', `statusTags` TEXT NOT NULL DEFAULT '', FOREIGN KEY(`checkpointId`) REFERENCES `checkpoints`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -167,6 +167,27 @@
             "fieldPath": "syncConflict",
             "columnName": "syncConflict",
             "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "imagePath",
+            "columnName": "imagePath",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "statusTags",
+            "columnName": "statusTags",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
           }
         ],
         "primaryKey": {
@@ -987,11 +1008,59 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "captured_inspections",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `imagePath` TEXT NOT NULL, `statusTags` TEXT NOT NULL DEFAULT '')",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imagePath",
+            "columnName": "imagePath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statusTags",
+            "columnName": "statusTags",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_captured_inspections_timestamp",
+            "unique": false,
+            "columnNames": [
+              "timestamp"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_captured_inspections_timestamp` ON `${TABLE_NAME}` (`timestamp`)"
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5de8d7c23a1ebc852a1f366576ff94f5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b3f741b095b0d616eb38fcdec83ae3df')"
     ]
   }
 }

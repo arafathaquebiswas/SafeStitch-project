@@ -10,6 +10,7 @@ import com.safestitch.app.BuildConfig
 import com.safestitch.app.data.InspectionRepository
 import com.safestitch.app.data.PhotoStorage
 import com.safestitch.app.data.db.CheckpointEntity
+import com.safestitch.app.data.db.Inspection
 import com.safestitch.app.domain.ReportFileNames
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -28,6 +29,7 @@ class ReportService(
     private val repository: InspectionRepository,
     private val photoStorage: PhotoStorage,
 ) {
+    private val appContext = context.applicationContext
     private val reportsDir = File(context.filesDir, "reports")
     private val labelsDir = File(context.filesDir, "labels")
 
@@ -56,6 +58,33 @@ class ReportService(
 
     fun deleteReport(fileName: String) {
         File(reportsDir, fileName).delete()
+    }
+
+    /** Returns the target PDF file path for a camera-captured [Inspection] record. */
+    fun capturedInspectionPdfFile(inspection: Inspection): File =
+        File(reportsDir, ReportFileNames.capturedInspection(inspection.id, inspection.timestamp))
+
+    /**
+     * Exports a camera-captured [Inspection] record (image, timestamp, file details, and status tags)
+     * into a branded A4 PDF file in `files/reports/` using PDFBox-Android.
+     */
+    suspend fun exportCapturedInspectionPdf(inspection: Inspection): File = withContext(Dispatchers.IO) {
+        reportsDir.mkdirs()
+        val name = ReportFileNames.capturedInspection(inspection.id, inspection.timestamp)
+        val target = File(reportsDir, name)
+        val temp = File(reportsDir, "$name.part")
+        try {
+            CapturedInspectionPdfExporter(BuildConfig.VERSION_NAME).write(
+                inspection = inspection,
+                outputFile = temp,
+                context = appContext,
+            )
+            if (target.exists() && !target.delete()) throw IOException("Could not replace $name")
+            if (!temp.renameTo(target)) throw IOException("Could not save $name")
+        } finally {
+            temp.delete()
+        }
+        target
     }
 
     suspend fun generateLabels(checkpoints: List<CheckpointEntity>): File = withContext(Dispatchers.IO) {

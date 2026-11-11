@@ -24,4 +24,9 @@ class ReportFileNamesTest {
     fun labelSheetName() {
         assertEquals("SafeStitch_QR_labels_20261109-1405.pdf", ReportFileNames.labels(millis, utc))
     }
+
+    @Test
+    fun capturedInspectionName() {
+        assertEquals("SafeStitch_Captured_20261109-1405_C12.pdf", ReportFileNames.capturedInspection(12, millis, utc))
+    }
 }
