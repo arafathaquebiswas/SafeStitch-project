@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -45,6 +47,7 @@ import com.safestitch.app.R
 import com.safestitch.app.data.CatalogRepository
 import com.safestitch.app.data.InspectionRepository
 import com.safestitch.app.data.db.AreaPath
+import com.safestitch.app.data.db.CheckpointEntity
 import com.safestitch.app.domain.CheckpointType
 import com.safestitch.app.domain.HistoryEntry
 import com.safestitch.app.domain.HistoryFilter
@@ -65,9 +68,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
-class HistoryViewModel(private val repository: InspectionRepository, catalog: CatalogRepository) : ViewModel() {
-    val filter = MutableStateFlow(HistoryFilter())
+class HistoryViewModel(
+    private val repository: InspectionRepository,
+    catalog: CatalogRepository,
+    initialEquipmentCode: String = "",
+) : ViewModel() {
+    val filter = MutableStateFlow(HistoryFilter(query = initialEquipmentCode.trim()))
     val paths: StateFlow<List<AreaPath>> = catalog.observeAreaPaths().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    val checkpoints: StateFlow<List<CheckpointEntity>> = repository.observeCheckpoints().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     val capturedInspections = repository.observeCapturedInspections().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     private val entries: StateFlow<List<HistoryEntry>?> = combine(repository.observeInspections(), catalog.observeAreaPaths()) { list, paths ->
@@ -108,20 +116,46 @@ fun HistoryScreen(
     onOpen: (id: Long, completed: Boolean) -> Unit,
     onOpenCapturedInspections: () -> Unit = {},
     onOpenCapturedInspectionDetail: (Long) -> Unit = {},
+    initialEquipmentCode: String = "",
 ) {
-    val vm = viewModel { HistoryViewModel(container.repository, container.catalog) }
+    val vm = viewModel(key = "history-${initialEquipmentCode.trim()}") {
+        HistoryViewModel(container.repository, container.catalog, initialEquipmentCode)
+    }
     val filter by vm.filter.collectAsStateWithLifecycle()
     val all by vm.all.collectAsStateWithLifecycle()
     val shown by vm.shown.collectAsStateWithLifecycle()
     val paths by vm.paths.collectAsStateWithLifecycle()
+    val checkpoints by vm.checkpoints.collectAsStateWithLifecycle()
     val captured by vm.capturedInspections.collectAsStateWithLifecycle()
     var moreFilters by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(initialEquipmentCode) {
+        val code = initialEquipmentCode.trim()
+        if (code.isNotEmpty() && filter.query != code) {
+            vm.update { it.copy(query = code) }
+        }
+    }
+
+    val matchedCheckpoint = checkpoints.firstOrNull { cp ->
+        filter.query.isNotBlank() && cp.code.equals(filter.query.trim(), ignoreCase = true)
+    }
 
     Scaffold(
         contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal),
         topBar = {
             TopAppBar(
-                title = { Text("Inspection history") },
+                title = {
+                    Column {
+                        Text("Inspection history")
+                        if (matchedCheckpoint != null) {
+                            Text(
+                                text = "Filtered by scanned equipment: ${matchedCheckpoint.code}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                    }
+                },
                 actions = {
                     TextButton(
                         onClick = onOpenCapturedInspections,
@@ -141,6 +175,55 @@ fun HistoryScreen(
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = padding.calculateTopPadding() + 8.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
+            if (matchedCheckpoint != null || initialEquipmentCode.isNotBlank() && filter.query.equals(initialEquipmentCode.trim(), ignoreCase = true)) {
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("history-scanned-equipment-banner"),
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(14.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(2.dp),
+                            ) {
+                                Text(
+                                    text = "Equipment Identified via QR / Barcode",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                                Text(
+                                    text = if (matchedCheckpoint != null) {
+                                        "${matchedCheckpoint.code} · ${matchedCheckpoint.name}"
+                                    } else {
+                                        "Equipment Code: ${filter.query}"
+                                    },
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                                if (matchedCheckpoint != null) {
+                                    Text(
+                                        text = "${matchedCheckpoint.type.label} · ${matchedCheckpoint.area.ifBlank { "Factory Floor" }}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                            }
+                            TextButton(
+                                onClick = { vm.update { HistoryFilter() } },
+                                modifier = Modifier.testTag("history-clear-scanned-equipment"),
+                            ) {
+                                Text("Show all")
+                            }
+                        }
+                    }
+                }
+            }
             item {
                 Card(
                     onClick = onOpenCapturedInspections,

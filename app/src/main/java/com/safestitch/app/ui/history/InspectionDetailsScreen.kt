@@ -84,7 +84,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.safestitch.app.AppContainer
 import com.safestitch.app.R
 import com.safestitch.app.data.InspectionRepository
+import com.safestitch.app.data.db.CheckpointEntity
 import com.safestitch.app.data.db.Inspection
+import com.safestitch.app.pdf.CapturedEquipmentDetails
 import com.safestitch.app.pdf.PdfInfo
 import com.safestitch.app.pdf.ReportService
 import com.safestitch.app.ui.components.BackButton
@@ -97,6 +99,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -115,10 +118,56 @@ class InspectionDetailsViewModel(
     private val inspectionId: Long,
     private val repository: InspectionRepository,
     private val reportService: ReportService? = null,
+    private val activeInspectorName: String? = null,
 ) : ViewModel() {
     val inspection: StateFlow<Inspection?> = repository
         .observeCapturedInspection(inspectionId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    val checkpoints: StateFlow<List<CheckpointEntity>> = repository
+        .observeCheckpoints()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    val selectedCheckpointId: MutableStateFlow<Long?> = MutableStateFlow(
+        reportService?.getSelectedCheckpointId(inspectionId),
+    )
+
+    val equipmentDetails: StateFlow<CapturedEquipmentDetails> = combine(
+        inspection,
+        checkpoints,
+        repository.observeAreaPaths(),
+        repository.observeInspections(),
+        selectedCheckpointId,
+    ) { current, allCheckpoints, areaPaths, allInspections, overrideId ->
+        if (current == null) {
+            CapturedEquipmentDetails(
+                equipmentName = "Factory Floor Safety Checkpoint",
+                equipmentCode = "SS-CAP-$inspectionId",
+                equipmentCategory = "General safety",
+                locationPath = "Main Factory › Production Floor",
+                inspectorName = activeInspectorName ?: "Field Safety Inspector",
+            )
+        } else {
+            InspectionRepository.resolveEquipmentFromCatalog(
+                inspection = current,
+                allCheckpoints = allCheckpoints,
+                areaPaths = areaPaths,
+                allInspections = allInspections,
+                overrideCheckpointId = overrideId,
+                activeInspectorName = activeInspectorName,
+            )
+        }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        CapturedEquipmentDetails(
+            equipmentName = "Factory Floor Safety Checkpoint",
+            equipmentCode = "SS-CAP-$inspectionId",
+            equipmentCategory = "General safety",
+            locationPath = "Main Factory › Production Floor",
+            inspectorName = activeInspectorName ?: "Field Safety Inspector",
+        ),
+    )
 
     val customTagInput: MutableStateFlow<String> = MutableStateFlow("")
     val exportedPdfFile: MutableStateFlow<File?> = MutableStateFlow(null)
@@ -126,6 +175,11 @@ class InspectionDetailsViewModel(
     val pdfPreviewBitmap: MutableStateFlow<ImageBitmap?> = MutableStateFlow(null)
     val exportingPdf: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val statusMessage: MutableStateFlow<String?> = MutableStateFlow(null)
+
+    fun selectEquipment(checkpointId: Long?) {
+        selectedCheckpointId.value = checkpointId
+        reportService?.setSelectedCheckpointId(inspectionId, checkpointId)
+    }
 
     fun updateCustomTagInput(value: String) {
         customTagInput.value = value.take(32)
@@ -154,15 +208,19 @@ class InspectionDetailsViewModel(
         val service = reportService ?: return
         if (exportingPdf.value) return
         exportingPdf.value = true
+        val currentEquipment = equipmentDetails.value
         viewModelScope.launch {
             try {
-                val file = service.exportCapturedInspectionPdf(current)
+                val file = service.exportCapturedInspectionPdf(
+                    inspection = current,
+                    equipmentDetails = currentEquipment,
+                )
                 exportedPdfFile.value = file
                 exportedPdfInfo.value = runCatching { service.inspect(file) }.getOrNull()
                 pdfPreviewBitmap.value = runCatching {
                     service.renderPage(file, 0, PDF_PREVIEW_WIDTH_PX).asImageBitmap()
                 }.getOrNull()
-                statusMessage.value = "Exported branded PDF: ${file.name}"
+                statusMessage.value = "Exported branded PDF (${currentEquipment.equipmentCode}): ${file.name}"
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
@@ -212,6 +270,7 @@ class InspectionDetailsViewModel(
 
     fun deleteInspection(onDeleted: () -> Unit) {
         viewModelScope.launch {
+            reportService?.setSelectedCheckpointId(inspectionId, null)
             exportedPdfFile.value?.let { file ->
                 withContext(Dispatchers.IO) { runCatching { file.delete() } }
             }
@@ -227,8 +286,9 @@ class InspectionDetailsViewModel(
 
 /**
  * Detail screen for a single camera-captured [Inspection] entity.
- * Displays the full-resolution image with pinch-to-zoom, capture timestamp, file metadata,
- * preset + custom status tag editing, branded PDFBox report export, and deletion.
+ * Displays the full-resolution image with pinch-to-zoom, capture timestamp, equipment details
+ * (auto-linked or selectable from registered equipment), file metadata, preset + custom status
+ * tag editing, branded PDFBox report export with in-app preview, and deletion.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -237,10 +297,19 @@ fun InspectionDetailsScreen(
     inspectionId: Long,
     onBack: () -> Unit,
 ) {
+    val activeInspector = container.auth.currentUser?.displayName
     val vm = viewModel(key = "inspection-details-$inspectionId") {
-        InspectionDetailsViewModel(inspectionId, container.repository, container.reportService)
+        InspectionDetailsViewModel(
+            inspectionId = inspectionId,
+            repository = container.repository,
+            reportService = container.reportService,
+            activeInspectorName = activeInspector,
+        )
     }
     val item by vm.inspection.collectAsStateWithLifecycle()
+    val checkpoints by vm.checkpoints.collectAsStateWithLifecycle()
+    val selectedCheckpointId by vm.selectedCheckpointId.collectAsStateWithLifecycle()
+    val equipmentDetails by vm.equipmentDetails.collectAsStateWithLifecycle()
     val customTagInput by vm.customTagInput.collectAsStateWithLifecycle()
     val exportedPdfFile by vm.exportedPdfFile.collectAsStateWithLifecycle()
     val exportedPdfInfo by vm.exportedPdfInfo.collectAsStateWithLifecycle()
@@ -289,7 +358,7 @@ fun InspectionDetailsScreen(
                         )
                         item?.let { current ->
                             Text(
-                                text = "Capture #${current.id} · ${formatDateTime(current.timestamp)}",
+                                text = "Capture #${current.id} · ${equipmentDetails.equipmentCode} · ${formatDateTime(current.timestamp)}",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -407,7 +476,93 @@ fun InspectionDetailsScreen(
                 decoded = decoded,
             )
 
-            // 2. Timestamp & file details card
+            // 2. Equipment Details & Selector Card (Auto-linked or selectable registered equipment)
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("details-equipment-card"),
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "Equipment Details",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                        StatusChip(
+                            text = if (selectedCheckpointId == null) "Auto-linked" else "Selected",
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.testTag("details-equipment-link-mode"),
+                        )
+                    }
+
+                    DetailRow(
+                        label = "Equipment",
+                        value = equipmentDetails.equipmentName,
+                        valueTestTag = "details-equipment-name",
+                    )
+                    DetailRow(
+                        label = "Equipment code",
+                        value = equipmentDetails.equipmentCode,
+                        valueTestTag = "details-equipment-code",
+                    )
+                    DetailRow(
+                        label = "Category",
+                        value = equipmentDetails.equipmentCategory,
+                        valueTestTag = "details-equipment-category",
+                    )
+                    DetailRow(
+                        label = "Location",
+                        value = equipmentDetails.locationPath,
+                        valueTestTag = "details-equipment-location",
+                    )
+                    DetailRow(
+                        label = "Inspector",
+                        value = equipmentDetails.inspectorName,
+                        valueTestTag = "details-equipment-inspector",
+                    )
+
+                    if (checkpoints.isNotEmpty()) {
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            text = "Link to registered equipment (included in PDFBox report):",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .horizontalScroll(rememberScrollState()),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            FilterChip(
+                                selected = selectedCheckpointId == null,
+                                onClick = { vm.selectEquipment(null) },
+                                label = { Text("Auto-link") },
+                                modifier = Modifier.testTag("details-select-equipment-auto"),
+                            )
+                            checkpoints.forEach { cp ->
+                                FilterChip(
+                                    selected = selectedCheckpointId == cp.id ||
+                                        (selectedCheckpointId == null && equipmentDetails.checkpointId == cp.id),
+                                    onClick = { vm.selectEquipment(cp.id) },
+                                    label = { Text("${cp.code} · ${cp.name}") },
+                                    modifier = Modifier.testTag("details-select-equipment-${cp.code}"),
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 3. Timestamp & file details card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -458,7 +613,7 @@ fun InspectionDetailsScreen(
                 }
             }
 
-            // 3. Status & custom tag editor card
+            // 4. Status & custom tag editor card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -567,7 +722,7 @@ fun InspectionDetailsScreen(
                 }
             }
 
-            // 4. Branded PDF Export Card (PDFBox)
+            // 5. Branded PDF Export Card (PDFBox)
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -591,7 +746,7 @@ fun InspectionDetailsScreen(
                                 fontWeight = FontWeight.SemiBold,
                             )
                             Text(
-                                text = "Exports the inspection image, timestamp, status tags, and file metadata into a branded A4 PDF.",
+                                text = "Exports the high-resolution image, inspection timestamp, equipment details (${equipmentDetails.equipmentCode}), and status tags into a branded A4 PDF.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -603,7 +758,7 @@ fun InspectionDetailsScreen(
                         val info = exportedPdfInfo
                         Text(
                             text = "PDF ready: ${pdfFile.name}" +
-                                (info?.let { "\n${it.pageCount} page${if (it.pageCount == 1) "" else "s"} · ${(it.sizeBytes + 1023) / 1024} KB" } ?: ""),
+                                (info?.let { "\n${it.pageCount} page${if (it.pageCount == 1) "" else "s"} · ${(it.sizeBytes + 1023) / 1024} KB · Equipment: ${equipmentDetails.equipmentCode}" } ?: ""),
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.testTag("details-pdf-status"),
                         )
@@ -616,7 +771,7 @@ fun InspectionDetailsScreen(
                                     FileSharing.sharePdf(
                                         context,
                                         pdfFile,
-                                        "SafeStitch Captured Inspection #C${current.id}",
+                                        "SafeStitch Captured Inspection #C${current.id} (${equipmentDetails.equipmentCode})",
                                     )
                                 },
                                 modifier = Modifier.testTag("details-share-pdf"),
@@ -677,7 +832,7 @@ fun InspectionDetailsScreen(
                             Spacer(Modifier.width(8.dp))
                             Text(
                                 if (pdfFile != null && pdfFile.isFile) {
-                                    "Re-export Branded PDF with Latest Tags"
+                                    "Re-export Branded PDF with Latest Details"
                                 } else {
                                     "Export Branded PDF"
                                 },

@@ -29,9 +29,11 @@ import com.safestitch.app.ui.actions.ActionsScreen
 import com.safestitch.app.ui.admin.AdminScreen
 import com.safestitch.app.ui.admin.ChecklistEditorScreen
 import com.safestitch.app.ui.admin.LocationsScreen
+import com.safestitch.app.ui.admin.SqlDatabaseScreen
 import com.safestitch.app.ui.admin.SyncScreen
 import com.safestitch.app.ui.admin.UsersScreen
 import com.safestitch.app.ui.camera.PhotoCaptureScreen
+import com.safestitch.app.ui.chat.GeminiChatScreen
 import com.safestitch.app.ui.checkpoint.CheckpointFormScreen
 import com.safestitch.app.ui.dashboard.DashboardScreen
 import com.safestitch.app.ui.history.CapturedInspectionsScreen
@@ -50,7 +52,7 @@ private val tabs = listOf(
     Tab(DashboardRoute, "Home", R.drawable.ic_home, "tab-home"),
     Tab(InspectRoute, "Inspect", R.drawable.ic_qr_scan, "tab-inspect"),
     Tab(ActionsRoute, "Actions", R.drawable.ic_assignment, "tab-actions"),
-    Tab(HistoryRoute, "History", R.drawable.ic_history, "tab-history"),
+    Tab(HistoryRoute(), "History", R.drawable.ic_history, "tab-history"),
 )
 
 @Composable
@@ -96,6 +98,12 @@ fun SafeStitchNavHost(container: AppContainer, user: UserEntity, modifier: Modif
                     onFindEquipment = { nav.navigate(InspectRoute) { launchSingleTop = true } },
                     onOpenActions = { nav.navigate(ActionsRoute) { launchSingleTop = true } },
                     onOpenCapturedInspections = { nav.navigate(CapturedInspectionsRoute) },
+                    onOpenChecklistInspection = ::openInspection,
+                    onOpenCapturedInspectionDetail = { id -> nav.navigate(CapturedInspectionDetailRoute(id)) },
+                    onNavigateToEquipmentHistory = { code ->
+                        nav.navigate(HistoryRoute(equipmentCode = code))
+                    },
+                    onOpenChat = { nav.navigate(GeminiChatRoute) },
                     onAdmin = { nav.navigate(AdminRoute) },
                     onSettings = { nav.navigate(SettingsRoute) },
                 )
@@ -113,12 +121,14 @@ fun SafeStitchNavHost(container: AppContainer, user: UserEntity, modifier: Modif
             composable<ActionsRoute> {
                 ActionsScreen(container = container, onOpen = { nav.navigate(ActionDetailRoute(it)) })
             }
-            composable<HistoryRoute> {
+            composable<HistoryRoute> { entry ->
+                val route = entry.toRoute<HistoryRoute>()
                 HistoryScreen(
                     container = container,
                     onOpen = ::openInspection,
                     onOpenCapturedInspections = { nav.navigate(CapturedInspectionsRoute) },
                     onOpenCapturedInspectionDetail = { id -> nav.navigate(CapturedInspectionDetailRoute(id)) },
+                    initialEquipmentCode = route.equipmentCode,
                 )
             }
             composable<CapturedInspectionsRoute> {
@@ -212,6 +222,7 @@ fun SafeStitchNavHost(container: AppContainer, user: UserEntity, modifier: Modif
                     onChecklists = { nav.navigate(ChecklistEditorRoute) },
                     onSync = { nav.navigate(SyncRoute) },
                     onEquipment = { nav.navigate(InspectRoute) { launchSingleTop = true } },
+                    onSqlDatabase = { nav.navigate(SqlDatabaseRoute) },
                 )
             }
             composable<UsersRoute> { UsersScreen(container = container, admin = user, onBack = { nav.popBackStack() }) }
@@ -229,6 +240,8 @@ fun SafeStitchNavHost(container: AppContainer, user: UserEntity, modifier: Modif
             }
             composable<ChecklistEditorRoute> { ChecklistEditorScreen(container = container, onBack = { nav.popBackStack() }) }
             composable<SyncRoute> { SyncScreen(container = container, onBack = { nav.popBackStack() }) }
+            composable<SqlDatabaseRoute> { SqlDatabaseScreen(container = container, onBack = { nav.popBackStack() }) }
+            composable<GeminiChatRoute> { GeminiChatScreen(container = container, onBack = { nav.popBackStack() }) }
         }
     }
 }

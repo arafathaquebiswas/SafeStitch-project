@@ -3,6 +3,7 @@ package com.safestitch.app.data
 import androidx.room.withTransaction
 import com.safestitch.app.data.db.ActionEventEntity
 import com.safestitch.app.data.db.ActionRow
+import com.safestitch.app.data.db.AreaPath
 import com.safestitch.app.data.db.CheckpointEntity
 import com.safestitch.app.data.db.ChecklistItemEntity
 import com.safestitch.app.data.db.CorrectiveActionEntity
@@ -18,11 +19,14 @@ import com.safestitch.app.domain.FindingDefaults
 import com.safestitch.app.domain.ItemResult
 import com.safestitch.app.domain.Priority
 import com.safestitch.app.domain.QrPayload
+import com.safestitch.app.pdf.CapturedEquipmentDetails
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.Locale
 
 class DuplicateCheckpointCodeException(code: String) :
     Exception("Equipment with code $code already exists.")
@@ -122,6 +126,142 @@ class InspectionRepository(
     fun observeCheckpoints(): Flow<List<CheckpointEntity>> = checkpoints.observeAll()
     suspend fun getCheckpoints(): List<CheckpointEntity> = checkpoints.getAll()
     suspend fun getCheckpoint(id: Long): CheckpointEntity? = checkpoints.getById(id)
+    fun observeAreaPaths(): Flow<List<AreaPath>> = locations.observeAreaPaths()
+    suspend fun getAreaPaths(): List<AreaPath> = locations.getAreaPaths()
+
+    /**
+     * Resolves the equipment context for a camera-captured [Inspection] record by checking:
+     * 1. An explicit [overrideCheckpointId] selected on the Inspection Details screen.
+     * 2. An exact photo or path match in an existing [InspectionWithDetails].
+     * 3. A matching checkpoint code in the inspection's tags or image file name, or the latest/first registered checkpoint.
+     * 4. Deterministic fallback details if no checkpoints are registered yet.
+     */
+    suspend fun resolveCapturedEquipmentDetails(
+        inspection: Inspection,
+        overrideCheckpointId: Long? = null,
+        activeInspectorName: String? = null,
+    ): CapturedEquipmentDetails {
+        val allCheckpoints = checkpoints.getAll()
+        val areaPaths = locations.getAreaPaths()
+        val allInspections = inspections.observeAll().first()
+        return resolveEquipmentFromCatalog(
+            inspection = inspection,
+            allCheckpoints = allCheckpoints,
+            areaPaths = areaPaths,
+            allInspections = allInspections,
+            overrideCheckpointId = overrideCheckpointId,
+            activeInspectorName = activeInspectorName,
+        )
+    }
+
+    companion object {
+        fun resolveEquipmentFromCatalog(
+            inspection: Inspection,
+            allCheckpoints: List<CheckpointEntity>,
+            areaPaths: List<AreaPath>,
+            allInspections: List<InspectionWithDetails>,
+            overrideCheckpointId: Long? = null,
+            activeInspectorName: String? = null,
+        ): CapturedEquipmentDetails {
+            val areaById = areaPaths.associateBy { it.areaId }
+            val fileName = File(inspection.imagePath).name
+            val lowerPath = inspection.imagePath.lowercase(Locale.ROOT)
+            val latestInspector = activeInspectorName?.takeIf { it.isNotBlank() }
+                ?: allInspections.firstOrNull { it.inspection.inspectorName.isNotBlank() }?.inspection?.inspectorName
+                ?: "Field Safety Inspector"
+
+            // 1. User-selected equipment override
+            if (overrideCheckpointId != null) {
+                val chosen = allCheckpoints.firstOrNull { it.id == overrideCheckpointId }
+                if (chosen != null) {
+                    val latestForCheckpoint = allInspections.firstOrNull { it.checkpoint.id == chosen.id }
+                    return buildCheckpointDetails(
+                        checkpoint = chosen,
+                        areaById = areaById,
+                        matchingInspection = latestForCheckpoint,
+                        inspectorFallback = latestInspector,
+                        autoLinked = false,
+                    )
+                }
+            }
+
+            // 2. Direct photo match in an existing equipment inspection
+            val matchedInspection = allInspections.firstOrNull { details ->
+                details.inspection.imagePath.equals(inspection.imagePath, ignoreCase = true) ||
+                    (fileName.isNotBlank() && details.photos.any { it.fileName.equals(fileName, ignoreCase = true) })
+            }
+            if (matchedInspection != null) {
+                return buildCheckpointDetails(
+                    checkpoint = matchedInspection.checkpoint,
+                    areaById = areaById,
+                    matchingInspection = matchedInspection,
+                    inspectorFallback = latestInspector,
+                    autoLinked = true,
+                )
+            }
+
+            // 3. Tag or filename match against registered checkpoints
+            val tagOrFileCheckpoint = allCheckpoints.firstOrNull { cp ->
+                val normCode = Inspection.normalizeTag(cp.code)
+                inspection.normalizedTags.any { tag ->
+                    tag.equals(cp.code, ignoreCase = true) ||
+                        tag.equals(normCode, ignoreCase = true) ||
+                        tag.equals("EQUIP_$normCode", ignoreCase = true)
+                } || lowerPath.contains(cp.code.lowercase(Locale.ROOT))
+            } ?: when {
+                lowerPath.contains("fe12") || lowerPath.contains("fire") ->
+                    allCheckpoints.firstOrNull { it.type == CheckpointType.FIRE_SAFETY }
+                lowerPath.contains("ep04") || lowerPath.contains("electrical") ->
+                    allCheckpoints.firstOrNull { it.type == CheckpointType.ELECTRICAL }
+                lowerPath.contains("mg09") || lowerPath.contains("guard") || lowerPath.contains("sewing") ->
+                    allCheckpoints.firstOrNull { it.type == CheckpointType.SEWING_LINE }
+                else -> null
+            } ?: allInspections.firstOrNull()?.checkpoint ?: allCheckpoints.firstOrNull()
+
+            if (tagOrFileCheckpoint != null) {
+                val latestForCheckpoint = allInspections.firstOrNull { it.checkpoint.id == tagOrFileCheckpoint.id }
+                return buildCheckpointDetails(
+                    checkpoint = tagOrFileCheckpoint,
+                    areaById = areaById,
+                    matchingInspection = latestForCheckpoint,
+                    inspectorFallback = latestInspector,
+                    autoLinked = true,
+                )
+            }
+
+            return CapturedEquipmentDetails.fromInspectionFallback(inspection, latestInspector)
+        }
+
+        private fun buildCheckpointDetails(
+            checkpoint: CheckpointEntity,
+            areaById: Map<Long, AreaPath>,
+            matchingInspection: InspectionWithDetails?,
+            inspectorFallback: String,
+            autoLinked: Boolean,
+        ): CapturedEquipmentDetails {
+            val hierarchyLabel = checkpoint.areaId?.let { areaById[it]?.label }.orEmpty()
+            val location = listOf(
+                matchingInspection?.inspection?.siteName.orEmpty().ifBlank { hierarchyLabel },
+                checkpoint.area,
+            ).map { it.trim() }.filter { it.isNotEmpty() }.distinct().joinToString(" · ")
+                .ifBlank { "Main Factory › Production Floor" }
+
+            val name = matchingInspection?.equipmentName?.takeIf { it.isNotBlank() } ?: checkpoint.name
+            val code = matchingInspection?.equipmentCode?.takeIf { it.isNotBlank() } ?: checkpoint.code
+            val category = (matchingInspection?.equipmentType ?: checkpoint.type).label
+            val inspector = matchingInspection?.inspection?.inspectorName?.takeIf { it.isNotBlank() } ?: inspectorFallback
+
+            return CapturedEquipmentDetails(
+                equipmentName = name,
+                equipmentCode = code,
+                equipmentCategory = category,
+                locationPath = location,
+                inspectorName = inspector,
+                checkpointId = checkpoint.id,
+                autoLinked = autoLinked,
+            )
+        }
+    }
 
     suspend fun findCheckpointByCode(code: String): CheckpointEntity? =
         QrPayload.parseCheckpointCode(code)?.let { checkpoints.findByCode(it) }

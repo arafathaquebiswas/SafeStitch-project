@@ -210,14 +210,36 @@ class CapturedInspectionsMigrationAndOfflineFlowTest {
             val decodedThumb = ImageUtils.decodeSampled(File(survived.imagePath), 2048)
             assertNotNull("Full-resolution image must decode from persisted imagePath after restart", decodedThumb)
 
-            // Verify PDFBox branded PDF export for the captured inspection record
+            // Verify PDFBox branded PDF export for the captured inspection record, including equipment details
+            val checkpointId = repo2.createCheckpoint(
+                code = "FE-101",
+                name = "CO2 Extinguisher — Main Hall",
+                spot = "Bay 2 North",
+                type = CheckpointType.FIRE_SAFETY,
+            )
             val reportService = com.safestitch.app.pdf.ReportService(context, repo2, photoStorage)
-            val exportedPdf = reportService.exportCapturedInspectionPdf(survived)
+            reportService.setSelectedCheckpointId(survived.id, checkpointId)
+            val resolvedEquip = repo2.resolveCapturedEquipmentDetails(
+                inspection = survived,
+                overrideCheckpointId = reportService.getSelectedCheckpointId(survived.id),
+                activeInspectorName = "R. Ahmed",
+            )
+            assertEquals("FE-101", resolvedEquip.equipmentCode)
+            assertEquals("CO2 Extinguisher — Main Hall", resolvedEquip.equipmentName)
+            assertEquals("R. Ahmed", resolvedEquip.inspectorName)
+
+            val exportedPdf = reportService.exportCapturedInspectionPdf(survived, resolvedEquip)
             assertTrue("Exported branded PDF must exist and be non-empty", exportedPdf.isFile && exportedPdf.length() > 500L)
             com.tom_roush.pdfbox.pdmodel.PDDocument.load(exportedPdf).use { doc ->
                 assertEquals(1, doc.numberOfPages)
                 assertEquals("SafeStitch Inspection Details #C$capturedId", doc.documentInformation.title)
                 assertTrue(doc.documentInformation.subject.orEmpty().contains("PASS"))
+                assertTrue(doc.documentInformation.subject.orEmpty().contains("FE-101"))
+                val extractedText = com.tom_roush.pdfbox.text.PDFTextStripper().getText(doc)
+                assertTrue("PDF text must include equipment code FE-101", extractedText.contains("FE-101"))
+                assertTrue("PDF text must include equipment name", extractedText.contains("CO2 Extinguisher"))
+                assertTrue("PDF text must include inspector name", extractedText.contains("R. Ahmed"))
+                assertTrue("PDF text must include status tag PASS", extractedText.contains("PASS"))
             }
             exportedPdf.delete()
             Unit

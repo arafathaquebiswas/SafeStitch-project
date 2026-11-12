@@ -88,4 +88,77 @@ class DashboardCalculatorTest {
         assertEquals(listOf("F › B", "F › A", "No location set"), s.byLocation.map { it.label })
         assertEquals(50, s.byLocation.first().passRatePercent)
     }
+
+    @Test
+    fun summaryDashboardComputesTotalPerformedPendingReportsAndRecentEquipmentUpdates() {
+        val cpFire = com.safestitch.app.data.db.CheckpointEntity(
+            id = 1L,
+            code = "FE-12",
+            name = "CO2 Extinguisher",
+            area = "North Lobby",
+            type = CheckpointType.FIRE_SAFETY,
+            createdAt = 1_000L,
+        )
+        val completedInspection = com.safestitch.app.data.db.InspectionWithDetails(
+            inspection = com.safestitch.app.data.db.InspectionEntity(
+                id = 10L,
+                checkpointId = 1L,
+                inspectorName = "R. Ahmed",
+                siteName = "Plant 1 › Lobby",
+                startedAt = 2_000L,
+                completedAt = 3_000L,
+                reportFileName = "SafeStitch_FE-12_R10.pdf",
+                equipmentCode = "FE-12",
+                equipmentName = "CO2 Extinguisher",
+                equipmentType = CheckpointType.FIRE_SAFETY,
+            ),
+            checkpoint = cpFire,
+            items = listOf(
+                com.safestitch.app.data.db.ChecklistItemEntity(
+                    id = 1L,
+                    inspectionId = 10L,
+                    position = 0,
+                    section = "Fire",
+                    question = "Pressure in green zone",
+                    critical = true,
+                    result = ItemResult.PASS,
+                ),
+            ),
+            photos = emptyList(),
+            actions = emptyList(),
+        )
+        val draftInspection = completedInspection.copy(
+            inspection = completedInspection.inspection.copy(
+                id = 11L,
+                startedAt = 4_000L,
+                completedAt = null,
+                reportFileName = null,
+            ),
+        )
+        val capturedPending = com.safestitch.app.data.db.Inspection(
+            id = 1L,
+            timestamp = 5_000L,
+            imagePath = "/data/user/0/com.safestitch.app/files/photos/seed_fire_extinguisher_fe12.jpg",
+            statusTags = listOf(com.safestitch.app.data.db.Inspection.TAG_NEEDS_REVIEW),
+        )
+        val capturedPass = com.safestitch.app.data.db.Inspection(
+            id = 2L,
+            timestamp = 6_000L,
+            imagePath = "/data/user/0/com.safestitch.app/files/photos/seed_electrical_panel_ep04.jpg",
+            statusTags = listOf(com.safestitch.app.data.db.Inspection.TAG_PASS),
+        )
+
+        val summary = com.safestitch.app.ui.dashboard.SummaryDashboardCalculator.compute(
+            inspections = listOf(completedInspection, draftInspection),
+            capturedInspections = listOf(capturedPending, capturedPass),
+            checkpoints = listOf(cpFire),
+        )
+
+        assertEquals(4, summary.totalInspectionsPerformed)
+        assertEquals(2, summary.checklistInspectionsCount)
+        assertEquals(2, summary.capturedPhotosCount)
+        assertEquals(2, summary.pendingReportsCount) // 1 draft + 1 NEEDS_REVIEW captured photo
+        assertEquals(4, summary.recentUpdates.size)
+        assertEquals("cap-2", summary.recentUpdates.first().key) // newest timestamp (6_000L) first
+    }
 }

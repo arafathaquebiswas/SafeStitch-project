@@ -1,0 +1,11 @@
+{
+  "name": "SafeStitch — Safety & Equipment Inspection",
+  "description": "Offline-first safety and equipment inspection app with QR checkpoints, corrective actions, PDF reports, SQL database inspector, and Gemini safety assistant.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

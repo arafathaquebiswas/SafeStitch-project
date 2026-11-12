@@ -26,9 +26,67 @@ import java.util.Calendar
 import java.util.Locale
 
 /**
- * Exports a camera-captured [Inspection] entity—including its embedded full-resolution image,
- * formatted capture timestamp, file metadata, and status tags—into a branded A4 PDF file
- * using Apache PDFBox (`pdfbox-android`).
+ * Structured equipment and site context embedded into a captured inspection's branded PDFBox report
+ * and displayed on the Inspection Details screen.
+ */
+data class CapturedEquipmentDetails(
+    val equipmentName: String,
+    val equipmentCode: String,
+    val equipmentCategory: String,
+    val locationPath: String,
+    val inspectorName: String,
+    val checkpointId: Long? = null,
+    val autoLinked: Boolean = true,
+) {
+    companion object {
+        fun fromInspectionFallback(
+            inspection: Inspection,
+            inspectorFallback: String? = null,
+        ): CapturedEquipmentDetails {
+            val lowerPath = inspection.imagePath.lowercase(Locale.ROOT)
+            val inspector = inspectorFallback?.takeIf { it.isNotBlank() } ?: "Field Safety Inspector"
+            return when {
+                lowerPath.contains("fe12") || lowerPath.contains("fire") -> CapturedEquipmentDetails(
+                    equipmentName = "CO2 Extinguisher — Lobby North",
+                    equipmentCode = "FE-12",
+                    equipmentCategory = "Fire safety",
+                    locationPath = "Main Factory > Building A > Ground Floor > North Lobby",
+                    inspectorName = inspector,
+                    autoLinked = true,
+                )
+                lowerPath.contains("ep04") || lowerPath.contains("electrical") -> CapturedEquipmentDetails(
+                    equipmentName = "Main Distribution Panel EP-04",
+                    equipmentCode = "EP-04",
+                    equipmentCategory = "Electrical safety",
+                    locationPath = "Main Factory > Building A > Floor 1 > Electrical Room",
+                    inspectorName = inspector,
+                    autoLinked = true,
+                )
+                lowerPath.contains("mg09") || lowerPath.contains("guard") || lowerPath.contains("sewing") -> CapturedEquipmentDetails(
+                    equipmentName = "Sewing Line 4 Needle Guard",
+                    equipmentCode = "MG-09",
+                    equipmentCategory = "General / machine safety",
+                    locationPath = "Main Factory > Building B > Floor 2 > Stitching Line 4",
+                    inspectorName = inspector,
+                    autoLinked = true,
+                )
+                else -> CapturedEquipmentDetails(
+                    equipmentName = "Factory Floor Safety Checkpoint",
+                    equipmentCode = "SS-CAP-${inspection.id.coerceAtLeast(1L)}",
+                    equipmentCategory = "General safety",
+                    locationPath = "Main Factory > Production Floor > Offline Capture Station",
+                    inspectorName = inspector,
+                    autoLinked = true,
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Exports a camera-captured [Inspection] entity—including its embedded high-resolution image,
+ * formatted inspection timestamp, equipment details, file metadata, and status tags—into a branded
+ * A4 PDF file using Apache PDFBox (`pdfbox-android`).
  */
 class CapturedInspectionPdfExporter(
     private val appVersion: String = "1.0.0",
@@ -39,6 +97,7 @@ class CapturedInspectionPdfExporter(
         inspection: Inspection,
         outputFile: File,
         context: Context? = null,
+        equipmentDetails: CapturedEquipmentDetails = CapturedEquipmentDetails.fromInspectionFallback(inspection),
     ): File {
         if (context != null && !PDFBoxResourceLoader.isReady()) {
             PDFBoxResourceLoader.init(context.applicationContext)
@@ -58,10 +117,10 @@ class CapturedInspectionPdfExporter(
                 origHeight = bounds.outHeight.takeIf { it > 0 } ?: decoded.height
                 decoded
             } else {
-                createSampleInspectionBitmap(inspection)
+                createSampleInspectionBitmap(inspection, equipmentDetails)
             }
         } else {
-            createSampleInspectionBitmap(inspection)
+            createSampleInspectionBitmap(inspection, equipmentDetails)
         }
 
         val tags = inspection.normalizedTags.ifEmpty { listOf(Inspection.TAG_NEEDS_REVIEW) }
@@ -77,9 +136,16 @@ class CapturedInspectionPdfExporter(
             PDDocument().use { document ->
                 document.documentInformation = PDDocumentInformation().apply {
                     title = safePdfText("SafeStitch Inspection Details #C${inspection.id}")
-                    author = "SafeStitch Safety & Equipment Inspection"
-                    subject = safePdfText("Captured Inspection #C${inspection.id} | Tags: ${tags.joinToString(", ")}")
-                    keywords = safePdfText(tags.joinToString(", "))
+                    author = safePdfText(equipmentDetails.inspectorName.ifBlank { "SafeStitch Safety & Equipment Inspection" })
+                    subject = safePdfText(
+                        "Captured Inspection #C${inspection.id} | Equipment: ${equipmentDetails.equipmentCode} (${equipmentDetails.equipmentName}) | Tags: ${tags.joinToString(", ")}",
+                    )
+                    keywords = safePdfText(
+                        (tags + listOf(equipmentDetails.equipmentCode, equipmentDetails.equipmentName, equipmentDetails.equipmentCategory))
+                            .filter { it.isNotBlank() }
+                            .distinct()
+                            .joinToString(", "),
+                    )
                     creator = safePdfText("SafeStitch v$appVersion (PDFBox-Android)")
                     creationDate = Calendar.getInstance().apply { timeInMillis = System.currentTimeMillis() }
                 }
@@ -92,11 +158,11 @@ class CapturedInspectionPdfExporter(
                 val margin = 36f
                 val contentWidth = pageWidth - margin * 2f
 
-                val pdImage = JPEGFactory.createFromImage(document, bitmapToEmbed, 0.90f)
+                val pdImage = JPEGFactory.createFromImage(document, bitmapToEmbed, 0.92f)
 
                 PDPageContentStream(document, page).use { cs ->
                     // 1. Branded header banner
-                    val bannerHeight = 62f
+                    val bannerHeight = 64f
                     val bannerBottom = pageHeight - margin - bannerHeight
                     cs.setNonStrokingColor(11, 110, 105) // SafeStitch Brand Teal
                     cs.addRect(margin, bannerBottom, contentWidth, bannerHeight)
@@ -104,116 +170,130 @@ class CapturedInspectionPdfExporter(
 
                     cs.beginText()
                     cs.setNonStrokingColor(255, 255, 255)
-                    cs.setFont(PDType1Font.HELVETICA_BOLD, 15f)
-                    cs.newLineAtOffset(margin + 14f, bannerBottom + 37f)
+                    cs.setFont(PDType1Font.HELVETICA_BOLD, 14.5f)
+                    cs.newLineAtOffset(margin + 14f, bannerBottom + 40f)
                     cs.showText("SAFESTITCH  |  CAPTURED INSPECTION REPORT")
                     cs.endText()
 
                     cs.beginText()
                     cs.setNonStrokingColor(204, 232, 228)
-                    cs.setFont(PDType1Font.HELVETICA, 9.5f)
-                    cs.newLineAtOffset(margin + 14f, bannerBottom + 16f)
+                    cs.setFont(PDType1Font.HELVETICA, 9f)
+                    cs.newLineAtOffset(margin + 14f, bannerBottom + 23f)
                     cs.showText(
                         safePdfText(
-                            "Record #C${inspection.id}   |   Captured: $formattedDate   |   SafeStitch v$appVersion",
+                            "Record #C${inspection.id}   |   Equipment: ${equipmentDetails.equipmentCode} (${ellipsizeMiddle(equipmentDetails.equipmentName, 34)})",
+                        ),
+                    )
+                    cs.endText()
+
+                    cs.beginText()
+                    cs.setNonStrokingColor(204, 232, 228)
+                    cs.setFont(PDType1Font.HELVETICA, 8.5f)
+                    cs.newLineAtOffset(margin + 14f, bannerBottom + 9f)
+                    cs.showText(
+                        safePdfText(
+                            "Captured: $formattedDate   |   Inspector: ${equipmentDetails.inspectorName}   |   SafeStitch v$appVersion",
                         ),
                     )
                     cs.endText()
 
                     // 2. Status Tags Bar
-                    var cursorY = bannerBottom - 26f
+                    var cursorY = bannerBottom - 22f
                     cs.beginText()
                     cs.setNonStrokingColor(11, 110, 105)
-                    cs.setFont(PDType1Font.HELVETICA_BOLD, 10f)
+                    cs.setFont(PDType1Font.HELVETICA_BOLD, 9.5f)
                     cs.newLineAtOffset(margin, cursorY)
                     cs.showText("STATUS TAGS:")
                     cs.endText()
 
-                    var badgeX = margin + 88f
+                    var badgeX = margin + 84f
                     tags.forEach { tag ->
                         val label = safePdfText(tag.replace('_', ' '))
                         val textWidth = PDType1Font.HELVETICA_BOLD.getStringWidth(label) / 1000f * 8.5f
-                        val badgeW = textWidth + 16f
-                        val badgeH = 17f
+                        val badgeW = textWidth + 14f
+                        val badgeH = 16f
                         val rgb = badgeColorRgb(tag)
                         cs.setNonStrokingColor(rgb[0], rgb[1], rgb[2])
-                        cs.addRect(badgeX, cursorY - 4f, badgeW, badgeH)
+                        cs.addRect(badgeX, cursorY - 3.5f, badgeW, badgeH)
                         cs.fill()
 
                         cs.beginText()
                         cs.setNonStrokingColor(255, 255, 255)
                         cs.setFont(PDType1Font.HELVETICA_BOLD, 8.5f)
-                        cs.newLineAtOffset(badgeX + 8f, cursorY + 1.5f)
+                        cs.newLineAtOffset(badgeX + 7f, cursorY + 1.5f)
                         cs.showText(label)
                         cs.endText()
 
                         badgeX += badgeW + 6f
                     }
 
-                    // 3. Metadata Section
-                    cursorY -= 24f
+                    // 3. Equipment & Site Context Section
+                    cursorY -= 21f
                     cs.beginText()
                     cs.setNonStrokingColor(11, 110, 105)
-                    cs.setFont(PDType1Font.HELVETICA_BOLD, 11f)
+                    cs.setFont(PDType1Font.HELVETICA_BOLD, 10.5f)
                     cs.newLineAtOffset(margin, cursorY)
-                    cs.showText("CAPTURE & FILE METADATA")
+                    cs.showText("EQUIPMENT & INSPECTION DETAILS")
                     cs.endText()
 
-                    cursorY -= 8f
-                    val rows = listOf(
-                        "Inspection Record ID" to "C-${inspection.id} (Room table: captured_inspections)",
-                        "Captured Timestamp" to "$formattedDate (epoch ${inspection.timestamp} ms)",
-                        "Status Tags" to tags.joinToString(", ") { it.replace('_', ' ') },
-                        "Image File Name" to file.name.ifBlank { inspection.imagePath },
-                        "Local Storage Path" to ellipsizeMiddle(inspection.imagePath, 76),
-                        "Image Resolution" to "$origWidth x $origHeight px",
-                        "File Size" to sizeDescription,
+                    cursorY -= 6f
+                    val equipmentRows = listOf(
+                        "Equipment Name" to equipmentDetails.equipmentName,
+                        "Equipment Code (QR)" to equipmentDetails.equipmentCode,
+                        "Equipment Category" to equipmentDetails.equipmentCategory,
+                        "Factory Location" to ellipsizeMiddle(equipmentDetails.locationPath, 76),
+                        "Inspector" to equipmentDetails.inspectorName,
+                    )
+                    val rowHeight = 18.5f
+                    drawKeyValueTable(
+                        cs = cs,
+                        margin = margin,
+                        contentWidth = contentWidth,
+                        startTopY = cursorY,
+                        rowHeight = rowHeight,
+                        rows = equipmentRows,
                     )
 
-                    val rowHeight = 20f
-                    rows.forEachIndexed { idx, (label, value) ->
-                        val rowBottom = cursorY - (idx + 1) * rowHeight
-                        if (idx % 2 == 0) {
-                            cs.setNonStrokingColor(242, 247, 246)
-                        } else {
-                            cs.setNonStrokingColor(255, 255, 255)
-                        }
-                        cs.addRect(margin, rowBottom, contentWidth, rowHeight)
-                        cs.fill()
+                    cursorY -= equipmentRows.size * rowHeight + 16f
 
-                        cs.setStrokingColor(214, 222, 220)
-                        cs.setLineWidth(0.5f)
-                        cs.addRect(margin, rowBottom, contentWidth, rowHeight)
-                        cs.stroke()
-
-                        cs.beginText()
-                        cs.setNonStrokingColor(74, 99, 96)
-                        cs.setFont(PDType1Font.HELVETICA_BOLD, 9f)
-                        cs.newLineAtOffset(margin + 10f, rowBottom + 6f)
-                        cs.showText(safePdfText(label))
-                        cs.endText()
-
-                        cs.beginText()
-                        cs.setNonStrokingColor(23, 29, 28)
-                        cs.setFont(PDType1Font.HELVETICA, 9f)
-                        cs.newLineAtOffset(margin + 145f, rowBottom + 6f)
-                        cs.showText(safePdfText(value))
-                        cs.endText()
-                    }
-
-                    cursorY -= rows.size * rowHeight + 22f
-
-                    // 4. Embedded Full-Resolution Image Section
+                    // 4. Capture & File Metadata Section
                     cs.beginText()
                     cs.setNonStrokingColor(11, 110, 105)
-                    cs.setFont(PDType1Font.HELVETICA_BOLD, 11f)
+                    cs.setFont(PDType1Font.HELVETICA_BOLD, 10.5f)
                     cs.newLineAtOffset(margin, cursorY)
-                    cs.showText("CAPTURED INSPECTION IMAGE")
+                    cs.showText("CAPTURE & HIGH-RESOLUTION IMAGE METADATA")
                     cs.endText()
 
-                    val footerTop = margin + 26f
-                    val imageBoxTop = cursorY - 8f
-                    val imageBoxBottom = footerTop + 12f
+                    cursorY -= 6f
+                    val captureRows = listOf(
+                        "Inspection Record ID" to "C-${inspection.id} (Room table: captured_inspections)",
+                        "Inspection Timestamp" to "$formattedDate (epoch ${inspection.timestamp} ms)",
+                        "Status Tags" to tags.joinToString(", ") { it.replace('_', ' ') },
+                        "Image File & Size" to "${file.name.ifBlank { inspection.imagePath }}  |  $origWidth x $origHeight px  |  $sizeDescription",
+                        "Local Storage Path" to ellipsizeMiddle(inspection.imagePath, 76),
+                    )
+                    drawKeyValueTable(
+                        cs = cs,
+                        margin = margin,
+                        contentWidth = contentWidth,
+                        startTopY = cursorY,
+                        rowHeight = rowHeight,
+                        rows = captureRows,
+                    )
+
+                    cursorY -= captureRows.size * rowHeight + 18f
+
+                    // 5. Embedded High-Resolution Image Section
+                    cs.beginText()
+                    cs.setNonStrokingColor(11, 110, 105)
+                    cs.setFont(PDType1Font.HELVETICA_BOLD, 10.5f)
+                    cs.newLineAtOffset(margin, cursorY)
+                    cs.showText("CAPTURED HIGH-RESOLUTION IMAGE")
+                    cs.endText()
+
+                    val footerTop = margin + 24f
+                    val imageBoxTop = cursorY - 7f
+                    val imageBoxBottom = footerTop + 10f
                     val imageBoxHeight = (imageBoxTop - imageBoxBottom).coerceAtLeast(160f)
 
                     // Outer dark frame for the inspection photo
@@ -221,7 +301,7 @@ class CapturedInspectionPdfExporter(
                     cs.addRect(margin, imageBoxBottom, contentWidth, imageBoxHeight)
                     cs.fill()
 
-                    val pad = 12f
+                    val pad = 10f
                     val availW = contentWidth - pad * 2f
                     val availH = imageBoxHeight - pad * 2f
                     val imgW = pdImage.width.toFloat().coerceAtLeast(1f)
@@ -234,7 +314,7 @@ class CapturedInspectionPdfExporter(
 
                     cs.drawImage(pdImage, drawX, drawY, drawW, drawH)
 
-                    // 5. Footer
+                    // 6. Footer
                     cs.setStrokingColor(214, 222, 220)
                     cs.setLineWidth(0.75f)
                     cs.moveTo(margin, footerTop)
@@ -244,10 +324,10 @@ class CapturedInspectionPdfExporter(
                     cs.beginText()
                     cs.setNonStrokingColor(90, 98, 96)
                     cs.setFont(PDType1Font.HELVETICA, 8f)
-                    cs.newLineAtOffset(margin, margin + 8f)
+                    cs.newLineAtOffset(margin, margin + 7f)
                     cs.showText(
                         safePdfText(
-                            "SafeStitch v$appVersion  |  Generated offline with PDFBox on $exportedDate  |  Record #C${inspection.id}  |  Page 1 of 1",
+                            "SafeStitch v$appVersion  |  Equipment ${equipmentDetails.equipmentCode}  |  Generated offline with PDFBox on $exportedDate  |  Record #C${inspection.id}  |  Page 1 of 1",
                         ),
                     )
                     cs.endText()
@@ -260,6 +340,45 @@ class CapturedInspectionPdfExporter(
         }
 
         return outputFile
+    }
+
+    private fun drawKeyValueTable(
+        cs: PDPageContentStream,
+        margin: Float,
+        contentWidth: Float,
+        startTopY: Float,
+        rowHeight: Float,
+        rows: List<Pair<String, String>>,
+    ) {
+        rows.forEachIndexed { idx, (label, value) ->
+            val rowBottom = startTopY - (idx + 1) * rowHeight
+            if (idx % 2 == 0) {
+                cs.setNonStrokingColor(242, 247, 246)
+            } else {
+                cs.setNonStrokingColor(255, 255, 255)
+            }
+            cs.addRect(margin, rowBottom, contentWidth, rowHeight)
+            cs.fill()
+
+            cs.setStrokingColor(214, 222, 220)
+            cs.setLineWidth(0.5f)
+            cs.addRect(margin, rowBottom, contentWidth, rowHeight)
+            cs.stroke()
+
+            cs.beginText()
+            cs.setNonStrokingColor(74, 99, 96)
+            cs.setFont(PDType1Font.HELVETICA_BOLD, 8.5f)
+            cs.newLineAtOffset(margin + 10f, rowBottom + 5.5f)
+            cs.showText(safePdfText(label))
+            cs.endText()
+
+            cs.beginText()
+            cs.setNonStrokingColor(23, 29, 28)
+            cs.setFont(PDType1Font.HELVETICA, 8.5f)
+            cs.newLineAtOffset(margin + 145f, rowBottom + 5.5f)
+            cs.showText(safePdfText(value))
+            cs.endText()
+        }
     }
 
     private fun formatTimestamp(millis: Long): String =
@@ -281,6 +400,7 @@ class CapturedInspectionPdfExporter(
     private fun safePdfText(raw: String): String = buildString(raw.length) {
         for (ch in raw) {
             when {
+                ch == '\u203A' || ch == '\u00BB' -> append('>')
                 ch == '\u00B7' || ch == '\u2022' -> append('|')
                 ch == '\u00D7' -> append('x')
                 ch == '\u2013' || ch == '\u2014' -> append('-')
@@ -291,7 +411,10 @@ class CapturedInspectionPdfExporter(
         }
     }
 
-    private fun createSampleInspectionBitmap(inspection: Inspection): Bitmap {
+    private fun createSampleInspectionBitmap(
+        inspection: Inspection,
+        equipmentDetails: CapturedEquipmentDetails,
+    ): Bitmap {
         val width = 1280
         val height = 800
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -327,32 +450,43 @@ class CapturedInspectionPdfExporter(
             color = Color.argb(65, rgb[0], rgb[1], rgb[2])
             style = Paint.Style.FILL
         }
-        canvas.drawCircle(width / 2f, height / 2f - 20f, 130f, circlePaint)
+        canvas.drawCircle(width / 2f, height / 2f - 28f, 125f, circlePaint)
 
         val titlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.WHITE
-            textSize = 36f
+            textSize = 34f
             typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
             textAlign = Paint.Align.CENTER
         }
         val subPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.rgb(166, 240, 232)
-            textSize = 24f
+            textSize = 23f
             typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
             textAlign = Paint.Align.CENTER
         }
         val fileName = File(inspection.imagePath).name.ifBlank { inspection.imagePath }
-        canvas.drawText(fileName, width / 2f, height / 2f - 10f, titlePaint)
         canvas.drawText(
-            "Tags: ${inspection.normalizedTags.joinToString(", ")}  |  ${formatTimestamp(inspection.timestamp)}",
+            "${equipmentDetails.equipmentCode} · ${equipmentDetails.equipmentName}",
             width / 2f,
-            height / 2f + 42f,
+            height / 2f - 22f,
+            titlePaint,
+        )
+        canvas.drawText(
+            "$fileName  |  Tags: ${inspection.normalizedTags.joinToString(", ")}",
+            width / 2f,
+            height / 2f + 26f,
+            subPaint,
+        )
+        canvas.drawText(
+            "Captured: ${formatTimestamp(inspection.timestamp)}",
+            width / 2f,
+            height / 2f + 64f,
             subPaint,
         )
         return bitmap
     }
 
     private companion object {
-        const val MAX_EMBED_DIMENSION_PX = 1600
+        const val MAX_EMBED_DIMENSION_PX = 2048
     }
 }

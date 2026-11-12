@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable data object DashboardRoute
 @Serializable data object InspectRoute
 @Serializable data object ActionsRoute
-@Serializable data object HistoryRoute
+@Serializable data class HistoryRoute(val equipmentCode: String = "")
 @Serializable data object CapturedInspectionsRoute
 @Serializable data class CapturedInspectionDetailRoute(val inspectionId: Long)
 
@@ -34,3 +34,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable data object ChecklistEditorRoute
 @Serializable data object SyncRoute
+@Serializable data object SqlDatabaseRoute
+@Serializable data object GeminiChatRoute

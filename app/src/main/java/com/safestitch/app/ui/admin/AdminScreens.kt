@@ -60,6 +60,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.safestitch.app.AppContainer
 import com.safestitch.app.BuildConfig
 import com.safestitch.app.R
+import com.safestitch.app.data.db.SafeStitchDatabase
+import com.safestitch.app.data.db.SqlDatabaseInspector
+import com.safestitch.app.data.db.SqlQueryResult
+import com.safestitch.app.data.db.SqlTableStat
 import com.safestitch.app.data.db.UserEntity
 import com.safestitch.app.domain.UserRole
 import com.safestitch.app.sync.SyncConfig
@@ -69,7 +73,9 @@ import com.safestitch.app.ui.auth.UsernameField
 import com.safestitch.app.ui.components.BackButton
 import com.safestitch.app.ui.components.formatDateTime
 import com.safestitch.app.ui.theme.LocalStatusColors
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,6 +86,7 @@ fun AdminScreen(
     onChecklists: () -> Unit,
     onSync: () -> Unit,
     onEquipment: () -> Unit,
+    onSqlDatabase: () -> Unit = {},
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text("Admin tools") }, navigationIcon = { BackButton(onBack) }) }) { padding ->
         Column(
@@ -90,6 +97,7 @@ fun AdminScreen(
             AdminEntry("Locations", "Factory › building › floor › area.", R.drawable.ic_location, "admin-locations", onLocations)
             AdminEntry("Equipment", "Add, edit and print QR labels for equipment.", R.drawable.ic_qr_scan, "admin-equipment", onEquipment)
             AdminEntry("Checklist questions", "Add, edit, reorder or switch off questions per equipment type.", R.drawable.ic_edit, "admin-checklists", onChecklists)
+            AdminEntry("SQL Database", "Inspect SQLite / Room tables, schemas, row counts and run SQL SELECT queries.", R.drawable.ic_history, "admin-sql-database", onSqlDatabase)
             AdminEntry("Sync", "Optional: upload inspections and corrective actions to your server when online.", R.drawable.ic_sync, "admin-sync", onSync)
         }
     }
@@ -392,3 +400,207 @@ fun SyncScreen(container: AppContainer, onBack: () -> Unit) {
         )
     }
 }
+
+// ---------------------------------------------------------------------------------------------
+//  SQL Database Inspector
+// ---------------------------------------------------------------------------------------------
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SqlDatabaseScreen(container: AppContainer, onBack: () -> Unit) {
+    val scope = rememberCoroutineScope()
+    var tables by remember { mutableStateOf<List<SqlTableStat>>(emptyList()) }
+    var sqlInput by rememberSaveable { mutableStateOf(SqlDatabaseInspector.PRESET_QUERIES.first().sql) }
+    var queryResult by remember { mutableStateOf<SqlQueryResult?>(null) }
+
+    suspend fun refreshTablesAndRun(sql: String) {
+        val (loadedTables, loadedResult) = withContext(Dispatchers.IO) {
+            val writableDb = container.database.openHelper.writableDatabase
+            SqlDatabaseInspector.inspectTables(writableDb) to SqlDatabaseInspector.executeReadOnlyQuery(writableDb, sql)
+        }
+        tables = loadedTables
+        queryResult = loadedResult
+    }
+
+    LaunchedEffect(Unit) {
+        refreshTablesAndRun(sqlInput)
+    }
+
+    val totalRows = tables.sumOf { it.rowCount }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("SQL Database") },
+                navigationIcon = { BackButton(onBack) },
+            )
+        },
+    ) { padding ->
+        Column(
+            Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .imePadding()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
+                .testTag("sql-database-screen"),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Card(
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                modifier = Modifier.fillMaxWidth().testTag("sql-db-summary-card"),
+            ) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        text = "Engine: SQLite 3 · Room v2 (${SafeStitchDatabase.FILE_NAME})",
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                    Text(
+                        text = "${tables.size} relational tables · $totalRows total rows persisted on device",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.testTag("sql-db-totals"),
+                    )
+                }
+            }
+
+            Text("Preset SQL Queries", style = MaterialTheme.typography.titleSmall)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                SqlDatabaseInspector.PRESET_QUERIES.take(2).forEach { preset ->
+                    OutlinedButton(
+                        onClick = {
+                            sqlInput = preset.sql
+                            scope.launch { refreshTablesAndRun(preset.sql) }
+                        },
+                        modifier = Modifier.weight(1f).testTag("sql-preset-${preset.id}"),
+                    ) {
+                        Text(preset.title, maxLines = 1)
+                    }
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                SqlDatabaseInspector.PRESET_QUERIES.drop(2).forEach { preset ->
+                    OutlinedButton(
+                        onClick = {
+                            sqlInput = preset.sql
+                            scope.launch { refreshTablesAndRun(preset.sql) }
+                        },
+                        modifier = Modifier.weight(1f).testTag("sql-preset-${preset.id}"),
+                    ) {
+                        Text(preset.title, maxLines = 1)
+                    }
+                }
+            }
+
+            OutlinedTextField(
+                value = sqlInput,
+                onValueChange = { sqlInput = it },
+                label = { Text("Read-only SQL query (SELECT / PRAGMA)") },
+                minLines = 2,
+                maxLines = 5,
+                modifier = Modifier.fillMaxWidth().testTag("sql-query-input"),
+            )
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(
+                    onClick = { scope.launch { refreshTablesAndRun(sqlInput) } },
+                    modifier = Modifier.testTag("sql-run-query"),
+                ) {
+                    Text("Run SQL Query")
+                }
+                OutlinedButton(
+                    onClick = { scope.launch { refreshTablesAndRun(sqlInput) } },
+                    modifier = Modifier.testTag("sql-refresh-tables"),
+                ) {
+                    Text("Refresh Counts")
+                }
+            }
+
+            queryResult?.let { result ->
+                Card(
+                    modifier = Modifier.fillMaxWidth().testTag("sql-query-results"),
+                ) {
+                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        if (result.error != null) {
+                            Text(
+                                text = result.error,
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.testTag("sql-query-error"),
+                            )
+                        } else {
+                            Text(
+                                text = "Result: ${result.rows.size} row(s) in ${result.executionTimeMs} ms",
+                                style = MaterialTheme.typography.titleSmall,
+                            )
+                            if (result.columns.isNotEmpty()) {
+                                Text(
+                                    text = result.columns.joinToString(" | "),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                            }
+                            if (result.rows.isEmpty()) {
+                                Text(
+                                    text = "No rows returned.",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            } else {
+                                result.rows.take(25).forEachIndexed { idx, row ->
+                                    Text(
+                                        text = "${idx + 1}. " + row.joinToString(" · "),
+                                        style = MaterialTheme.typography.bodySmall,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Text(
+                text = "Relational Tables (${tables.size})",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.testTag("sql-table-header"),
+            )
+
+            tables.forEach { table ->
+                Card(
+                    onClick = {
+                        val query = "SELECT * FROM \"${table.tableName}\" LIMIT 25"
+                        sqlInput = query
+                        scope.launch { refreshTablesAndRun(query) }
+                    },
+                    modifier = Modifier.fillMaxWidth().testTag("sql-table-${table.tableName}"),
+                ) {
+                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(table.tableName, style = MaterialTheme.typography.titleSmall)
+                            Text(
+                                text = "${table.rowCount} row(s)",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                        Text(
+                            text = table.columns.joinToString(", "),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+

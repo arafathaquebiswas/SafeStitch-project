@@ -32,6 +32,22 @@ class ReportService(
     private val appContext = context.applicationContext
     private val reportsDir = File(context.filesDir, "reports")
     private val labelsDir = File(context.filesDir, "labels")
+    private val equipmentPrefs = appContext.getSharedPreferences("safestitch_captured_equipment", Context.MODE_PRIVATE)
+
+    fun getSelectedCheckpointId(inspectionId: Long): Long? {
+        val raw = equipmentPrefs.getLong("captured_checkpoint_$inspectionId", -1L)
+        return raw.takeIf { it > 0L }
+    }
+
+    fun setSelectedCheckpointId(inspectionId: Long, checkpointId: Long?) {
+        equipmentPrefs.edit().apply {
+            if (checkpointId == null || checkpointId <= 0L) {
+                remove("captured_checkpoint_$inspectionId")
+            } else {
+                putLong("captured_checkpoint_$inspectionId", checkpointId)
+            }
+        }.apply()
+    }
 
     /** Generates the report PDF. [completedAt] is used for drafts being completed right now. */
     suspend fun generateReport(inspectionId: Long, completedAt: Long?): File = withContext(Dispatchers.IO) {
@@ -65,11 +81,18 @@ class ReportService(
         File(reportsDir, ReportFileNames.capturedInspection(inspection.id, inspection.timestamp))
 
     /**
-     * Exports a camera-captured [Inspection] record (image, timestamp, file details, and status tags)
-     * into a branded A4 PDF file in `files/reports/` using PDFBox-Android.
+     * Exports a camera-captured [Inspection] record (high-resolution image, timestamp, equipment details,
+     * file metadata, and status tags) into a branded A4 PDF file in `files/reports/` using PDFBox-Android.
      */
-    suspend fun exportCapturedInspectionPdf(inspection: Inspection): File = withContext(Dispatchers.IO) {
+    suspend fun exportCapturedInspectionPdf(
+        inspection: Inspection,
+        equipmentDetails: CapturedEquipmentDetails? = null,
+    ): File = withContext(Dispatchers.IO) {
         reportsDir.mkdirs()
+        val resolvedEquipment = equipmentDetails ?: repository.resolveCapturedEquipmentDetails(
+            inspection = inspection,
+            overrideCheckpointId = getSelectedCheckpointId(inspection.id),
+        )
         val name = ReportFileNames.capturedInspection(inspection.id, inspection.timestamp)
         val target = File(reportsDir, name)
         val temp = File(reportsDir, "$name.part")
@@ -78,6 +101,7 @@ class ReportService(
                 inspection = inspection,
                 outputFile = temp,
                 context = appContext,
+                equipmentDetails = resolvedEquipment,
             )
             if (target.exists() && !target.delete()) throw IOException("Could not replace $name")
             if (!temp.renameTo(target)) throw IOException("Could not save $name")
