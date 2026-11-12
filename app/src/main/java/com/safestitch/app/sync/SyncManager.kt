@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -72,7 +73,8 @@ class SyncManager(
     private val mutableConfig = MutableStateFlow(readConfig())
     private val mutableStatus = MutableStateFlow(readStatus())
     private val mutex = Mutex()
-    private val workManager get() = WorkManager.getInstance(context)
+    private val workManagerOrNull: WorkManager?
+        get() = runCatching { WorkManager.getInstance(context) }.getOrNull()
 
     val config: StateFlow<SyncConfig> = mutableConfig.asStateFlow()
     val status: StateFlow<SyncStatus> = mutableStatus.asStateFlow()
@@ -81,12 +83,15 @@ class SyncManager(
     val conflicts: Flow<List<SyncConflict>> get() = repository.observeConflicts()
 
     val phase: Flow<SyncPhase>
-        get() = combine(config, workManager.getWorkInfosForUniqueWorkFlow(WORK_NAME)) { cfg, infos ->
-            when {
-                !cfg.enabled -> SyncPhase.OFF
-                infos.any { it.state == WorkInfo.State.RUNNING } -> SyncPhase.RUNNING
-                infos.any { it.state == WorkInfo.State.ENQUEUED || it.state == WorkInfo.State.BLOCKED } -> SyncPhase.WAITING
-                else -> SyncPhase.IDLE
+        get() {
+            val workInfosFlow = workManagerOrNull?.getWorkInfosForUniqueWorkFlow(WORK_NAME) ?: flowOf(emptyList())
+            return combine(config, workInfosFlow) { cfg, infos ->
+                when {
+                    !cfg.enabled -> SyncPhase.OFF
+                    infos.any { it.state == WorkInfo.State.RUNNING } -> SyncPhase.RUNNING
+                    infos.any { it.state == WorkInfo.State.ENQUEUED || it.state == WorkInfo.State.BLOCKED } -> SyncPhase.WAITING
+                    else -> SyncPhase.IDLE
+                }
             }
         }
 
@@ -106,7 +111,7 @@ class SyncManager(
             putString(KEY_API_KEY, clean.apiKey)
         }
         mutableConfig.value = clean
-        if (clean.enabled) requestSync() else workManager.cancelUniqueWork(WORK_NAME)
+        if (clean.enabled) requestSync() else workManagerOrNull?.cancelUniqueWork(WORK_NAME)
         return null
     }
 
@@ -118,11 +123,12 @@ class SyncManager(
 
     private fun enqueue(policy: ExistingWorkPolicy) {
         if (!config.value.enabled) return
+        val wm = workManagerOrNull ?: return
         val request = OneTimeWorkRequestBuilder<SyncWorker>()
             .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
             .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
             .build()
-        workManager.enqueueUniqueWork(WORK_NAME, policy, request)
+        wm.enqueueUniqueWork(WORK_NAME, policy, request)
     }
 
     /** Uploads everything that changed since the last successful sync, then the photos. Called by [SyncWorker]. */
@@ -300,11 +306,11 @@ class SyncManager(
 data class HttpResult(val code: Int, val body: String)
 
 /** Plain HttpURLConnection client: no extra network library. */
-class SyncClient {
-    fun postJson(url: String, apiKey: String, body: String): HttpResult =
+open class SyncClient {
+    open fun postJson(url: String, apiKey: String, body: String): HttpResult =
         send(url, "POST", apiKey, "application/json; charset=utf-8", emptyMap()) { it.write(body.toByteArray(Charsets.UTF_8)) }
 
-    fun putPhoto(url: String, apiKey: String, file: File, sha256: String, photo: PhotoEntity): HttpResult = send(
+    open fun putPhoto(url: String, apiKey: String, file: File, sha256: String, photo: PhotoEntity): HttpResult = send(
         url,
         "PUT",
         apiKey,

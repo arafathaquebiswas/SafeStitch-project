@@ -18,6 +18,11 @@ import com.safestitch.app.domain.ItemResult
 import com.safestitch.app.domain.Outcome
 import com.safestitch.app.domain.QrPayload
 import com.safestitch.app.util.ImageUtils
+import com.tom_roush.pdfbox.pdmodel.PDDocument
+import com.tom_roush.pdfbox.pdmodel.PDPage
+import com.tom_roush.pdfbox.pdmodel.PDPageContentStream
+import com.tom_roush.pdfbox.pdmodel.common.PDRectangle
+import com.tom_roush.pdfbox.pdmodel.font.PDType1Font
 import java.io.File
 import java.io.FileOutputStream
 import java.time.Instant
@@ -63,9 +68,50 @@ class ReportPdfWriter(
             out.parentFile?.mkdirs()
             FileOutputStream(out).use { document.writeTo(it) }
             return pager.pageNumber
+        } catch (_: IllegalStateException) {
+            return writePdfBoxFallback(details, out)
         } finally {
-            document.close()
+            runCatching { document.close() }
         }
+    }
+
+    private fun writePdfBoxFallback(details: InspectionWithDetails, out: File): Int {
+        out.parentFile?.mkdirs()
+        val summary = details.summary()
+        PDDocument().use { doc ->
+            val page = PDPage(PDRectangle.A4)
+            doc.addPage(page)
+            PDPageContentStream(doc, page).use { cs ->
+                var y = 790f
+                cs.beginText()
+                cs.setFont(PDType1Font.HELVETICA_BOLD, 14f)
+                cs.newLineAtOffset(40f, y)
+                cs.showText("SafeStitch Inspection Report R${details.inspection.id}")
+                cs.endText()
+
+                val lines = buildList {
+                    add("Equipment: ${details.equipmentName} (${details.equipmentCode})")
+                    add("Inspector: ${details.inspection.inspectorName}")
+                    add("Outcome: ${summary.outcome.label} (${summary.scorePercent}%)")
+                    details.sortedItems.forEach { item ->
+                        add("${item.position + 1}. [${item.result.name}] ${item.question} ${item.note}".trim())
+                    }
+                }
+                lines.forEach { rawLine ->
+                    y -= 18f
+                    if (y > 50f) {
+                        val safe = rawLine.map { ch -> if (ch.code in 32..126) ch else ' ' }.joinToString("")
+                        cs.beginText()
+                        cs.setFont(PDType1Font.HELVETICA, 10f)
+                        cs.newLineAtOffset(40f, y)
+                        cs.showText(safe.take(95))
+                        cs.endText()
+                    }
+                }
+            }
+            doc.save(out)
+        }
+        return 1
     }
 
     private fun drawTitle(pager: PdfPager, details: InspectionWithDetails) {

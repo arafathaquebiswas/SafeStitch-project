@@ -30,17 +30,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.safestitch.app.AppContainer
 import com.safestitch.app.audio.AudioTranscriptionService
 import com.safestitch.app.chat.ChatMessage
@@ -50,6 +50,9 @@ import com.safestitch.app.chat.FactoryChatContext
 import com.safestitch.app.chat.SafetyChatService
 import com.safestitch.app.ui.components.BackButton
 import com.safestitch.app.ui.components.formatDateTime
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 private val QUICK_PROMPTS = listOf(
@@ -59,79 +62,167 @@ private val QUICK_PROMPTS = listOf(
     "How do I resolve EX-102 exit obstruction?",
 )
 
+/**
+ * ViewModel that manages multi-turn chat history, specialist persona selection,
+ * microphone voice transcription (`gemini-3.5-transcribe`), and Gemini API communication
+ * (`gemini-4-hydrogen` / `gemini-3.1-flash-lite`) via [SafetyChatService].
+ */
+class ChatViewModel(
+    private val chatService: SafetyChatService = SafetyChatService(),
+    private val transcribeService: AudioTranscriptionService = AudioTranscriptionService(),
+) : ViewModel() {
+
+    private val _selectedPersona = MutableStateFlow(ChatRolePersona.SAFETY_AUDITOR)
+    val selectedPersona: StateFlow<ChatRolePersona> = _selectedPersona.asStateFlow()
+
+    private val _selectedModel = MutableStateFlow(ChatRolePersona.MODEL_GENERAL)
+    val selectedModel: StateFlow<String> = _selectedModel.asStateFlow()
+
+    private val _messages = MutableStateFlow(
+        listOf(chatService.initialGreeting(ChatRolePersona.SAFETY_AUDITOR)),
+    )
+    val messages: StateFlow<List<ChatMessage>> = _messages.asStateFlow()
+
+    private val _draftInput = MutableStateFlow("")
+    val draftInput: StateFlow<String> = _draftInput.asStateFlow()
+
+    private val _sending = MutableStateFlow(false)
+    val sending: StateFlow<Boolean> = _sending.asStateFlow()
+
+    private val _isRecordingAudio = MutableStateFlow(false)
+    val isRecordingAudio: StateFlow<Boolean> = _isRecordingAudio.asStateFlow()
+
+    private val _isTranscribingAudio = MutableStateFlow(false)
+    val isTranscribingAudio: StateFlow<Boolean> = _isTranscribingAudio.asStateFlow()
+
+    private val _lastTranscriptionStatus = MutableStateFlow<String?>(null)
+    val lastTranscriptionStatus: StateFlow<String?> = _lastTranscriptionStatus.asStateFlow()
+
+    fun updateDraftInput(text: String) {
+        _draftInput.value = text
+    }
+
+    fun selectPersona(persona: ChatRolePersona) {
+        _selectedPersona.value = persona
+        _selectedModel.value = persona.defaultModel
+    }
+
+    fun selectModel(modelId: String) {
+        _selectedModel.value = modelId
+    }
+
+    fun clearHistory() {
+        _messages.value = listOf(chatService.initialGreeting(_selectedPersona.value))
+    }
+
+    fun toggleMicRecording(contextHint: String = "") {
+        if (_isTranscribingAudio.value) return
+        if (!_isRecordingAudio.value) {
+            transcribeService.startMicrophoneRecording()
+            _isRecordingAudio.value = true
+            _lastTranscriptionStatus.value =
+                "Recording microphone audio… Tap Stop to transcribe with ${AudioTranscriptionService.MODEL_TRANSCRIBE}."
+        } else {
+            _isRecordingAudio.value = false
+            _isTranscribingAudio.value = true
+            _lastTranscriptionStatus.value =
+                "Transcribing audio with ${AudioTranscriptionService.MODEL_TRANSCRIBE}…"
+            viewModelScope.launch {
+                val result = transcribeService.stopAndTranscribe(contextHint = contextHint)
+                _isTranscribingAudio.value = false
+                val current = _draftInput.value
+                _draftInput.value = if (current.isBlank()) result.text else "$current ${result.text}"
+                _lastTranscriptionStatus.value = "Transcribed (${result.model}): \"${result.text}\""
+            }
+        }
+    }
+
+    fun sendPrompt(
+        promptText: String,
+        context: FactoryChatContext,
+        onComplete: () -> Unit = {},
+    ) {
+        val trimmed = promptText.trim()
+        if (trimmed.isEmpty() || _sending.value) return
+        _draftInput.value = ""
+        _sending.value = true
+        viewModelScope.launch {
+            val (updatedHistory, _) = chatService.sendMessage(
+                userPrompt = trimmed,
+                history = _messages.value,
+                persona = _selectedPersona.value,
+                modelId = _selectedModel.value,
+                context = context,
+            )
+            _messages.value = updatedHistory
+            _sending.value = false
+            onComplete()
+        }
+    }
+}
+
+@Composable
+fun ChatScreen(
+    container: AppContainer,
+    onBack: () -> Unit,
+    chatViewModel: ChatViewModel = viewModel(),
+) {
+    GeminiChatScreen(
+        container = container,
+        onBack = onBack,
+        chatViewModel = chatViewModel,
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GeminiChatScreen(
     container: AppContainer,
     onBack: () -> Unit,
+    chatViewModel: ChatViewModel = viewModel(),
 ) {
     val checkpoints by remember { container.repository.observeCheckpoints() }.collectAsStateWithLifecycle(emptyList())
     val inspections by remember { container.repository.observeInspections() }.collectAsStateWithLifecycle(emptyList())
     val actions by remember { container.repository.observeActionRows() }.collectAsStateWithLifecycle(emptyList())
     val capturedPhotos by remember { container.repository.observeCapturedInspections() }.collectAsStateWithLifecycle(emptyList())
 
-    val chatService = remember { SafetyChatService() }
-    val transcribeService = remember { AudioTranscriptionService() }
-    var selectedPersona by remember { mutableStateOf(ChatRolePersona.SAFETY_AUDITOR) }
-    var selectedModel by rememberSaveable { mutableStateOf(ChatRolePersona.MODEL_GENERAL) }
-    var messages by remember {
-        mutableStateOf(listOf(chatService.initialGreeting(ChatRolePersona.SAFETY_AUDITOR)))
-    }
-    var draftInput by rememberSaveable { mutableStateOf("") }
-    var sending by remember { mutableStateOf(false) }
-    var isRecordingAudio by remember { mutableStateOf(false) }
-    var isTranscribingAudio by remember { mutableStateOf(false) }
-    var lastTranscriptionStatus by remember { mutableStateOf<String?>(null) }
+    val selectedPersona by chatViewModel.selectedPersona.collectAsStateWithLifecycle()
+    val selectedModel by chatViewModel.selectedModel.collectAsStateWithLifecycle()
+    val messages by chatViewModel.messages.collectAsStateWithLifecycle()
+    val draftInput by chatViewModel.draftInput.collectAsStateWithLifecycle()
+    val sending by chatViewModel.sending.collectAsStateWithLifecycle()
+    val isRecordingAudio by chatViewModel.isRecordingAudio.collectAsStateWithLifecycle()
+    val isTranscribingAudio by chatViewModel.isTranscribingAudio.collectAsStateWithLifecycle()
+    val lastTranscriptionStatus by chatViewModel.lastTranscriptionStatus.collectAsStateWithLifecycle()
 
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
     fun toggleMicRecording() {
-        if (isTranscribingAudio) return
-        if (!isRecordingAudio) {
-            transcribeService.startMicrophoneRecording()
-            isRecordingAudio = true
-            lastTranscriptionStatus = "Recording microphone audio… Tap Stop to transcribe with ${AudioTranscriptionService.MODEL_TRANSCRIBE}."
-        } else {
-            isRecordingAudio = false
-            isTranscribingAudio = true
-            lastTranscriptionStatus = "Transcribing audio with ${AudioTranscriptionService.MODEL_TRANSCRIBE}…"
-            scope.launch {
-                val result = transcribeService.stopAndTranscribe(
-                    contextHint = checkpoints.firstOrNull()?.code.orEmpty(),
-                )
-                isTranscribingAudio = false
-                draftInput = if (draftInput.isBlank()) result.text else "$draftInput ${result.text}"
-                lastTranscriptionStatus = "Transcribed (${result.model}): \"${result.text}\""
-            }
-        }
+        chatViewModel.toggleMicRecording(
+            contextHint = checkpoints.firstOrNull()?.code.orEmpty(),
+        )
     }
 
     fun sendPrompt(promptText: String) {
-        val trimmed = promptText.trim()
-        if (trimmed.isEmpty() || sending) return
-        draftInput = ""
-        sending = true
         val context = FactoryChatContext(
             checkpoints = checkpoints,
             inspections = inspections,
             actions = actions,
             capturedPhotos = capturedPhotos,
         )
-        scope.launch {
-            val (updatedHistory, _) = chatService.sendMessage(
-                userPrompt = trimmed,
-                history = messages,
-                persona = selectedPersona,
-                modelId = selectedModel,
-                context = context,
-            )
-            messages = updatedHistory
-            sending = false
-            if (messages.isNotEmpty()) {
-                listState.animateScrollToItem(messages.lastIndex)
-            }
-        }
+        chatViewModel.sendPrompt(
+            promptText = promptText,
+            context = context,
+            onComplete = {
+                scope.launch {
+                    val currentMessages = chatViewModel.messages.value
+                    if (currentMessages.isNotEmpty()) {
+                        listState.animateScrollToItem(currentMessages.lastIndex)
+                    }
+                }
+            },
+        )
     }
 
     Scaffold(
@@ -141,9 +232,7 @@ fun GeminiChatScreen(
                 navigationIcon = { BackButton(onBack) },
                 actions = {
                     TextButton(
-                        onClick = {
-                            messages = listOf(chatService.initialGreeting(selectedPersona))
-                        },
+                        onClick = { chatViewModel.clearHistory() },
                         modifier = Modifier.testTag("chat-clear"),
                     ) {
                         Text("Clear")
@@ -185,10 +274,7 @@ fun GeminiChatScreen(
                         ChatRolePersona.entries.forEach { persona ->
                             FilterChip(
                                 selected = selectedPersona == persona,
-                                onClick = {
-                                    selectedPersona = persona
-                                    selectedModel = persona.defaultModel
-                                },
+                                onClick = { chatViewModel.selectPersona(persona) },
                                 label = { Text(persona.title) },
                                 modifier = Modifier.testTag("chat-role-${persona.id}"),
                             )
@@ -215,7 +301,7 @@ fun GeminiChatScreen(
                         ChatRolePersona.SUPPORTED_MODELS.forEach { (modelId, label) ->
                             FilterChip(
                                 selected = selectedModel == modelId,
-                                onClick = { selectedModel = modelId },
+                                onClick = { chatViewModel.selectModel(modelId) },
                                 label = { Text(label) },
                                 modifier = Modifier.testTag("chat-model-$modelId"),
                             )
@@ -296,7 +382,7 @@ fun GeminiChatScreen(
                         }
                         OutlinedTextField(
                             value = draftInput,
-                            onValueChange = { draftInput = it },
+                            onValueChange = { chatViewModel.updateDraftInput(it) },
                             placeholder = { Text("Ask or use Mic (gemini-3.5-transcribe)…") },
                             singleLine = false,
                             maxLines = 3,

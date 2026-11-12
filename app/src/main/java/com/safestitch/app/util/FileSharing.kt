@@ -1,5 +1,6 @@
 package com.safestitch.app.util
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.Context
@@ -25,7 +26,10 @@ object FileSharing {
             clipData = ClipData.newRawUri(subject, uri)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-        context.startActivity(Intent.createChooser(send, "Share PDF"))
+        val chooser = Intent.createChooser(send, "Share PDF").apply {
+            if (context !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(chooser)
     }
 
     /** Opens the PDF in a viewer app. Returns false if the phone has no PDF viewer. */
@@ -33,6 +37,7 @@ object FileSharing {
         val view = Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(uriFor(context, file), "application/pdf")
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            if (context !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         return try {
             context.startActivity(view)

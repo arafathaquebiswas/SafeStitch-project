@@ -222,6 +222,9 @@ android {
         getByName("debug") {
             assets.directories.add("$projectDir/schemas")
         }
+        getByName("release") {
+            assets.directories.add("$projectDir/schemas")
+        }
     }
 
     lint {
@@ -230,6 +233,12 @@ android {
         // Dependency-update checks need the internet; versions are pinned on purpose in
         // gradle/libs.versions.toml. targetSdk 36 is a deliberate, documented choice.
         disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion", "OldTargetApi")
+    }
+}
+
+androidComponents {
+    beforeVariants(selector().withBuildType("release")) { variantBuilder ->
+        variantBuilder.hostTests[com.android.build.api.variant.HostTestBuilder.UNIT_TEST_TYPE]?.enable = true
     }
 }
 

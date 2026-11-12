@@ -12,6 +12,7 @@ import com.safestitch.app.data.PhotoStorage
 import com.safestitch.app.data.db.CheckpointEntity
 import com.safestitch.app.data.db.Inspection
 import com.safestitch.app.domain.ReportFileNames
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -33,6 +34,12 @@ class ReportService(
     private val reportsDir = File(context.filesDir, "reports")
     private val labelsDir = File(context.filesDir, "labels")
     private val equipmentPrefs = appContext.getSharedPreferences("safestitch_captured_equipment", Context.MODE_PRIVATE)
+
+    init {
+        if (!PDFBoxResourceLoader.isReady()) {
+            runCatching { PDFBoxResourceLoader.init(appContext) }
+        }
+    }
 
     fun getSelectedCheckpointId(inspectionId: Long): Long? {
         val raw = equipmentPrefs.getLong("captured_checkpoint_$inspectionId", -1L)

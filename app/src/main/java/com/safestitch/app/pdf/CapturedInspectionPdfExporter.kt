@@ -164,19 +164,19 @@ class CapturedInspectionPdfExporter(
                     // 1. Branded header banner
                     val bannerHeight = 64f
                     val bannerBottom = pageHeight - margin - bannerHeight
-                    cs.setNonStrokingColor(11, 110, 105) // SafeStitch Brand Teal
+                    cs.setFillRgb(11, 110, 105) // SafeStitch Brand Teal
                     cs.addRect(margin, bannerBottom, contentWidth, bannerHeight)
                     cs.fill()
 
                     cs.beginText()
-                    cs.setNonStrokingColor(255, 255, 255)
+                    cs.setFillRgb(255, 255, 255)
                     cs.setFont(PDType1Font.HELVETICA_BOLD, 14.5f)
                     cs.newLineAtOffset(margin + 14f, bannerBottom + 40f)
                     cs.showText("SAFESTITCH  |  CAPTURED INSPECTION REPORT")
                     cs.endText()
 
                     cs.beginText()
-                    cs.setNonStrokingColor(204, 232, 228)
+                    cs.setFillRgb(204, 232, 228)
                     cs.setFont(PDType1Font.HELVETICA, 9f)
                     cs.newLineAtOffset(margin + 14f, bannerBottom + 23f)
                     cs.showText(
@@ -187,7 +187,7 @@ class CapturedInspectionPdfExporter(
                     cs.endText()
 
                     cs.beginText()
-                    cs.setNonStrokingColor(204, 232, 228)
+                    cs.setFillRgb(204, 232, 228)
                     cs.setFont(PDType1Font.HELVETICA, 8.5f)
                     cs.newLineAtOffset(margin + 14f, bannerBottom + 9f)
                     cs.showText(
@@ -200,7 +200,7 @@ class CapturedInspectionPdfExporter(
                     // 2. Status Tags Bar
                     var cursorY = bannerBottom - 22f
                     cs.beginText()
-                    cs.setNonStrokingColor(11, 110, 105)
+                    cs.setFillRgb(11, 110, 105)
                     cs.setFont(PDType1Font.HELVETICA_BOLD, 9.5f)
                     cs.newLineAtOffset(margin, cursorY)
                     cs.showText("STATUS TAGS:")
@@ -213,12 +213,12 @@ class CapturedInspectionPdfExporter(
                         val badgeW = textWidth + 14f
                         val badgeH = 16f
                         val rgb = badgeColorRgb(tag)
-                        cs.setNonStrokingColor(rgb[0], rgb[1], rgb[2])
+                        cs.setFillRgb(rgb[0], rgb[1], rgb[2])
                         cs.addRect(badgeX, cursorY - 3.5f, badgeW, badgeH)
                         cs.fill()
 
                         cs.beginText()
-                        cs.setNonStrokingColor(255, 255, 255)
+                        cs.setFillRgb(255, 255, 255)
                         cs.setFont(PDType1Font.HELVETICA_BOLD, 8.5f)
                         cs.newLineAtOffset(badgeX + 7f, cursorY + 1.5f)
                         cs.showText(label)
@@ -230,7 +230,7 @@ class CapturedInspectionPdfExporter(
                     // 3. Equipment & Site Context Section
                     cursorY -= 21f
                     cs.beginText()
-                    cs.setNonStrokingColor(11, 110, 105)
+                    cs.setFillRgb(11, 110, 105)
                     cs.setFont(PDType1Font.HELVETICA_BOLD, 10.5f)
                     cs.newLineAtOffset(margin, cursorY)
                     cs.showText("EQUIPMENT & INSPECTION DETAILS")
@@ -258,7 +258,7 @@ class CapturedInspectionPdfExporter(
 
                     // 4. Capture & File Metadata Section
                     cs.beginText()
-                    cs.setNonStrokingColor(11, 110, 105)
+                    cs.setFillRgb(11, 110, 105)
                     cs.setFont(PDType1Font.HELVETICA_BOLD, 10.5f)
                     cs.newLineAtOffset(margin, cursorY)
                     cs.showText("CAPTURE & HIGH-RESOLUTION IMAGE METADATA")
@@ -285,7 +285,7 @@ class CapturedInspectionPdfExporter(
 
                     // 5. Embedded High-Resolution Image Section
                     cs.beginText()
-                    cs.setNonStrokingColor(11, 110, 105)
+                    cs.setFillRgb(11, 110, 105)
                     cs.setFont(PDType1Font.HELVETICA_BOLD, 10.5f)
                     cs.newLineAtOffset(margin, cursorY)
                     cs.showText("CAPTURED HIGH-RESOLUTION IMAGE")
@@ -297,7 +297,7 @@ class CapturedInspectionPdfExporter(
                     val imageBoxHeight = (imageBoxTop - imageBoxBottom).coerceAtLeast(160f)
 
                     // Outer dark frame for the inspection photo
-                    cs.setNonStrokingColor(15, 23, 22)
+                    cs.setFillRgb(15, 23, 22)
                     cs.addRect(margin, imageBoxBottom, contentWidth, imageBoxHeight)
                     cs.fill()
 
@@ -315,14 +315,14 @@ class CapturedInspectionPdfExporter(
                     cs.drawImage(pdImage, drawX, drawY, drawW, drawH)
 
                     // 6. Footer
-                    cs.setStrokingColor(214, 222, 220)
+                    cs.setStrokeRgb(214, 222, 220)
                     cs.setLineWidth(0.75f)
                     cs.moveTo(margin, footerTop)
                     cs.lineTo(pageWidth - margin, footerTop)
                     cs.stroke()
 
                     cs.beginText()
-                    cs.setNonStrokingColor(90, 98, 96)
+                    cs.setFillRgb(90, 98, 96)
                     cs.setFont(PDType1Font.HELVETICA, 8f)
                     cs.newLineAtOffset(margin, margin + 7f)
                     cs.showText(
@@ -353,32 +353,40 @@ class CapturedInspectionPdfExporter(
         rows.forEachIndexed { idx, (label, value) ->
             val rowBottom = startTopY - (idx + 1) * rowHeight
             if (idx % 2 == 0) {
-                cs.setNonStrokingColor(242, 247, 246)
+                cs.setFillRgb(242, 247, 246)
             } else {
-                cs.setNonStrokingColor(255, 255, 255)
+                cs.setFillRgb(255, 255, 255)
             }
             cs.addRect(margin, rowBottom, contentWidth, rowHeight)
             cs.fill()
 
-            cs.setStrokingColor(214, 222, 220)
+            cs.setStrokeRgb(214, 222, 220)
             cs.setLineWidth(0.5f)
             cs.addRect(margin, rowBottom, contentWidth, rowHeight)
             cs.stroke()
 
             cs.beginText()
-            cs.setNonStrokingColor(74, 99, 96)
+            cs.setFillRgb(74, 99, 96)
             cs.setFont(PDType1Font.HELVETICA_BOLD, 8.5f)
             cs.newLineAtOffset(margin + 10f, rowBottom + 5.5f)
             cs.showText(safePdfText(label))
             cs.endText()
 
             cs.beginText()
-            cs.setNonStrokingColor(23, 29, 28)
+            cs.setFillRgb(23, 29, 28)
             cs.setFont(PDType1Font.HELVETICA, 8.5f)
             cs.newLineAtOffset(margin + 145f, rowBottom + 5.5f)
             cs.showText(safePdfText(value))
             cs.endText()
         }
+    }
+
+    private fun PDPageContentStream.setFillRgb(r: Int, g: Int, b: Int) {
+        setNonStrokingColor(r / 255f, g / 255f, b / 255f)
+    }
+
+    private fun PDPageContentStream.setStrokeRgb(r: Int, g: Int, b: Int) {
+        setStrokingColor(r / 255f, g / 255f, b / 255f)
     }
 
     private fun formatTimestamp(millis: Long): String =
