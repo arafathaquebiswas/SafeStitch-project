@@ -144,6 +144,32 @@ val uploadKey: UploadKey? = run {
     UploadKey(storeFile, alias, password)
 }
 
+val debugKeystoreFile: File = run {
+    val rootKs = File(rootDir, "debug.keystore")
+    if (rootKs.isFile) return@run rootKs
+
+    val userKs = File(System.getProperty("user.home"), ".android/debug.keystore")
+    if (userKs.isFile) return@run userKs
+
+    runCatching {
+        val keytoolBin = File(System.getProperty("java.home"), "bin/keytool").takeIf { it.canExecute() }?.absolutePath
+            ?: "keytool"
+        ProcessBuilder(
+            keytoolBin, "-genkeypair",
+            "-keystore", rootKs.absolutePath,
+            "-storetype", "PKCS12",
+            "-alias", "androiddebugkey",
+            "-keyalg", "RSA",
+            "-keysize", "2048",
+            "-validity", "10000",
+            "-dname", "CN=Android Debug, O=Android, C=US",
+            "-storepass", "android",
+            "-keypass", "android",
+        ).redirectErrorStream(true).start().waitFor()
+    }
+    if (rootKs.isFile) rootKs else userKs
+}
+
 android {
     namespace = "com.safestitch.app"
     compileSdk = 36
@@ -159,7 +185,7 @@ android {
 
     signingConfigs {
         create("debugConfig") {
-            storeFile = file("${rootDir}/debug.keystore")
+            storeFile = debugKeystoreFile
             storePassword = "android"
             keyAlias = "androiddebugkey"
             keyPassword = "android"
