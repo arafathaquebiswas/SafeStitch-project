@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2330" height="1216.08" viewBox="0 0 2330 1216.08" font-family="Helvetica, Arial, sans-serif">
+<title>Module 05 — Inspection report &amp; PDF</title>
+<defs>
+<marker id="ah-nav" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e293b"/></marker>
+<marker id="ah-admin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker>
+<marker id="ah-popup" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+<marker id="ah-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+<marker id="ah-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+<marker id="ah-partial" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker>
+<marker id="ah-tab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0e7490"/></marker>
+<marker id="ah-background" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+<marker id="ah-conditional" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/></marker>
+<marker id="ah-back" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+<marker id="ah-dialog_result" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a21caf"/></marker>
+<marker id="ah-state" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b45309"/></marker>
+</defs>
+<rect x="0" y="0" width="2330" height="1216.08" fill="#ffffff"/>
+<text font-size="30" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="60.0" y="56.6">Module 05 — Inspection report &amp; PDF</tspan></text>
+
+
+<text font-size="11" fill="#334155" text-anchor="start"><tspan x="60.0" y="76.5">The report shows result, score and corrective actions; the PDF can be viewed in-app (PdfRenderer), shared, saved via the system document picker, opened in another app or regenerated with the latest corrective-action status.</tspan></text>
+<g id="S13"><title>S13 Inspection report | Route: ReportRoute(inspectionId) | Source: ui/report/ReportScreen.kt | Roles: Admin, Inspector | Status: IMPLEMENTED</title>
+<rect x="480.0" y="272.0" width="30.0" height="15.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="8.5" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="495.0" y="283.1">S13</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="515.0" y="283.9">Inspection report</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="start"><tspan x="480.0" y="297.9">ReportRoute(inspectionId)</tspan></text>
+<rect x="480.0" y="310.0" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="575.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="334.0" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="595.0" cy="742.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="613.5" y="303.0" width="88.5" height="12.0" rx="6.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="6.3" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="657.8" y="311.6">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="494.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="696.0" y="341.9">▴ ▮</tspan></text>
+<rect x="488.0" y="345.0" width="214.0" height="24.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="368.2" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="494.0" y="359.2">←</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="508.0" y="358.8">Inspection report</tspan></text>
+<rect x="494.0" y="369.0" width="202.0" height="64.6" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="379.3">Fire extinguisher FE-12</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="387.7">FE-12 · Fire extinguisher</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="395.8">PlantA › BlockB › FloorOne › Cutting</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="403.8">Result: PASS</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="411.9">Score 85% · 6 passed · 1 failed · 0 N/A</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="420.0">Inspector: Walk Admin</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="428.0">Submitted Nov 15, 2026, 6:49 AM</tspan></text>
+<rect x="494.0" y="437.1" width="202.0" height="48.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="447.4">PDF report</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="455.8">PDF ready: SafeStitch_FE-12_20261115-0649_R1.pdf</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="463.9">2 pages · 160 KB</tspan></text>
+<rect x="499.0" y="466.9" width="46.8" height="14.0" rx="7.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="522.4" y="476.8">Open PDF</tspan></text>
+<rect x="549.8" y="466.9" width="34.2" height="14.0" rx="7.0" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="566.9" y="476.8">Share</tspan></text>
+<rect x="494.0" y="488.9" width="70.6" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="529.3" y="500.3">Save a copy…</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="568.6" y="500.3">Other app</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="628.6" y="500.3">Create again</tspan></text>
+<rect x="494.0" y="509.4" width="202.0" height="32.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="519.8">Corrective actions (1)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="528.1">1. Extinguisher is in its marked place …</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="536.2">[Medium] [Open] Due Nov 22, 2026</tspan></text>
+<text font-size="11" fill="#64748b" text-anchor="middle"><tspan x="689.0" y="530.2">›</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="494.0" y="553.9">Preview of page 1</tspan></text>
+<rect x="494.0" y="559.8" width="202.0" height="70.0" rx="4.0" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.4" fill="#64748b" text-anchor="middle" font-style="italic"><tspan x="595.0" y="597.5">PDF page 1 (rendered with PdfRenderer)</tspan></text>
+<rect x="494.0" y="633.3" width="202.0" height="21.9" rx="3.0" fill="#fef9c3" stroke="#eab308" stroke-width="0.8"/><text font-size="6.2" fill="#713f12" text-anchor="start" font-style="italic"><tspan x="498.0" y="642.9">File missing: &#x27;The PDF file is missing on this phone.&#x27; + [Create</tspan><tspan x="498.0" y="650.8">PDF again]</tspan></text>
+</g>
+<g id="X02_S13"><title>X02 Android share sheet | Source: util/FileSharing.kt | Status: IMPLEMENTED</title>
+<rect x="850.0" y="318.0" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="854.0" y="326.0" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="865.0" y="333.6">X02</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="879.0" y="333.9">Android share sheet</tspan></text>
+<rect x="1025.0" y="326.0" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1041.0" y="332.7">SYSTEM</tspan></text>
+</g>
+<g id="X03_S13"><title>X03 External PDF app | Source: util/FileSharing.kt | Status: IMPLEMENTED</title>
+<rect x="850.0" y="374.0" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="854.0" y="382.0" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="865.0" y="389.6">X03</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="879.0" y="389.9">External PDF app</tspan></text>
+<rect x="1025.0" y="382.0" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1041.0" y="388.7">SYSTEM</tspan></text>
+</g>
+<g id="X04_S13"><title>X04 System &#x27;Save a copy&#x27; | Source: ui/report/ReportScreen.kt | Status: IMPLEMENTED</title>
+<rect x="850.0" y="430.0" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="854.0" y="438.0" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="865.0" y="445.6">X04</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="879.0" y="445.9">System &#x27;Save a copy&#x27;</tspan></text>
+<rect x="1025.0" y="438.0" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1041.0" y="444.7">SYSTEM</tspan></text>
+</g>
+<g id="BACK_S13"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="344.0" y="340.0" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="392.0" y="353.7">↩ previous screen</tspan><tspan x="392.0" y="362.1">(back stack)</tspan></text>
+</g>
+<g id="note52">
+<rect x="480.0" y="794.0" width="580.0" height="38.6" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="487.0" y="809.0">S13 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="487.0" y="821.6">• Create again / Create PDF again (regenerate)</tspan></text>
+</g>
+<g id="S14"><title>S14 PDF viewer (in-app) | Route: PdfViewerRoute(inspectionId) | Source: ui/report/PdfViewerScreen.kt | Roles: Admin, Inspector | Status: IMPLEMENTED</title>
+<rect x="1270.0" y="272.0" width="30.0" height="15.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="8.5" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1285.0" y="283.1">S14</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1305.0" y="283.9">PDF viewer (in-app)</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="start"><tspan x="1270.0" y="297.9">PdfViewerRoute(inspectionId)</tspan></text>
+<rect x="1270.0" y="310.0" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="1365.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="334.0" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="1385.0" cy="742.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="1403.5" y="303.0" width="88.5" height="12.0" rx="6.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="6.3" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="1447.8" y="311.6">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="1486.0" y="341.9">▴ ▮</tspan></text>
+<rect x="1278.0" y="345.0" width="214.0" height="24.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="368.2" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="1284.0" y="359.2">←</tspan></text>
+<rect x="1468.7" y="349.0" width="14.3" height="13.0" rx="3.0" fill="#fff" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.5" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="1475.9" y="358.2">⇪</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1298.0" y="358.8">SafeStitch_FE-12_20261115-…</tspan></text>
+<rect x="1284.0" y="369.0" width="202.0" height="150.0" rx="4.0" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.4" fill="#64748b" text-anchor="middle" font-style="italic"><tspan x="1385.0" y="446.7">Page 1 (PdfRenderer bitmap)</tspan></text>
+<rect x="1284.0" y="522.5" width="202.0" height="150.0" rx="4.0" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.4" fill="#64748b" text-anchor="middle" font-style="italic"><tspan x="1385.0" y="600.2">Page 2 — Photos</tspan></text>
+</g>
+<g id="X02_S14"><title>X02 Android share sheet | Source: util/FileSharing.kt | Status: IMPLEMENTED</title>
+<rect x="1640.0" y="318.0" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="1644.0" y="326.0" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1655.0" y="333.6">X02</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1669.0" y="333.9">Android share sheet</tspan></text>
+<rect x="1815.0" y="326.0" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1831.0" y="332.7">SYSTEM</tspan></text>
+</g>
+<g id="BACK_S14"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="1134.0" y="340.0" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="1182.0" y="353.7">↩ previous screen</tspan><tspan x="1182.0" y="362.1">(back stack)</tspan></text>
+</g>
+<g id="ref_in_S03_60_300"><title>Off-diagram reference to in:S03: from S03 Home dashboard</title>
+<rect x="60.0" y="300.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="313.2">↗ from S03 Home dashboard</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="325.7">Home dashboard (03)</tspan></text>
+</g>
+<g id="ref_in_S06_60_350"><title>Off-diagram reference to in:S06: from S06 Inspection history</title>
+<rect x="60.0" y="350.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="363.2">↗ from S06 Inspection history</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="375.7">History &amp; captured (07)</tspan></text>
+</g>
+<g id="ref_in_S11_60_400"><title>Off-diagram reference to in:S11: from S11 Inspection checklist</title>
+<rect x="60.0" y="400.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="413.2">↗ from S11 Inspection checklist</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="425.7">Equipment &amp; inspection (04)</tspan></text>
+</g>
+<g id="ref_in_S15_60_450"><title>Off-diagram reference to in:S15: from S15 Corrective action detail</title>
+<rect x="60.0" y="450.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="463.2">↗ from S15 Corrective action detail</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="475.7">Corrective actions (06)</tspan></text>
+</g>
+<g id="ref_out_S15_2040_300"><title>Off-diagram reference to out:S15: to S15 Corrective action detail</title>
+<rect x="2040.0" y="300.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2050.0" y="313.2">↗ to S15 Corrective action detail</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2050.0" y="325.7">Corrective actions (06)</tspan></text>
+</g>
+<g id="legend85">
+<rect x="1630.0" y="938.6" width="640.0" height="237.5" rx="8.0" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text font-size="12" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1642.0" y="958.6">LEGEND</tspan></text>
+<rect x="1644.0" y="978.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#1e293b" stroke-width="2.1"/>
+<text font-size="7" fill="#1e293b" text-anchor="middle"><tspan x="1679.0" y="981.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1688.0" y="981.9">Navigation (tap → new screen)</tspan></text>
+<rect x="1964.0" y="978.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#1d4ed8" stroke-width="2.1" stroke-dasharray="10 3"/>
+<text font-size="7" fill="#1d4ed8" text-anchor="middle"><tspan x="1999.0" y="981.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2008.0" y="981.9">Conditional navigation (label = condition)</tspan></text>
+<rect x="1644.0" y="996.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#c2410c" stroke-width="2.3"/>
+<text font-size="7" fill="#c2410c" text-anchor="middle"><tspan x="1679.0" y="999.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1688.0" y="999.9">Admin-only navigation</tspan></text>
+<rect x="1964.0" y="996.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#64748b" stroke-width="2.0" stroke-dasharray="2 3"/>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="1999.0" y="999.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2008.0" y="999.9">Return after save / photo (popBackStack to the opener)</tspan></text>
+<rect x="1644.0" y="1014.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#64748b" stroke-width="1.9" stroke-dasharray="1 3"/>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="1679.0" y="1017.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1688.0" y="1017.9">← / system Back → previous screen on the stack</tspan></text>
+<rect x="1964.0" y="1014.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#7c3aed" stroke-width="1.9" stroke-dasharray="5 3"/>
+<text font-size="7" fill="#7c3aed" text-anchor="middle"><tspan x="1999.0" y="1017.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2008.0" y="1017.9">Opens a pop-up / menu / permission prompt</tspan></text>
+<rect x="1644.0" y="1032.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#a21caf" stroke-width="1.9" stroke-dasharray="3 2"/>
+<text font-size="7" fill="#a21caf" text-anchor="middle"><tspan x="1679.0" y="1035.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1688.0" y="1035.9">Dialog outcome (OK / Cancel / Save / Delete …)</tspan></text>
+<rect x="1964.0" y="1032.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#b45309" stroke-width="1.9" stroke-dasharray="4 2"/>
+<text font-size="7" fill="#b45309" text-anchor="middle"><tspan x="1999.0" y="1035.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2008.0" y="1035.9">In-screen state change (annotation box)</tspan></text>
+<rect x="1644.0" y="1050.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0f766e" stroke-width="1.9" stroke-dasharray="7 3 2 3"/>
+<text font-size="7" fill="#0f766e" text-anchor="middle"><tspan x="1679.0" y="1053.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1688.0" y="1053.9">Hands off to Android / another app / server</tspan></text>
+<rect x="1964.0" y="1050.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0f766e" stroke-width="1.7999999999999998" stroke-dasharray="2 2"/>
+<text font-size="7" fill="#0f766e" text-anchor="middle"><tspan x="1999.0" y="1053.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2008.0" y="1053.9">Background work (WorkManager)</tspan></text>
+<rect x="1644.0" y="1068.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#dc2626" stroke-width="2.1" stroke-dasharray="6 3"/>
+<text font-size="7" fill="#dc2626" text-anchor="middle"><tspan x="1679.0" y="1071.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1688.0" y="1071.9">Partially implemented path</tspan></text>
+<rect x="1964.0" y="1068.6" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0e7490" stroke-width="2.1"/>
+<text font-size="7" fill="#0e7490" text-anchor="middle"><tspan x="1999.0" y="1071.5">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2008.0" y="1071.9">Bottom-bar tab switch</tspan></text>
+<rect x="1644.0" y="1084.6" width="67.6" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="6.8" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="1677.8" y="1094.4">IMPLEMENTED</tspan></text>
+<rect x="1719.6" y="1084.6" width="45.6" height="14.0" rx="7.0" fill="#fef3c7" stroke="#b45309" stroke-width="0.8"/><text font-size="6.8" fill="#b45309" text-anchor="middle" font-weight="bold"><tspan x="1742.4" y="1094.4">PARTIAL</tspan></text>
+<rect x="1773.2" y="1084.6" width="64.8" height="14.0" rx="7.0" fill="#e2e8f0" stroke="#475569" stroke-width="0.8"/><text font-size="6.8" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="1805.6" y="1094.4">UNREACHABLE</tspan></text>
+<rect x="1846.0" y="1084.6" width="82.6" height="14.0" rx="7.0" fill="#ede9fe" stroke="#7c3aed" stroke-width="0.8"/><text font-size="6.8" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1887.4" y="1094.4">DOCUMENTED ONLY</tspan></text>
+<rect x="1936.7" y="1084.6" width="66.9" height="14.0" rx="7.0" fill="#fee2e2" stroke="#b91c1c" stroke-width="0.8"/><text font-size="6.8" fill="#b91c1c" text-anchor="middle" font-weight="bold"><tspan x="1970.1" y="1094.4">NOT VERIFIED</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="1644.0" y="1113.8">✓ in an arrow label, or &#x27;✓ RUN&#x27; on a screen = exercised in the Android 16 emulator walkthrough; everything else is traced in source.</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="1644.0" y="1127.7">ADMIN dashed outline inside a frame = control rendered only when user.isAdmin. Dashed tray under a frame = that screen&#x27;s pop-ups and hand-offs.</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="1644.0" y="1141.5">Every screen with ← (and the system Back gesture) returns to the previous screen via NavController.popBackStack(); only non-obvious returns are drawn.</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="1644.0" y="1155.4">Hover a frame or arrow in the .drawio/.svg to see its route, source file:line, roles and verification status.</tspan></text>
+</g>
+<path d="M480.0,355.0 L440.0,355.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M480.0,355.0 L440.0,355.0" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S13 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/report/ReportScreen.kt:182</title></path>
+<path d="M595.0,760.0 L595.0,794.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M595.0,760.0 L595.0,794.0" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S13 → S13: Create again / Create PDF again (regenerate) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/report/ReportScreen.kt:232</title></path>
+<path d="M1270.0,355.0 L1230.0,355.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1270.0,355.0 L1230.0,355.0" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S14 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/report/PdfViewerScreen.kt:61</title></path>
+<path d="M710.0,475.0 L825.0,475.0 L825.0,335.0 L850.0,335.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,475.0 L825.0,475.0 L825.0,335.0 L850.0,335.0" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>S13 → X02: Share — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/report/ReportScreen.kt:213</title></path>
+<path d="M1500.0,355.0 L1615.0,355.0 L1615.0,335.0 L1640.0,335.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,355.0 L1615.0,355.0 L1615.0,335.0 L1640.0,335.0" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>S14 → X02: Share icon — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/report/PdfViewerScreen.kt:64</title></path>
+<path d="M270.0,315.0 L455.0,315.0 L455.0,345.0 L480.0,345.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,315.0 L455.0,315.0 L455.0,345.0 L480.0,345.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S03 → S13: Summary card: recent submitted checklist — inspection completed — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/SummaryDashboardCard.kt:434</title></path>
+<path d="M710.0,495.0 L835.0,495.0 L835.0,395.0 L850.0,395.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,495.0 L835.0,495.0 L835.0,395.0 L850.0,395.0" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>S13 → X03: Other app — snackbar when no PDF app is installed — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/report/ReportScreen.kt:230</title></path>
+<path d="M270.0,365.0 L335.0,365.0 L335.0,385.0 L480.0,385.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,365.0 L335.0,365.0 L335.0,385.0 L480.0,385.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S06 → S13: Inspection card (submitted) — completedAt != null — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/history/HistoryScreen.kt:356</title></path>
+<path d="M710.0,495.0 L725.0,495.0 L725.0,445.0 L850.0,445.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,495.0 L725.0,495.0 L725.0,445.0 L850.0,445.0" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>S13 → X04: Save a copy… — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/report/ReportScreen.kt:221</title></path>
+<path d="M270.0,415.0 L480.0,415.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,415.0 L480.0,415.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S11 → S13: Submit &amp; create PDF — all answered; each fail has a note, priority and due date — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:364</title></path>
+<path d="M270.0,465.0 L480.0,465.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,465.0 L480.0,465.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S15 → S13: Open inspection report — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/actions/ActionsScreens.kt:279</title></path>
+<path d="M710.0,475.0 L735.0,475.0 L735.0,485.0 L1270.0,485.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,475.0 L735.0,475.0 L735.0,485.0 L1270.0,485.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S13 → S14: Open PDF — PDF file exists — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/report/ReportScreen.kt:210</title></path>
+<path d="M710.0,525.0 L1255.0,525.0 L1255.0,255.0 L2065.0,255.0 L2065.0,300.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,525.0 L1255.0,525.0 L1255.0,255.0 L2065.0,255.0 L2065.0,300.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S13 → S15: Corrective-action card — inspection has failed items — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/report/ReportScreen.kt:255</title></path>
+<rect x="809.0" y="398.4" width="32.0" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="825.0" y="407.8" font-size="7.4" text-anchor="middle" fill="#0f766e" font-weight="bold">Share</text>
+<rect x="1541.5" y="348.4" width="32.0" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="1557.5" y="357.8" font-size="7.4" text-anchor="middle" fill="#0f766e" font-weight="bold">Share</text>
+<rect x="320.4" y="308.4" width="84.1" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="362.5" y="317.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">recent (submitted)</text>
+<rect x="749.1" y="488.4" width="46.8" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="772.5" y="497.8" font-size="7.4" text-anchor="middle" fill="#0f766e" font-weight="bold">Other app</text>
+<rect x="378.7" y="378.4" width="57.7" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="407.5" y="387.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ submitted</text>
+<rect x="760.9" y="438.4" width="53.2" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="787.5" y="447.8" font-size="7.4" text-anchor="middle" fill="#0f766e" font-weight="bold">Save a copy</text>
+<rect x="326.1" y="408.4" width="97.8" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="375.0" y="417.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ Submit &amp; create PDF</text>
+<rect x="322.6" y="458.4" width="104.8" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="375.0" y="467.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Open inspection report</text>
+<rect x="975.0" y="478.4" width="55.1" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1002.5" y="487.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ Open PDF</text>
+<rect x="1629.2" y="248.4" width="61.5" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1660.0" y="257.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ action card</text>
+</svg>

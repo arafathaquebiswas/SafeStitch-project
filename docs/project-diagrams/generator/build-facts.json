@@ -1,0 +1,101 @@
+{
+ "build": {
+  "Toolchain found": "macOS (Darwin 25.5), JDK 17 (Temurin 17.0.19, JetBrains 17.0.14), Android SDK at ~/Library/Android/sdk (ANDROID_HOME not set, no local.properties — ANDROID_HOME was passed on the command line only), Gradle wrapper 9.3.1, AGP 9.1.1, Kotlin 2.2.10, Compose BOM 2025.05.00, compileSdk/targetSdk 36, minSdk 28.",
+  "./gradlew": "The wrapper script is not executable in this checkout (permission denied); it was run as `bash ./gradlew` instead of changing file modes.",
+  "Unit tests (:app:testDebugUnitTest)": "61 tests in 16 classes: 59 passed, 2 failed. Both failures are environmental: the Robolectric suites ProductionValidationSuiteTest and CapturedInspectionsMigrationAndOfflineFlowTest stop with 'Android SDK 36 requires Java 21 (have Java 17)'. No JDK 21 is installed, and none was installed.",
+  "Lint (:app:lintDebug)": "Passed: 0 errors, 7 warnings (UseKtx, UseTomlInstead, ModifierParameter). Report: app/build/reports/lint-results-debug.html.",
+  "Debug build (:app:assembleDebug)": "Kotlin compiles. Packaging fails at validateSigningDebug because the build expects debug.keystore in the project root (gitignored, absent). A test APK was produced without creating any signing file, by passing Android Studio's injected-signing properties pointing at the existing SDK key ~/.android/debug.keystore → app/build/outputs/apk/debug/app-debug.apk (49.9 MB, com.safestitch.inspection.debug).",
+  "Instrumented tests (:app:connectedDebugAndroidTest)": "The Gradle task skipped the emulator ('Unknown API Level' — device detection in the Android Gradle plugin), so the APKs it built were run directly with `adb shell am instrument -w com.safestitch.inspection.debug.test/androidx.test.runner.AndroidJUnitRunner`: OK (11 tests) — CorrectiveActionFlowTest, InspectionRepositoryTest, MigrationTest, ReportPdfWriterTest.",
+  "Release bundle": "Not built: it needs the private upload key, which is not present. Out of scope and not attempted.",
+  "Emulator walkthrough": "Scripted with adb + uiautomator against the debug APK on a read-only emulator (changes discarded at shutdown). Both roles were exercised: first-admin setup, users, the full 4-level location tree, checklist editor, SQL inspector, sync screen, equipment create/edit/print labels, a full inspection with a failed item, item photo, PDF report and in-app viewer, the complete corrective-action lifecycle, history, captured photos, scan with known and unknown codes, chat, settings, sign-out and sign-in errors, inspector restrictions, and session restore. Run in 6 parts (the scripted run was resumed from the current state after harness stops instead of resetting data); every planned check was eventually executed.",
+  "Upgrade over the earlier build": "The AVD already had an older build of the debug app with data. Installing the current build over it crashed on launch: 'Room cannot verify the data integrity… Expected identity hash b3f741…, found 5de8d7…'. App data was then cleared inside the throw-away emulator session only.",
+  "Arrow audit (this revision)": "Before correction: master 50 arrows / 260 across 11 diagrams in the first draft of this run (the earlier static run had 38 / 113). The independent extractor then found every interactive operation in the source; 59 had no arrow (dialog outcomes, stack-dependent Back, permission results, Account-menu wiring that was attributed to the wrong node). 45 transitions were added to the model (125 → 170) and the extractor now matches every operation it finds to a drawn edge."
+ },
+ "emulator": "SafeStitch_Disposable_API36 AVD (Pixel 6 profile, Android 16 / API 36, Google Play arm64 image), started with -read-only -no-snapshot so nothing is written back to the AVD; debug APK installed; CAMERA granted via adb; RECORD_AUDIO deliberately left ungranted because the app never requests it.",
+ "gaps": [
+  [
+   "Critical",
+   [
+    "**App crashes after updating from a 9–11 Nov 2026 build (reproduced on the emulator).** Commit `ae57d7c` (11 Nov) changed the Room schema for version 2 (identity hash `5de8d7c2…` → `b3f741b0…`) without raising the database version or adding a migration (`SafeStitchDatabase.kt` still says `version = 2`). Any phone that installed a build from commit `c5e9516` (9 Nov), such as the debug APK handed out earlier, will crash on launch after updating. Fix: bump to version 3 with a migration (or a destructive fallback for test builds) before the next tester build."
+   ]
+  ],
+  [
+   "High — navigation bug (reproduced on the emulator)",
+   [
+    "**The Home tab stops returning to the dashboard (reproduced twice on the emulator).** `SafeStitchNavHost.kt` opens tab destinations from inside Home without `popUpTo`, so the destination is pushed onto Home's own back stack and the bottom bar's `restoreState = true` brings it back whenever Home is tapped — even from another tab. System Back to the dashboard clears it.",
+    "Affected routes — **runtime-verified:** Home KPI cards → `ActionsRoute` (`onOpenActions = { nav.navigate(ActionsRoute) { launchSingleTop = true } }`); Home › Find equipment → `InspectRoute` (`onFindEquipment`). **Same code pattern, code-derived only (not run):** Admin tools › Equipment → `InspectRoute` (`onEquipment`); Home live scan / From image / quick chip / typed code / 'Scan Equipment' button → `HistoryRoute(equipmentCode)` (`onNavigateToEquipmentHistory`), which pushes a filtered History tab onto Home's stack.",
+    "Suggested fix (not applied — needs your authorisation): navigate to tab routes with the bottom bar's options (`popUpTo(nav.graph.findStartDestination().id) { saveState = true }; launchSingleTop = true; restoreState = true`), or switch the selected tab instead of pushing."
+   ]
+  ],
+  [
+   "High — partially implemented features",
+   [
+    "**Voice note transcription (Home › Voice Note Transcription; chat 🎙).** `RECORD_AUDIO` is declared in the manifest but never requested at runtime, so on Android 6+ `AudioRecord` fails silently. The service then substitutes a synthetic 440 Hz tone, posts it to `http://10.0.2.2:3000/api/gemini/transcribe` and, when that fails, shows a hard-coded sentence about FE-101 / EL-204 / EX-102 as if it were the user's transcript (`AudioTranscriptionService.buildFallbackTranscription`). Reproduced on the emulator: a transcript appeared while RECORD_AUDIO was not granted.",
+    "**Safety Assistant chat (S17).** Replies come from `http://10.0.2.2:3000/api/gemini/chat`, the developer's Mac as seen from an Android emulator, served by `scripts/preview-server.mjs`. Release builds block cleartext HTTP and real phones cannot reach 10.0.2.2, so outside the emulator the screen always shows the local rules-based `buildContextualReply` text. The model names shown (Gemini 4 Flash, Gemini 3.1 Flash Lite) are only labels sent to that dev server. `metadata.json` advertises a server-side Gemini capability that the app does not have in production."
+   ]
+  ],
+  [
+   "Medium — access control and data safety",
+   [
+    "**Role checks are UI-only for most admin areas.** `SafeStitchNavHost` has no route guards; Admin tools (S18–S23) are only hidden by `if (user.isAdmin)` on the Account-menu item. `CatalogRepository` (locations, checklist questions) and `SyncManager.save` have no admin check. User management and corrective-action verify/send-back/reassign/reschedule are also enforced in the repositories (`AuthRepository`, `InspectionRepository.requireAdmin`). There is currently no deep link or other entry point, so an inspector cannot reach these screens, but that protection depends on the UI alone.",
+    "**Inspectors can register new equipment.** Scanning or typing an unknown code opens 'New equipment' (S10) for any role, and `InspectionRepository.createCheckpoint` has no role check. The inspector empty-state text ('Scan a QR label…') suggests this is intended. Reproduced on the emulator. Please confirm this is the intended policy.",
+    "**Captured photos are deleted without confirmation on the list screen (S07)**, while the details screen (S08) asks first (D07). One mis-tap deletes both the record and the photo file.",
+    "**`settings.gradle.kts` starts a background Node server during Gradle configuration** if `/usr/local/bin/node` exists. It listens on 0.0.0.0:3000 (all network interfaces). It did not trigger on this Mac (Node is in /opt/homebrew), but any machine or CI agent with Node at that path starts a LAN-reachable server just by running Gradle."
+   ]
+  ],
+  [
+   "Low — UX inconsistencies",
+   [
+    "S08 'Open in app' actually launches an external PDF viewer (`FileSharing.openPdf`), while S13's 'Open PDF' opens the in-app viewer. When no viewer is installed, S08 says 'No external PDF viewer installed.'",
+    "Home 'Scan Equipment (QR / Barcode → Inspection History)': with no code typed, it opens the history of the *first* equipment in the list (`checkpoints.firstOrNull()`), which can look arbitrary.",
+    "The Home voice-note card and the chat say they transcribe with 'gemini-3.5-transcribe' even when the result is the canned fallback.",
+    "There is no delete action for locations, equipment or users (users can only be deactivated; questions can only be switched off). This looks intentional, since history keeps snapshots, but the README doesn't say so.",
+    "Corrective actions (S05): when the selected filter has no matches but other actions exist (e.g. 'To do (0)' after everything is verified) the list shows only '0 shown · N corrective actions in total' with no explanation."
+   ]
+  ],
+  [
+   "Declared but unreachable code",
+   [
+    "`InspectionListScreen` (ui/history/CapturedInspectionsScreen.kt), `CapturedInspectionDetailsScreen` (ui/history/InspectionDetailsScreen.kt) and `ChatScreen` (ui/chat/GeminiChatScreen.kt) are alias composables with no callers.",
+    "`DatabaseSeed.seedSampleData` (sample factory 'Dhaka Plant 1', equipment FE-101/EL-204/EX-102…) is never called, so a fresh install has no equipment or locations, even though the chat prompts, the voice fallback and three seeded sample captured photos refer to FE-101/EL-204/EX-102.",
+    "The three seeded captured photos point at image files that do not exist (`photos/IMG_FE101_gauge_check.jpg` …), so S08 shows a generated placeholder canvas instead."
+   ]
+  ],
+  [
+   "Documentation drift (README vs code)",
+   [
+    "The README does not mention the Home live ZXing camera/barcode scanner and captured-photo tagging, captured inspections with PDFBox branded export, voice notes, the Safety Assistant chat, or the SQL Database inspector.",
+    "README versions differ from the build files: the README says AGP 9.4.1, Kotlin 2.4.21, Compose BOM 2026.09.00 and Gradle 9.6.0; the project uses AGP 9.1.1, Kotlin 2.2.10, Compose BOM 2025.05.00 and Gradle wrapper 9.3.1.",
+    "README 'For developers' says PDFs use `android.graphics.pdf.PdfDocument`; captured-photo export also uses PDFBox."
+   ]
+  ],
+  [
+   "Build environment issues found",
+   [
+    "`debug.keystore` is expected in the project root but is absent (gitignored), so `assembleDebug` fails until it is created or Android Studio injects signing.",
+    "`gradlew` has no executable bit in this checkout.",
+    "Two Robolectric test classes need JDK 21 for SDK 36; only JDK 17 is installed.",
+    "`ANDROID_HOME` is not set and there is no `local.properties`.",
+    "The reference file named in the brief, `references/wireframe-diagram_updated.pdf`, is not in the workspace; the copy attached to the request was used instead."
+   ]
+  ],
+  [
+   "How the emulator walkthrough failures were classified",
+   [
+    "**Account / Admin menu (first run):** test harness — Compose `DropdownMenu` renders in its own popup window, where the root `testTagsAsResourceId` flag does not apply; the script was changed to match menu items by text. Re-run: PASS.",
+    "**Checkpoint form save (parts 1 and 2):** test harness — a location dropdown popup hid the form's resource-ids while scrolling. The form was filled correctly (screenshot); the save was re-run: PASS (S10 → back to Inspect with FE-12 listed).",
+    "**Corrective actions list → action detail:** missing test data — the only action had just been verified, so the default 'To do' filter was empty. Re-run with the 'All' filter: PASS.",
+    "**Back from the Actions tab:** test-harness expectation — System Back on a tab screen correctly returns Home.",
+    "**Home tab after KPI card / Find equipment:** real app problem (see 'High — navigation bug').",
+    "**'Add equipment first.' snackbar:** not verifiable with uiautomator (snackbars disappear before a dump completes); remains code-verified only.",
+    "**Inspector 'New equipment' save (part 5):** test harness — the keyboard covered the form; re-run in part 6: PASS."
+   ]
+  ],
+  [
+   "Previous run of this task",
+   [
+    "An earlier, static-only run of this task (23 screens, 39 transitions, no emulator test) was committed as `f60b43c` ('add'). Its files were moved unchanged to `docs/project-diagrams/_previous-run-2026-11-15/` and also remain in git history; delete the folder when you no longer need it. Application source is identical between `d797895` and `f60b43c`."
+   ]
+  ]
+ ]
+}

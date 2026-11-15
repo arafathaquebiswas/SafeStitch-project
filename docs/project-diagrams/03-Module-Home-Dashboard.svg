@@ -1,0 +1,412 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3120" height="1700.76" viewBox="0 0 3120 1700.76" font-family="Helvetica, Arial, sans-serif">
+<title>Module 03 — Home dashboard (hub)</title>
+<defs>
+<marker id="ah-nav" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e293b"/></marker>
+<marker id="ah-admin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker>
+<marker id="ah-popup" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+<marker id="ah-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+<marker id="ah-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+<marker id="ah-partial" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker>
+<marker id="ah-tab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0e7490"/></marker>
+<marker id="ah-background" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+<marker id="ah-conditional" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/></marker>
+<marker id="ah-back" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+<marker id="ah-dialog_result" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a21caf"/></marker>
+<marker id="ah-state" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b45309"/></marker>
+</defs>
+<rect x="0" y="0" width="3120" height="1700.76" fill="#ffffff"/>
+<text font-size="30" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="60.0" y="56.6">Module 03 — Home dashboard (hub)</tspan></text>
+
+
+<text font-size="11" fill="#334155" text-anchor="start"><tspan x="60.0" y="76.5">The start destination. Live ZXing camera scan, picture/manual code and quick chips all open Inspection history filtered by equipment; buttons open Scan/Find/Chat/Captured photos; the summary card and KPI cards deep-link into checklists, reports, photos and corrective actions. The account icon opens the Account menu.</tspan></text>
+<g id="S03"><title>S03 Home dashboard | Route: DashboardRoute (start destination) | Source: ui/dashboard/DashboardScreen.kt | Roles: Admin, Inspector | Status: IMPLEMENTED</title>
+<rect x="480.0" y="272.0" width="30.0" height="15.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="8.5" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="495.0" y="283.1">S03</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="515.0" y="283.9">Home dashboard</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="start"><tspan x="480.0" y="297.9">DashboardRoute (start destination)</tspan></text>
+<rect x="480.0" y="310.0" width="230.0" height="903.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="575.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="334.0" width="214.0" height="847.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="595.0" cy="1195.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="613.5" y="303.0" width="88.5" height="12.0" rx="6.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="6.3" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="657.8" y="311.6">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="494.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="696.0" y="341.9">▴ ▮</tspan></text>
+<rect x="488.0" y="345.0" width="214.0" height="30.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="374.2" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<rect x="678.7" y="349.0" width="14.3" height="13.0" rx="3.0" fill="#fff" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.5" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="685.9" y="358.2">◉</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="494.0" y="358.8">SafeStitch</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="494.0" y="368.5">Walk Admin · Admin</tspan></text>
+<rect x="494.0" y="375.0" width="202.0" height="46.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="385.3">Live Camera &amp; ZXing Equipment Scanner</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="393.7">Auto-identifies equipment via QR or barcode and opens its</tspan><tspan x="499.0" y="401.8">inspection history</tspan></text>
+<rect x="499.0" y="404.8" width="85.2" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="541.6" y="412.9">ZXing QR / Barcode Active</tspan></text>
+<rect x="587.2" y="404.8" width="45.9" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="610.1" y="412.9">Capture tag:</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="642.1" y="413.3">…</tspan></text>
+<rect x="494.0" y="424.8" width="202.0" height="64.0" rx="5.0" fill="#0f172a" stroke="none" stroke-width="1"/>
+<rect x="498.0" y="472.8" width="158.0" height="13.0" rx="6.0" fill="#334155" stroke="none" stroke-width="1"/><text font-size="5.8" fill="#fff" text-anchor="middle"><tspan x="577.0" y="481.8">ZXing live: point at QR / barcode, or tap shutter</tspan></text>
+<ellipse cx="681.0" cy="475.8" rx="9.0" ry="9.0" fill="#0f766e" stroke="#fff" stroke-width="1.2"/><text font-size="9" fill="#fff" text-anchor="middle"><tspan x="681.0" y="479.6">◉</tspan></text>
+<rect x="494.0" y="492.3" width="202.0" height="48.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="502.7">Scan Equipment (QR / Barcode → History)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="511.0">Supports QR_CODE, CODE_128, CODE_39, EAN_13 &amp;</tspan><tspan x="499.0" y="519.1">DATA_MATRIX via ZXing.</tspan></text>
+<rect x="499.0" y="522.2" width="54.5" height="14.0" rx="7.0" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="526.3" y="532.0">From image</tspan></text>
+<rect x="494.0" y="544.2" width="52.5" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="520.2" y="552.2">Quick scan tag:</tspan></text>
+<rect x="549.5" y="544.2" width="100.5" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="599.7" y="552.2">FE-12 · Fire extinguisher FE-12</tspan></text>
+<rect x="494.0" y="560.7" width="157.6" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.8"/><text font-size="6.3" fill="#64748b" text-anchor="start"><tspan x="498.0" y="571.8">Enter or scan QR / barcode (e.g. FE-101)</tspan></text>
+<rect x="655.6" y="560.7" width="40.4" height="17.0" rx="8.5" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="675.8" y="572.0">History</tspan></text>
+<rect x="494.0" y="581.2" width="78.2" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="533.1" y="589.2">Captured frames (3/3):</tspan></text>
+<rect x="575.2" y="581.2" width="17.3" height="11.0" rx="5.5" fill="#ccfbf1" stroke="#0f766e" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="583.8" y="589.2">All</tspan></text>
+<rect x="595.5" y="581.2" width="56.4" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="623.7" y="589.2">NEEDS REVIEW</tspan></text>
+<rect x="654.9" y="581.2" width="25.8" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="667.8" y="589.2">PASS</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="689.7" y="589.6">…</tspan></text>
+<rect x="494.0" y="597.7" width="72.7" height="17.0" rx="4.0" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.2" fill="#1e293b" text-anchor="middle"><tspan x="530.3" y="608.8">▣ NEEDS REVIEW</tspan></text>
+<rect x="570.7" y="597.7" width="82.8" height="17.0" rx="4.0" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.2" fill="#1e293b" text-anchor="middle"><tspan x="612.1" y="608.8">▣ FAIL · FOLLOW UP</tspan></text>
+<rect x="657.5" y="597.7" width="38.5" height="17.0" rx="4.0" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.2" fill="#1e293b" text-anchor="middle"><tspan x="676.7" y="608.8">▣ PASS</tspan></text>
+<rect x="494.0" y="618.2" width="202.0" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="595.0" y="629.5">View all captured inspections (3)</tspan></text>
+<rect x="494.0" y="638.7" width="202.0" height="17.0" rx="8.5" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="595.0" y="650.0">Scan Equipment (QR / Barcode → Inspection History)</tspan></text>
+<rect x="494.0" y="659.2" width="107.4" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="547.7" y="670.5">Scan for Checklist</tspan></text>
+<rect x="605.4" y="659.2" width="90.6" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="650.7" y="670.5">Find equipment</tspan></text>
+<rect x="494.0" y="679.7" width="202.0" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="595.0" y="691.0">Safety Assistant Chat (Multi-Turn Advisor)</tspan></text>
+<rect x="494.0" y="700.2" width="202.0" height="48.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="710.5">Voice Note Transcription</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="718.9">Record microphone audio &amp; transcribe via</tspan><tspan x="499.0" y="727.0">gemini-3.5-transcribe</tspan></text>
+<rect x="499.0" y="730.0" width="52.2" height="14.0" rx="7.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="525.1" y="739.9">Record Mic</tspan></text>
+<rect x="494.0" y="752.0" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="498.0" y="759.4">Transcribed Audio (gemini-3.5-transcribe)</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="498.0" y="768.9">Field safety voice note: checked FE-101 …</tspan></text>
+<rect x="494.0" y="775.5" width="202.0" height="49.6" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="785.9">Inspection Summary Overview [2 Pending</tspan><tspan x="499.0" y="795.1">Reports]</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="803.4">1 checklists · 3 camera captures</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="811.5">4 Total Performed · 2 Passed · 2 Pending Reports</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="819.6">Status chart · Recent Equipment Status Updates ›</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="494.0" y="837.3">Inspections · last 30 days</tspan></text>
+<rect x="494.0" y="843.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="855.9">1</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="499.0" y="865.7">Completed</tspan></text>
+<rect x="597.0" y="843.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="602.0" y="855.9">100%</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="602.0" y="865.7">Pass rate</tspan></text>
+<rect x="494.0" y="873.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="886.4">85%</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="499.0" y="896.2">Average score</tspan></text>
+<rect x="597.0" y="873.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="602.0" y="886.4">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="602.0" y="896.2">Drafts in progress</tspan></text>
+<rect x="494.0" y="904.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="916.9">1</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="499.0" y="926.7">Inspections (all time)</tspan></text>
+<rect x="597.0" y="904.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="602.0" y="916.9">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="602.0" y="926.7">Failed · 30 days</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="494.0" y="943.3">Corrective actions (cards open Actions)</tspan></text>
+<rect x="494.0" y="949.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="961.9">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="499.0" y="971.7">Open</tspan></text>
+<rect x="597.0" y="949.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="602.0" y="961.9">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="602.0" y="971.7">In progress</tspan></text>
+<rect x="494.0" y="979.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="992.4">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="499.0" y="1002.2">Overdue</tspan></text>
+<rect x="597.0" y="979.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="602.0" y="992.4">1</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="602.0" y="1002.2">Awaiting verification</tspan></text>
+<rect x="494.0" y="1010.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1022.9">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="499.0" y="1032.7">Critical / high not verified</tspan></text>
+<rect x="597.0" y="1010.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="602.0" y="1022.9">1</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="602.0" y="1032.7">All corrective actions</tspan></text>
+<rect x="494.0" y="1040.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1053.4">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="499.0" y="1063.2">Verified · 30 days</tspan></text>
+<rect x="597.0" y="1040.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="602.0" y="1053.4">—</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="602.0" y="1063.2">Fixed on time</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="494.0" y="1079.8">Pass rate by building</tspan></text>
+<rect x="494.0" y="1085.7" width="202.0" height="24.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1096.0">BlockB 100% (1/1)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1104.4">████████████████████</tspan></text>
+<rect x="494.0" y="1113.4" width="202.0" height="32.3" rx="5.0" fill="#e0f2fe" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1123.8">Works offline</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1132.1">Everything is stored on this phone. An admin can turn on</tspan><tspan x="499.0" y="1140.2">optional sync under Admin › Sync.</tspan></text>
+<rect x="488.0" y="1155.0" width="214.0" height="26.0" rx="0.0" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/>
+<rect x="499.8" y="1157.0" width="30.0" height="12.0" rx="6.0" fill="#ccfbf1" stroke="none" stroke-width="1"/>
+<text font-size="8" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="514.8" y="1166.4">⌂</tspan></text>
+<text font-size="6" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="514.8" y="1176.5">Home</tspan></text>
+<text font-size="8" fill="#64748b" text-anchor="middle"><tspan x="568.2" y="1166.4">▦</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="middle"><tspan x="568.2" y="1176.5">Inspect</tspan></text>
+<text font-size="8" fill="#64748b" text-anchor="middle"><tspan x="621.8" y="1166.4">☰</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="middle"><tspan x="621.8" y="1176.5">Actions</tspan></text>
+<text font-size="8" fill="#64748b" text-anchor="middle"><tspan x="675.2" y="1166.4">◷</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="middle"><tspan x="675.2" y="1176.5">History</tspan></text>
+</g>
+<g id="D16_S03"><title>D16 Camera permission gate | Source: ui/components/Common.kt | Roles: Admin, Inspector</title>
+<rect x="850.0" y="318.0" width="210.0" height="53.8" rx="7.0" fill="#fffbeb" stroke="#b45309" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="855.0" y="322.0" width="22.0" height="10.0" rx="3.0" fill="#b45309" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="866.0" y="329.6">D16</tspan></text>
+<rect x="1010.8" y="322.0" width="45.2" height="9.0" rx="2.0" fill="#fff" stroke="#b45309" stroke-width="0.6"/><text font-size="5.4" fill="#b45309" text-anchor="middle" font-weight="bold"><tspan x="1033.4" y="328.8">PERMISSION</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="881.0" y="330.0">Camera permission gate</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="856.0" y="342.8">← Camera permission gate (asks once)</tspan><tspan x="856.0" y="352.1">System prompt, asked once</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1054.0" y="363.3">Allow camera ⇒ preview Open app settings</tspan></text>
+</g>
+<g id="X01_S03"><title>X01 System photo picker | Source: ui/scan/ScanScreen.kt | Status: IMPLEMENTED</title>
+<rect x="850.0" y="401.8" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="854.0" y="409.8" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="865.0" y="417.4">X01</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="879.0" y="417.6">System photo picker</tspan></text>
+<rect x="1025.0" y="409.8" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1041.0" y="416.5">SYSTEM</tspan></text>
+</g>
+<g id="X07_S03"><title>X07 Gemini dev endpoint :3000 | Source: chat/SafetyChatService.kt | Status: PARTIALLY IMPLEMENTED | Emulator/debug-only host; cleartext is blocked in release builds, so the app always falls back to local text there.</title>
+<rect x="850.0" y="457.8" width="210.0" height="26.0" rx="4.0" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="854.0" y="465.8" width="22.0" height="10.0" rx="3.0" fill="#dc2626" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="865.0" y="473.4">X07</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="879.0" y="473.6">Gemini dev endpoint :3000</tspan></text>
+<rect x="1025.0" y="465.8" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#dc2626" stroke-width="0.6"/><text font-size="5.2" fill="#dc2626" text-anchor="middle" font-weight="bold"><tspan x="1041.0" y="472.5">PARTIAL</tspan></text>
+</g>
+<g id="X05_S03"><title>X05 Android app settings | Source: ui/components/Common.kt | Status: IMPLEMENTED</title>
+<rect x="850.0" y="513.8" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="854.0" y="521.8" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="865.0" y="529.4">X05</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="879.0" y="529.6">Android app settings</tspan></text>
+<rect x="1025.0" y="521.8" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1041.0" y="528.5">SYSTEM</tspan></text>
+</g>
+<g id="note136">
+<rect x="480.0" y="1247.0" width="580.0" height="70.2" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="487.0" y="1262.0">S03 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="487.0" y="1274.6">• Shutter: save tagged captured photo (create) [camera ready]</tspan><tspan x="487.0" y="1285.2">• Tap captured thumbnail: toggle selected tag (update)</tspan><tspan x="487.0" y="1295.7">• Capture-tag / filter chips, torch, Hide/Show viewfinder</tspan><tspan x="487.0" y="1306.3">• Invalid code / no barcode in picture → snackbar</tspan></text>
+</g>
+<g id="D01"><title>D01 Account menu | Source: ui/dashboard/DashboardScreen.kt | Roles: Admin, Inspector</title>
+<rect x="1270.0" y="410.0" width="230.0" height="60.9" rx="7.0" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="1275.0" y="414.0" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1286.0" y="421.6">D01</tspan></text>
+<rect x="1473.6" y="414.0" width="22.4" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1484.8" y="420.8">MENU</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1301.0" y="422.0">Account menu</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="1276.0" y="434.8">Admin tools (admin only)</tspan><tspan x="1276.0" y="444.1">Safety Assistant Chat</tspan><tspan x="1276.0" y="453.3">Settings</tspan><tspan x="1276.0" y="462.5">Sign out</tspan></text>
+</g>
+<g id="ref_in_S00_60_300"><title>Off-diagram reference to in:S00: from S00 App launch / session check</title>
+<rect x="60.0" y="300.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="313.2">↗ from S00 App launch / session check</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="325.7">Auth &amp; session (02)</tspan></text>
+</g>
+<g id="ref_in_S01_60_350"><title>Off-diagram reference to in:S01: from S01 Set up SafeStitch (first admin)</title>
+<rect x="60.0" y="350.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="363.2">↗ from S01 Set up SafeStitch (first admin)</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="375.7">Auth &amp; session (02)</tspan></text>
+</g>
+<g id="ref_in_S02_60_400"><title>Off-diagram reference to in:S02: from S02 Sign in</title>
+<rect x="60.0" y="400.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="413.2">↗ from S02 Sign in</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="425.7">Auth &amp; session (02)</tspan></text>
+</g>
+<g id="ref_in_TABS_60_450"><title>Off-diagram reference to in:TABS: from Bottom-bar tab</title>
+<rect x="60.0" y="450.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="463.2">↗ from Bottom-bar tab</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="475.7">bottom navigation bar</tspan></text>
+</g>
+<g id="ref_out_S02_2830_300"><title>Off-diagram reference to out:S02: to S02 Sign in</title>
+<rect x="2830.0" y="300.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="313.2">↗ to S02 Sign in</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="325.7">Auth &amp; session (02)</tspan></text>
+</g>
+<g id="ref_out_S18_2830_350"><title>Off-diagram reference to out:S18: to S18 Admin tools</title>
+<rect x="2830.0" y="350.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="363.2">↗ to S18 Admin tools</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="375.7">Admin tools (08)</tspan></text>
+</g>
+<g id="ref_out_S17_2830_400"><title>Off-diagram reference to out:S17: to S17 Safety Assistant Chat</title>
+<rect x="2830.0" y="400.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="413.2">↗ to S17 Safety Assistant Chat</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="425.7">Safety assistant (09)</tspan></text>
+</g>
+<g id="ref_out_S16_2830_450"><title>Off-diagram reference to out:S16: to S16 Settings</title>
+<rect x="2830.0" y="450.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="463.2">↗ to S16 Settings</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="475.7">Auth &amp; session (02)</tspan></text>
+</g>
+<g id="ref_out_S06_2830_500"><title>Off-diagram reference to out:S06: to S06 Inspection history</title>
+<rect x="2830.0" y="500.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="513.2">↗ to S06 Inspection history</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="525.7">History &amp; captured (07)</tspan></text>
+</g>
+<g id="ref_out_S09_2830_550"><title>Off-diagram reference to out:S09: to S09 Scan checkpoint</title>
+<rect x="2830.0" y="550.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="563.2">↗ to S09 Scan checkpoint</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="575.7">Equipment &amp; inspection (04)</tspan></text>
+</g>
+<g id="ref_out_S04_2830_600"><title>Off-diagram reference to out:S04: to S04 Inspect — find equipment</title>
+<rect x="2830.0" y="600.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="613.2">↗ to S04 Inspect — find equipment</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="625.7">Equipment &amp; inspection (04)</tspan></text>
+</g>
+<g id="ref_out_S07_2830_650"><title>Off-diagram reference to out:S07: to S07 Captured inspections (photo list)</title>
+<rect x="2830.0" y="650.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="663.2">↗ to S07 Captured inspections (photo list)</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="675.7">History &amp; captured (07)</tspan></text>
+</g>
+<g id="ref_out_S08_2830_700"><title>Off-diagram reference to out:S08: to S08 Captured inspection details</title>
+<rect x="2830.0" y="700.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="713.2">↗ to S08 Captured inspection details</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="725.7">History &amp; captured (07)</tspan></text>
+</g>
+<g id="ref_out_S13_2830_750"><title>Off-diagram reference to out:S13: to S13 Inspection report</title>
+<rect x="2830.0" y="750.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="763.2">↗ to S13 Inspection report</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="775.7">Report &amp; PDF (05)</tspan></text>
+</g>
+<g id="ref_out_S11_2830_800"><title>Off-diagram reference to out:S11: to S11 Inspection checklist</title>
+<rect x="2830.0" y="800.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="813.2">↗ to S11 Inspection checklist</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="825.7">Equipment &amp; inspection (04)</tspan></text>
+</g>
+<g id="ref_out_S05_2830_850"><title>Off-diagram reference to out:S05: to S05 Corrective actions</title>
+<rect x="2830.0" y="850.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="863.2">↗ to S05 Corrective actions</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="875.7">Corrective actions (06)</tspan></text>
+</g>
+<g id="legend176">
+<rect x="2420.0" y="1423.2" width="640.0" height="237.5" rx="8.0" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text font-size="12" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2432.0" y="1443.3">LEGEND</tspan></text>
+<rect x="2434.0" y="1463.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#1e293b" stroke-width="2.1"/>
+<text font-size="7" fill="#1e293b" text-anchor="middle"><tspan x="2469.0" y="1466.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2478.0" y="1466.6">Navigation (tap → new screen)</tspan></text>
+<rect x="2754.0" y="1463.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#1d4ed8" stroke-width="2.1" stroke-dasharray="10 3"/>
+<text font-size="7" fill="#1d4ed8" text-anchor="middle"><tspan x="2789.0" y="1466.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2798.0" y="1466.6">Conditional navigation (label = condition)</tspan></text>
+<rect x="2434.0" y="1481.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#c2410c" stroke-width="2.3"/>
+<text font-size="7" fill="#c2410c" text-anchor="middle"><tspan x="2469.0" y="1484.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2478.0" y="1484.6">Admin-only navigation</tspan></text>
+<rect x="2754.0" y="1481.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#64748b" stroke-width="2.0" stroke-dasharray="2 3"/>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="2789.0" y="1484.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2798.0" y="1484.6">Return after save / photo (popBackStack to the opener)</tspan></text>
+<rect x="2434.0" y="1499.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#64748b" stroke-width="1.9" stroke-dasharray="1 3"/>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="2469.0" y="1502.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2478.0" y="1502.6">← / system Back → previous screen on the stack</tspan></text>
+<rect x="2754.0" y="1499.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#7c3aed" stroke-width="1.9" stroke-dasharray="5 3"/>
+<text font-size="7" fill="#7c3aed" text-anchor="middle"><tspan x="2789.0" y="1502.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2798.0" y="1502.6">Opens a pop-up / menu / permission prompt</tspan></text>
+<rect x="2434.0" y="1517.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#a21caf" stroke-width="1.9" stroke-dasharray="3 2"/>
+<text font-size="7" fill="#a21caf" text-anchor="middle"><tspan x="2469.0" y="1520.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2478.0" y="1520.6">Dialog outcome (OK / Cancel / Save / Delete …)</tspan></text>
+<rect x="2754.0" y="1517.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#b45309" stroke-width="1.9" stroke-dasharray="4 2"/>
+<text font-size="7" fill="#b45309" text-anchor="middle"><tspan x="2789.0" y="1520.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2798.0" y="1520.6">In-screen state change (annotation box)</tspan></text>
+<rect x="2434.0" y="1535.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0f766e" stroke-width="1.9" stroke-dasharray="7 3 2 3"/>
+<text font-size="7" fill="#0f766e" text-anchor="middle"><tspan x="2469.0" y="1538.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2478.0" y="1538.6">Hands off to Android / another app / server</tspan></text>
+<rect x="2754.0" y="1535.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0f766e" stroke-width="1.7999999999999998" stroke-dasharray="2 2"/>
+<text font-size="7" fill="#0f766e" text-anchor="middle"><tspan x="2789.0" y="1538.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2798.0" y="1538.6">Background work (WorkManager)</tspan></text>
+<rect x="2434.0" y="1553.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#dc2626" stroke-width="2.1" stroke-dasharray="6 3"/>
+<text font-size="7" fill="#dc2626" text-anchor="middle"><tspan x="2469.0" y="1556.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2478.0" y="1556.6">Partially implemented path</tspan></text>
+<rect x="2754.0" y="1553.2" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0e7490" stroke-width="2.1"/>
+<text font-size="7" fill="#0e7490" text-anchor="middle"><tspan x="2789.0" y="1556.2">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2798.0" y="1556.6">Bottom-bar tab switch</tspan></text>
+<rect x="2434.0" y="1569.2" width="67.6" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="6.8" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="2467.8" y="1579.1">IMPLEMENTED</tspan></text>
+<rect x="2509.6" y="1569.2" width="45.6" height="14.0" rx="7.0" fill="#fef3c7" stroke="#b45309" stroke-width="0.8"/><text font-size="6.8" fill="#b45309" text-anchor="middle" font-weight="bold"><tspan x="2532.4" y="1579.1">PARTIAL</tspan></text>
+<rect x="2563.2" y="1569.2" width="64.8" height="14.0" rx="7.0" fill="#e2e8f0" stroke="#475569" stroke-width="0.8"/><text font-size="6.8" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="2595.6" y="1579.1">UNREACHABLE</tspan></text>
+<rect x="2636.0" y="1569.2" width="82.6" height="14.0" rx="7.0" fill="#ede9fe" stroke="#7c3aed" stroke-width="0.8"/><text font-size="6.8" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="2677.4" y="1579.1">DOCUMENTED ONLY</tspan></text>
+<rect x="2726.7" y="1569.2" width="66.9" height="14.0" rx="7.0" fill="#fee2e2" stroke="#b91c1c" stroke-width="0.8"/><text font-size="6.8" fill="#b91c1c" text-anchor="middle" font-weight="bold"><tspan x="2760.1" y="1579.1">NOT VERIFIED</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1598.5">✓ in an arrow label, or &#x27;✓ RUN&#x27; on a screen = exercised in the Android 16 emulator walkthrough; everything else is traced in source.</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1612.3">ADMIN dashed outline inside a frame = control rendered only when user.isAdmin. Dashed tray under a frame = that screen&#x27;s pop-ups and hand-offs.</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1626.2">Every screen with ← (and the system Back gesture) returns to the previous screen via NavController.popBackStack(); only non-obvious returns are drawn.</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1640.1">Hover a frame or arrow in the .drawio/.svg to see its route, source file:line, roles and verification status.</tspan></text>
+</g>
+<path d="M595.0,1213.0 L595.0,1247.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M595.0,1213.0 L595.0,1247.0" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S03 → S03: Shutter: save tagged captured photo (create) — camera ready — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:509
+S03 → S03: Tap captured thumbnail: toggle selected tag (update) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:697
+S03 → S03: Capture-tag / filter chips, torch, Hide/Show viewfinder — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:673
+S03 → S03: Invalid code / no barcode in picture → snackbar — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:191</title></path>
+<path d="M1060.0,345.0 L1075.0,345.0 L1075.0,525.0 L1060.0,525.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1060.0,345.0 L1075.0,345.0 L1075.0,525.0 L1060.0,525.0" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>D16 → X05: Open app settings — permission denied once — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/components/Common.kt:175</title></path>
+<path d="M710.0,455.0 L825.0,455.0 L825.0,355.0 L850.0,355.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,455.0 L825.0,455.0 L825.0,355.0 L850.0,355.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S03 → D16: Camera permission gate (asks once) — camera not granted — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:479</title></path>
+<path d="M850.0,345.0 L710.0,345.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M850.0,345.0 L710.0,345.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D16 → S03: Permission granted → camera preview shown — user allows the camera — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/components/Common.kt:161</title></path>
+<path d="M270.0,315.0 L455.0,315.0 L455.0,345.0 L480.0,345.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,315.0 L455.0,315.0 L455.0,345.0 L480.0,345.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S00 → S03: Session restore — remembered user id exists and the account is active — Admin, Inspector — app/src/main/java/com/safestitch/app/MainActivity.kt:45</title></path>
+<path d="M270.0,365.0 L480.0,365.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,365.0 L480.0,365.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S01 → S03: Create admin account — valid name, username, password ≥ 8, passwords match — First user → Admin — app/src/main/java/com/safestitch/app/ui/auth/AuthScreens.kt:82</title></path>
+<path d="M710.0,525.0 L835.0,525.0 L835.0,425.0 L850.0,425.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,525.0 L835.0,525.0 L835.0,425.0 L850.0,425.0" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>S03 → X01: From image — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:583</title></path>
+<path d="M270.0,415.0 L480.0,415.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,415.0 L480.0,415.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S02 → S03: Sign in — correct credentials, active account, not locked — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/auth/AuthScreens.kt:109</title></path>
+<path d="M710.0,735.0 L825.0,735.0 L825.0,475.0 L850.0,475.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,735.0 L825.0,735.0 L825.0,475.0 L850.0,475.0" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="6 3" marker-end="url(#ah-partial)"><title>S03 → X07: Voice note: Record Mic → Stop &amp; Transcribe — no RECORD_AUDIO runtime request exists; the dev server is only reachable from emulator debug builds — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:818</title></path>
+<path d="M270.0,465.0 L480.0,465.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,465.0 L480.0,465.0" fill="none" stroke="#0e7490" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-tab)"><title>TABS → S03: Bottom bar: Home — bottom bar is shown only on the 4 tab screens — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/navigation/SafeStitchNavHost.kt:52</title></path>
+<path d="M710.0,365.0 L815.0,365.0 L815.0,445.0 L1270.0,445.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,365.0 L815.0,365.0 L815.0,445.0 L1270.0,445.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S03 → D01: Account icon — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:356</title></path>
+<path d="M1270.0,435.0 L1085.0,435.0 L1085.0,385.0 L710.0,385.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1270.0,435.0 L1085.0,435.0 L1085.0,385.0 L710.0,385.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D01 → S03: Dismiss menu (tap outside / Back) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:359</title></path>
+<path d="M1500.0,435.0 L2805.0,435.0 L2805.0,425.0 L2830.0,425.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,435.0 L2805.0,435.0 L2805.0,425.0 L2830.0,425.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>D01 → S17: Safety Assistant Chat — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:372</title></path>
+<path d="M1500.0,435.0 L1515.0,435.0 L1515.0,455.0 L2830.0,455.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,435.0 L1515.0,435.0 L1515.0,455.0 L2830.0,455.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>D01 → S16: Settings — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:378</title></path>
+<path d="M1500.0,435.0 L1515.0,435.0 L1515.0,375.0 L2830.0,375.0" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,435.0 L1515.0,435.0 L1515.0,375.0 L2830.0,375.0" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>D01 → S18: Admin tools — user.isAdmin (menu item is not rendered for inspectors) — Admin — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:365</title></path>
+<path d="M1385.0,410.0 L1385.0,325.0 L2830.0,325.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1385.0,410.0 L1385.0,325.0 L2830.0,325.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>D01 → S02: Sign out — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:384</title></path>
+<path d="M710.0,685.0 L2795.0,685.0 L2795.0,415.0 L2830.0,415.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,685.0 L2795.0,685.0 L2795.0,415.0 L2830.0,415.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S03 → S17: Safety Assistant Chat (Multi-Turn Advisor) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:767</title></path>
+<path d="M710.0,455.0 L725.0,455.0 L725.0,495.0 L2805.0,495.0 L2805.0,505.0 L2830.0,505.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,455.0 L725.0,455.0 L725.0,495.0 L2805.0,495.0 L2805.0,505.0 L2830.0,505.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S03 → S06: Live ZXing scan recognises a QR/barcode — payload parses to an equipment code — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:285
+S03 → S06: From image → photo picker → decode — a QR/barcode is found in the picked picture — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:587
+S03 → S06: Quick scan tag chip — at least one equipment exists — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:616
+S03 → S06: Type code → History — code parses — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:647
+S03 → S06: Scan Equipment (→ Inspection History) button — typed code, else the first equipment&#x27;s code; with no equipment it only shows the viewfinder — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:749</title></path>
+<path d="M710.0,665.0 L2805.0,665.0 L2805.0,575.0 L2830.0,575.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,665.0 L2805.0,665.0 L2805.0,575.0 L2830.0,575.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S03 → S09: Scan for Checklist — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:756</title></path>
+<path d="M710.0,665.0 L725.0,665.0 L725.0,625.0 L2830.0,625.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,665.0 L725.0,665.0 L725.0,625.0 L2830.0,625.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S03 → S04: Find equipment — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:760</title></path>
+<path d="M710.0,625.0 L735.0,625.0 L735.0,655.0 L2830.0,655.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,625.0 L735.0,625.0 L735.0,655.0 L2830.0,655.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S03 → S07: View all captured inspections (n) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:719</title></path>
+<path d="M710.0,805.0 L2805.0,805.0 L2805.0,725.0 L2830.0,725.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,805.0 L2805.0,805.0 L2805.0,725.0 L2830.0,725.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S03 → S08: Summary card: recent captured photo — update is a captured photo — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/SummaryDashboardCard.kt:432</title></path>
+<path d="M710.0,805.0 L725.0,805.0 L725.0,775.0 L2830.0,775.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,805.0 L725.0,805.0 L725.0,775.0 L2830.0,775.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S03 → S13: Summary card: recent submitted checklist — inspection completed — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/SummaryDashboardCard.kt:434</title></path>
+<path d="M710.0,805.0 L725.0,805.0 L725.0,815.0 L2830.0,815.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,805.0 L725.0,805.0 L725.0,815.0 L2830.0,815.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S03 → S11: Summary card: recent draft checklist — inspection still a draft — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/SummaryDashboardCard.kt:434</title></path>
+<path d="M710.0,965.0 L2855.0,965.0 L2855.0,884.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,965.0 L2855.0,965.0 L2855.0,884.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S03 → S05: KPI cards (Open / In progress / Overdue / Awaiting / Critical / All) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:875</title></path>
+<rect x="1046.8" y="378.0" width="56.4" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="1075.0" y="387.4" font-size="7.4" text-anchor="middle" fill="#0f766e" font-weight="bold">app settings</text>
+<rect x="760.3" y="338.4" width="39.4" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="780.0" y="347.8" font-size="7.4" text-anchor="middle" fill="#a21caf" font-weight="bold">granted</text>
+<rect x="319.8" y="308.4" width="85.4" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="362.5" y="317.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ remembered user</text>
+<rect x="324.6" y="358.4" width="100.9" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="375.0" y="367.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ Create admin account</text>
+<rect x="744.3" y="518.4" width="56.4" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="772.5" y="527.8" font-size="7.4" text-anchor="middle" fill="#0f766e" font-weight="bold">photo picker</text>
+<rect x="353.1" y="408.4" width="43.8" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="375.0" y="417.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ Sign in</text>
+<rect x="796.3" y="598.4" width="57.3" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#dc2626" stroke-width="0.6"/>
+<text x="825.0" y="607.8" font-size="7.4" text-anchor="middle" fill="#dc2626" font-weight="bold">✓ voice note</text>
+<rect x="347.8" y="458.4" width="54.5" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0e7490" stroke-width="0.6"/>
+<text x="375.0" y="467.8" font-size="7.4" text-anchor="middle" fill="#0e7490" font-weight="bold">✓ Home tab</text>
+<rect x="1009.6" y="438.4" width="65.7" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="1042.5" y="447.8" font-size="7.4" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓ account icon</text>
+<rect x="878.5" y="378.4" width="38.0" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="897.5" y="387.8" font-size="7.4" text-anchor="middle" fill="#a21caf" font-weight="bold">dismiss</text>
+<rect x="2133.9" y="428.4" width="37.2" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="2152.5" y="437.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Chat</text>
+<rect x="2146.5" y="448.4" width="52.0" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="2172.5" y="457.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Settings</text>
+<rect x="2140.9" y="368.4" width="63.1" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="2172.5" y="377.8" font-size="7.4" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ Admin tools</text>
+<rect x="2082.5" y="318.4" width="50.0" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="2107.5" y="327.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Sign out</text>
+<rect x="1733.9" y="678.4" width="37.2" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="1752.5" y="687.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Chat</text>
+<rect x="1697.4" y="488.4" width="135.2" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1765.0" y="497.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ code scanned / from image / …</text>
+<rect x="1713.0" y="658.4" width="89.0" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="1757.5" y="667.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Scan for Checklist</text>
+<rect x="1739.6" y="618.4" width="75.7" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="1777.5" y="627.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Find equipment</text>
+<rect x="1426.1" y="648.4" width="84.4" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="1468.2" y="657.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ View all captured</text>
+<rect x="1728.3" y="798.4" width="58.4" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1757.5" y="807.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">recent photo</text>
+<rect x="1735.4" y="768.4" width="84.1" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1777.5" y="777.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">recent (submitted)</text>
+<rect x="1428.4" y="808.4" width="66.8" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1461.8" y="817.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">recent (draft)</text>
+<rect x="1753.4" y="958.4" width="58.2" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="1782.5" y="967.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ KPI cards</text>
+</svg>

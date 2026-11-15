@@ -1,0 +1,435 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="4700" height="2369.32" viewBox="0 0 4700 2369.32" font-family="Helvetica, Arial, sans-serif">
+<title>Module 02 — Authentication, session &amp; settings</title>
+<defs>
+<marker id="ah-nav" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e293b"/></marker>
+<marker id="ah-admin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker>
+<marker id="ah-popup" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+<marker id="ah-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+<marker id="ah-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+<marker id="ah-partial" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker>
+<marker id="ah-tab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0e7490"/></marker>
+<marker id="ah-background" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+<marker id="ah-conditional" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/></marker>
+<marker id="ah-back" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+<marker id="ah-dialog_result" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a21caf"/></marker>
+<marker id="ah-state" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b45309"/></marker>
+</defs>
+<rect x="0" y="0" width="4700" height="2369.32" fill="#ffffff"/>
+<text font-size="30" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="60.0" y="56.6">Module 02 — Authentication, session &amp; settings</tspan></text>
+
+
+<text font-size="11" fill="#334155" text-anchor="start"><tspan x="60.0" y="76.5">MainActivity renders one of three auth states before the NavHost exists: Loading → Setup (no accounts) / Sign in / Home (remembered user). Sign out (Account menu or Settings) returns to Sign in; a different user gets a fresh navigation stack (key(user.id)). Passwords are PBKDF2-hashed on the phone; 5 wrong attempts lock sign-in for 30 s.</tspan></text>
+<g id="S00"><title>S00 App launch / session check | Route: AuthState.Loading (MainActivity) | Source: MainActivity.kt | Roles: All | Status: IMPLEMENTED</title>
+<rect x="480.0" y="272.0" width="30.0" height="15.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="8.5" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="495.0" y="283.1">S00</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="515.0" y="283.9">App launch / session check</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="start"><tspan x="480.0" y="297.9">AuthState.Loading (MainActivity)</tspan></text>
+<rect x="480.0" y="310.0" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="575.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="334.0" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="595.0" cy="742.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="613.5" y="303.0" width="88.5" height="12.0" rx="6.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="6.3" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="657.8" y="311.6">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="494.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="696.0" y="341.9">▴ ▮</tspan></text>
+<rect x="494.0" y="416.0" width="20.0" height="20.0" rx="5.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="11" fill="#fff" text-anchor="middle"><tspan x="504.0" y="430.6">⛨</tspan></text>
+<ellipse cx="595.0" cy="470.5" rx="12.0" ry="12.0" fill="none" stroke="#0f766e" stroke-width="2.5" stroke-dasharray="28 10"/>
+<text font-size="6.3" fill="#64748b" text-anchor="middle"><tspan x="595.0" y="494.1">CircularProgressIndicator</tspan></text>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="494.0" y="520.3">AuthRepository.refresh(): counts users and reads the</tspan><tspan x="494.0" y="528.7">remembered user id</tspan></text>
+<rect x="494.0" y="543.4" width="202.0" height="13.9" rx="3.0" fill="#fef9c3" stroke="#eab308" stroke-width="0.8"/><text font-size="6.2" fill="#713f12" text-anchor="start" font-style="italic"><tspan x="498.0" y="553.0">No controls: decides Setup, Sign in or Home</tspan></text>
+</g>
+<g id="S01"><title>S01 Set up SafeStitch (first admin) | Route: AuthState.NeedsSetup | Source: ui/auth/AuthScreens.kt | Roles: First launch (no accounts) | Status: IMPLEMENTED</title>
+<rect x="1270.0" y="272.0" width="30.0" height="15.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="8.5" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1285.0" y="283.1">S01</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1305.0" y="283.9">Set up SafeStitch (first admin)</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="start"><tspan x="1270.0" y="297.9">AuthState.NeedsSetup</tspan></text>
+<rect x="1270.0" y="310.0" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="1365.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="334.0" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="1385.0" cy="742.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="1403.5" y="303.0" width="88.5" height="12.0" rx="6.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="6.3" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="1447.8" y="311.6">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="1486.0" y="341.9">▴ ▮</tspan></text>
+<rect x="1284.0" y="350.0" width="20.0" height="20.0" rx="5.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="11" fill="#fff" text-anchor="middle"><tspan x="1294.0" y="364.6">⛨</tspan></text>
+<text font-size="11" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="1284.0" y="384.9">SafeStitch</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1284.0" y="400.7">Set up SafeStitch</tspan></text>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="414.1">Create the first admin account. Admins add inspectors,</tspan><tspan x="1284.0" y="422.5">locations, equipment and checklist questions.</tspan></text>
+<rect x="1284.0" y="429.2" width="202.0" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="1288.0" y="440.5">Your name</tspan></text>
+<rect x="1284.0" y="449.7" width="202.0" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="1288.0" y="461.0">Username</tspan></text>
+<rect x="1284.0" y="470.2" width="202.0" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="1288.0" y="481.5">Password (at least 8 characters)</tspan></text>
+<rect x="1284.0" y="490.7" width="202.0" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="1288.0" y="502.0">Repeat password</tspan></text>
+<text font-size="6.6" fill="#dc2626" text-anchor="start"><tspan x="1284.0" y="517.5">The two passwords do not match.</tspan></text>
+<rect x="1284.0" y="524.2" width="202.0" height="17.0" rx="8.5" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1385.0" y="535.5">Create admin account</tspan></text>
+</g>
+<g id="note42">
+<rect x="1270.0" y="794.0" width="580.0" height="38.6" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="1277.0" y="809.0">S01 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1277.0" y="821.6">✓ Validation error shown inline [invalid input / passwords differ]</tspan></text>
+</g>
+<g id="S02"><title>S02 Sign in | Route: AuthState.SignedOut | Source: ui/auth/AuthScreens.kt | Roles: All | Status: IMPLEMENTED</title>
+<rect x="1270.0" y="1425.2" width="30.0" height="15.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="8.5" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1285.0" y="1436.3">S02</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1305.0" y="1437.2">Sign in</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="start"><tspan x="1270.0" y="1451.2">AuthState.SignedOut</tspan></text>
+<rect x="1270.0" y="1463.2" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="1365.0" y="1472.2" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="1487.2" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="1385.0" cy="1895.2" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="1403.5" y="1456.2" width="88.5" height="12.0" rx="6.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="6.3" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="1447.8" y="1464.9">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="1495.2">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="1486.0" y="1495.2">▴ ▮</tspan></text>
+<rect x="1284.0" y="1503.2" width="20.0" height="20.0" rx="5.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="11" fill="#fff" text-anchor="middle"><tspan x="1294.0" y="1517.9">⛨</tspan></text>
+<text font-size="11" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="1284.0" y="1538.2">SafeStitch</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1284.0" y="1553.9">Sign in</tspan></text>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="1567.3">Use the account your SafeStitch admin created for you.</tspan></text>
+<rect x="1284.0" y="1574.0" width="202.0" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="1288.0" y="1585.3">Username</tspan></text>
+<rect x="1284.0" y="1594.5" width="202.0" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="1288.0" y="1605.8">Password</tspan></text>
+<text font-size="6.6" fill="#dc2626" text-anchor="start"><tspan x="1284.0" y="1621.3">Wrong username or password.</tspan></text>
+<rect x="1284.0" y="1628.0" width="202.0" height="17.0" rx="8.5" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1385.0" y="1639.3">Sign in</tspan></text>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="1654.7">Forgot your password? An admin can reset it under Admin ›</tspan><tspan x="1284.0" y="1663.2">Users.</tspan></text>
+</g>
+<g id="note66">
+<rect x="1270.0" y="1947.2" width="580.0" height="38.6" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="1277.0" y="1962.3">S02 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1277.0" y="1974.8">✓ Sign-in rejected [wrong credentials / deactivated / 5 failures → 30 s lock]</tspan></text>
+</g>
+<g id="S03"><title>S03 Home dashboard | Route: DashboardRoute (start destination) | Source: ui/dashboard/DashboardScreen.kt | Roles: Admin, Inspector | Status: IMPLEMENTED</title>
+<rect x="2060.0" y="272.0" width="30.0" height="15.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="8.5" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2075.0" y="283.1">S03</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2095.0" y="283.9">Home dashboard</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="start"><tspan x="2060.0" y="297.9">DashboardRoute (start destination)</tspan></text>
+<rect x="2060.0" y="310.0" width="230.0" height="903.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="2155.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="2068.0" y="334.0" width="214.0" height="847.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="2175.0" cy="1195.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="2193.5" y="303.0" width="88.5" height="12.0" rx="6.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="6.3" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="2237.8" y="311.6">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="2074.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="2276.0" y="341.9">▴ ▮</tspan></text>
+<rect x="2068.0" y="345.0" width="214.0" height="30.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="2068.0" y="374.2" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<rect x="2258.7" y="349.0" width="14.3" height="13.0" rx="3.0" fill="#fff" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.5" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="2265.9" y="358.2">◉</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2074.0" y="358.8">SafeStitch</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2074.0" y="368.5">Walk Admin · Admin</tspan></text>
+<rect x="2074.0" y="375.0" width="202.0" height="46.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="385.3">Live Camera &amp; ZXing Equipment Scanner</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="393.7">Auto-identifies equipment via QR or barcode and opens its</tspan><tspan x="2079.0" y="401.8">inspection history</tspan></text>
+<rect x="2079.0" y="404.8" width="85.2" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="2121.6" y="412.9">ZXing QR / Barcode Active</tspan></text>
+<rect x="2167.2" y="404.8" width="45.9" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="2190.1" y="412.9">Capture tag:</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="2222.1" y="413.3">…</tspan></text>
+<rect x="2074.0" y="424.8" width="202.0" height="64.0" rx="5.0" fill="#0f172a" stroke="none" stroke-width="1"/>
+<rect x="2078.0" y="472.8" width="158.0" height="13.0" rx="6.0" fill="#334155" stroke="none" stroke-width="1"/><text font-size="5.8" fill="#fff" text-anchor="middle"><tspan x="2157.0" y="481.8">ZXing live: point at QR / barcode, or tap shutter</tspan></text>
+<ellipse cx="2261.0" cy="475.8" rx="9.0" ry="9.0" fill="#0f766e" stroke="#fff" stroke-width="1.2"/><text font-size="9" fill="#fff" text-anchor="middle"><tspan x="2261.0" y="479.6">◉</tspan></text>
+<rect x="2074.0" y="492.3" width="202.0" height="48.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="502.7">Scan Equipment (QR / Barcode → History)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="511.0">Supports QR_CODE, CODE_128, CODE_39, EAN_13 &amp;</tspan><tspan x="2079.0" y="519.1">DATA_MATRIX via ZXing.</tspan></text>
+<rect x="2079.0" y="522.2" width="54.5" height="14.0" rx="7.0" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2106.3" y="532.0">From image</tspan></text>
+<rect x="2074.0" y="544.2" width="52.5" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="2100.2" y="552.2">Quick scan tag:</tspan></text>
+<rect x="2129.5" y="544.2" width="100.5" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="2179.7" y="552.2">FE-12 · Fire extinguisher FE-12</tspan></text>
+<rect x="2074.0" y="560.7" width="157.6" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.8"/><text font-size="6.3" fill="#64748b" text-anchor="start"><tspan x="2078.0" y="571.8">Enter or scan QR / barcode (e.g. FE-101)</tspan></text>
+<rect x="2235.6" y="560.7" width="40.4" height="17.0" rx="8.5" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2255.8" y="572.0">History</tspan></text>
+<rect x="2074.0" y="581.2" width="78.2" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="2113.1" y="589.2">Captured frames (3/3):</tspan></text>
+<rect x="2155.2" y="581.2" width="17.3" height="11.0" rx="5.5" fill="#ccfbf1" stroke="#0f766e" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="2163.8" y="589.2">All</tspan></text>
+<rect x="2175.5" y="581.2" width="56.4" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="2203.7" y="589.2">NEEDS REVIEW</tspan></text>
+<rect x="2234.9" y="581.2" width="25.8" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="2247.8" y="589.2">PASS</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="2269.7" y="589.6">…</tspan></text>
+<rect x="2074.0" y="597.7" width="72.7" height="17.0" rx="4.0" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.2" fill="#1e293b" text-anchor="middle"><tspan x="2110.3" y="608.8">▣ NEEDS REVIEW</tspan></text>
+<rect x="2150.7" y="597.7" width="82.8" height="17.0" rx="4.0" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.2" fill="#1e293b" text-anchor="middle"><tspan x="2192.1" y="608.8">▣ FAIL · FOLLOW UP</tspan></text>
+<rect x="2237.5" y="597.7" width="38.5" height="17.0" rx="4.0" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.2" fill="#1e293b" text-anchor="middle"><tspan x="2256.7" y="608.8">▣ PASS</tspan></text>
+<rect x="2074.0" y="618.2" width="202.0" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2175.0" y="629.5">View all captured inspections (3)</tspan></text>
+<rect x="2074.0" y="638.7" width="202.0" height="17.0" rx="8.5" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2175.0" y="650.0">Scan Equipment (QR / Barcode → Inspection History)</tspan></text>
+<rect x="2074.0" y="659.2" width="107.4" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2127.7" y="670.5">Scan for Checklist</tspan></text>
+<rect x="2185.4" y="659.2" width="90.6" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2230.7" y="670.5">Find equipment</tspan></text>
+<rect x="2074.0" y="679.7" width="202.0" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2175.0" y="691.0">Safety Assistant Chat (Multi-Turn Advisor)</tspan></text>
+<rect x="2074.0" y="700.2" width="202.0" height="48.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="710.5">Voice Note Transcription</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="718.9">Record microphone audio &amp; transcribe via</tspan><tspan x="2079.0" y="727.0">gemini-3.5-transcribe</tspan></text>
+<rect x="2079.0" y="730.0" width="52.2" height="14.0" rx="7.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2105.1" y="739.9">Record Mic</tspan></text>
+<rect x="2074.0" y="752.0" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="2078.0" y="759.4">Transcribed Audio (gemini-3.5-transcribe)</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="2078.0" y="768.9">Field safety voice note: checked FE-101 …</tspan></text>
+<rect x="2074.0" y="775.5" width="202.0" height="49.6" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="785.9">Inspection Summary Overview [2 Pending</tspan><tspan x="2079.0" y="795.1">Reports]</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="803.4">1 checklists · 3 camera captures</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="811.5">4 Total Performed · 2 Passed · 2 Pending Reports</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="819.6">Status chart · Recent Equipment Status Updates ›</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="2074.0" y="837.3">Inspections · last 30 days</tspan></text>
+<rect x="2074.0" y="843.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="855.9">1</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2079.0" y="865.7">Completed</tspan></text>
+<rect x="2177.0" y="843.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2182.0" y="855.9">100%</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2182.0" y="865.7">Pass rate</tspan></text>
+<rect x="2074.0" y="873.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="886.4">85%</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2079.0" y="896.2">Average score</tspan></text>
+<rect x="2177.0" y="873.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2182.0" y="886.4">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2182.0" y="896.2">Drafts in progress</tspan></text>
+<rect x="2074.0" y="904.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="916.9">1</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2079.0" y="926.7">Inspections (all time)</tspan></text>
+<rect x="2177.0" y="904.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2182.0" y="916.9">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2182.0" y="926.7">Failed · 30 days</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="2074.0" y="943.3">Corrective actions (cards open Actions)</tspan></text>
+<rect x="2074.0" y="949.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="961.9">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2079.0" y="971.7">Open</tspan></text>
+<rect x="2177.0" y="949.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2182.0" y="961.9">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2182.0" y="971.7">In progress</tspan></text>
+<rect x="2074.0" y="979.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="992.4">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2079.0" y="1002.2">Overdue</tspan></text>
+<rect x="2177.0" y="979.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2182.0" y="992.4">1</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2182.0" y="1002.2">Awaiting verification</tspan></text>
+<rect x="2074.0" y="1010.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="1022.9">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2079.0" y="1032.7">Critical / high not verified</tspan></text>
+<rect x="2177.0" y="1010.2" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2182.0" y="1022.9">1</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2182.0" y="1032.7">All corrective actions</tspan></text>
+<rect x="2074.0" y="1040.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="1053.4">0</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2079.0" y="1063.2">Verified · 30 days</tspan></text>
+<rect x="2177.0" y="1040.7" width="99.0" height="27.0" rx="4.0" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="10" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2182.0" y="1053.4">—</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2182.0" y="1063.2">Fixed on time</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="2074.0" y="1079.8">Pass rate by building</tspan></text>
+<rect x="2074.0" y="1085.7" width="202.0" height="24.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="1096.0">BlockB 100% (1/1)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="1104.4">████████████████████</tspan></text>
+<rect x="2074.0" y="1113.4" width="202.0" height="32.3" rx="5.0" fill="#e0f2fe" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="1123.8">Works offline</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="1132.1">Everything is stored on this phone. An admin can turn on</tspan><tspan x="2079.0" y="1140.2">optional sync under Admin › Sync.</tspan></text>
+<rect x="2068.0" y="1155.0" width="214.0" height="26.0" rx="0.0" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/>
+<rect x="2079.8" y="1157.0" width="30.0" height="12.0" rx="6.0" fill="#ccfbf1" stroke="none" stroke-width="1"/>
+<text font-size="8" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="2094.8" y="1166.4">⌂</tspan></text>
+<text font-size="6" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="2094.8" y="1176.5">Home</tspan></text>
+<text font-size="8" fill="#64748b" text-anchor="middle"><tspan x="2148.2" y="1166.4">▦</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="middle"><tspan x="2148.2" y="1176.5">Inspect</tspan></text>
+<text font-size="8" fill="#64748b" text-anchor="middle"><tspan x="2201.8" y="1166.4">☰</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="middle"><tspan x="2201.8" y="1176.5">Actions</tspan></text>
+<text font-size="8" fill="#64748b" text-anchor="middle"><tspan x="2255.2" y="1166.4">◷</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="middle"><tspan x="2255.2" y="1176.5">History</tspan></text>
+</g>
+<g id="D16_S03"><title>D16 Camera permission gate | Source: ui/components/Common.kt | Roles: Admin, Inspector</title>
+<rect x="2430.0" y="318.0" width="210.0" height="53.8" rx="7.0" fill="#fffbeb" stroke="#b45309" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="2435.0" y="322.0" width="22.0" height="10.0" rx="3.0" fill="#b45309" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2446.0" y="329.6">D16</tspan></text>
+<rect x="2590.8" y="322.0" width="45.2" height="9.0" rx="2.0" fill="#fff" stroke="#b45309" stroke-width="0.6"/><text font-size="5.4" fill="#b45309" text-anchor="middle" font-weight="bold"><tspan x="2613.4" y="328.8">PERMISSION</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2461.0" y="330.0">Camera permission gate</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="2436.0" y="342.8">← Camera permission gate (asks once)</tspan><tspan x="2436.0" y="352.1">System prompt, asked once</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="2634.0" y="363.3">Allow camera ⇒ preview Open app settings</tspan></text>
+</g>
+<g id="X01_S03"><title>X01 System photo picker | Source: ui/scan/ScanScreen.kt | Status: IMPLEMENTED</title>
+<rect x="2430.0" y="401.8" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="2434.0" y="409.8" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2445.0" y="417.4">X01</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2459.0" y="417.6">System photo picker</tspan></text>
+<rect x="2605.0" y="409.8" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2621.0" y="416.5">SYSTEM</tspan></text>
+</g>
+<g id="X07_S03"><title>X07 Gemini dev endpoint :3000 | Source: chat/SafetyChatService.kt | Status: PARTIALLY IMPLEMENTED | Emulator/debug-only host; cleartext is blocked in release builds, so the app always falls back to local text there.</title>
+<rect x="2430.0" y="457.8" width="210.0" height="26.0" rx="4.0" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="2434.0" y="465.8" width="22.0" height="10.0" rx="3.0" fill="#dc2626" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2445.0" y="473.4">X07</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2459.0" y="473.6">Gemini dev endpoint :3000</tspan></text>
+<rect x="2605.0" y="465.8" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#dc2626" stroke-width="0.6"/><text font-size="5.2" fill="#dc2626" text-anchor="middle" font-weight="bold"><tspan x="2621.0" y="472.5">PARTIAL</tspan></text>
+</g>
+<g id="X05_S03"><title>X05 Android app settings | Source: ui/components/Common.kt | Status: IMPLEMENTED</title>
+<rect x="2430.0" y="513.8" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="2434.0" y="521.8" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2445.0" y="529.4">X05</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2459.0" y="529.6">Android app settings</tspan></text>
+<rect x="2605.0" y="521.8" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2621.0" y="528.5">SYSTEM</tspan></text>
+</g>
+<g id="note201">
+<rect x="2060.0" y="1247.0" width="580.0" height="70.2" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="2067.0" y="1262.0">S03 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2067.0" y="1274.6">• Shutter: save tagged captured photo (create) [camera ready]</tspan><tspan x="2067.0" y="1285.2">• Tap captured thumbnail: toggle selected tag (update)</tspan><tspan x="2067.0" y="1295.7">• Capture-tag / filter chips, torch, Hide/Show viewfinder</tspan><tspan x="2067.0" y="1306.3">• Invalid code / no barcode in picture → snackbar</tspan></text>
+</g>
+<g id="S16"><title>S16 Settings | Route: SettingsRoute | Source: ui/settings/SettingsScreen.kt | Roles: Admin, Inspector | Status: IMPLEMENTED</title>
+<rect x="2850.0" y="1425.2" width="30.0" height="15.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="8.5" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2865.0" y="1436.3">S16</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2885.0" y="1437.2">Settings</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="start"><tspan x="2850.0" y="1451.2">SettingsRoute</tspan></text>
+<rect x="2850.0" y="1463.2" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="2945.0" y="1472.2" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="2858.0" y="1487.2" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="2965.0" cy="1895.2" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="2983.5" y="1456.2" width="88.5" height="12.0" rx="6.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="6.3" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="3027.8" y="1464.9">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="2864.0" y="1495.2">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="3066.0" y="1495.2">▴ ▮</tspan></text>
+<rect x="2858.0" y="1498.2" width="214.0" height="24.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="2858.0" y="1521.4" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="2864.0" y="1512.4">←</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2878.0" y="1512.0">Settings</tspan></text>
+<rect x="2864.0" y="1522.2" width="202.0" height="48.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2869.0" y="1532.6">Account</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2869.0" y="1540.9">Walk Admin (@walkadmin)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2869.0" y="1549.0">Role: Admin</tspan></text>
+<rect x="2869.0" y="1552.1" width="85.4" height="14.0" rx="7.0" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2911.7" y="1561.9">Change my password</tspan></text>
+<rect x="2864.0" y="1574.1" width="202.0" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2965.0" y="1585.4">Sign out</tspan></text>
+<rect x="2864.0" y="1594.6" width="202.0" height="40.4" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2869.0" y="1604.9">About SafeStitch</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2869.0" y="1613.3">Version 1.0.0-debug (build 1)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2869.0" y="1621.3">App ID com.safestitch.inspection.debug</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2869.0" y="1629.4">Works offline; internet only if an admin turns on sync.</tspan></text>
+</g>
+<g id="D13_S16"><title>D13 Change password | Source: ui/settings/SettingsScreen.kt | Roles: Admin, Inspector</title>
+<rect x="3220.0" y="1471.2" width="210.0" height="53.8" rx="7.0" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="3225.0" y="1475.2" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="3236.0" y="1482.9">D13</tspan></text>
+<rect x="3397.9" y="1475.2" width="28.1" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="3411.9" y="1482.0">POP-UP</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="3251.0" y="1483.2">Change password</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="3226.0" y="1496.1">← Change my password</tspan><tspan x="3226.0" y="1505.3">Current · New (8+) · Repeat new</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="3424.0" y="1516.5">Cancel Save ⇒ password changed</tspan></text>
+</g>
+<g id="BACK_S16"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="2714.0" y="1493.2" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="2762.0" y="1507.0">↩ previous screen</tspan><tspan x="2762.0" y="1515.4">(back stack)</tspan></text>
+</g>
+<g id="D01"><title>D01 Account menu | Source: ui/dashboard/DashboardScreen.kt | Roles: Admin, Inspector</title>
+<rect x="2850.0" y="410.0" width="230.0" height="60.9" rx="7.0" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="2855.0" y="414.0" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2866.0" y="421.6">D01</tspan></text>
+<rect x="3053.6" y="414.0" width="22.4" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="3064.8" y="420.8">MENU</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2881.0" y="422.0">Account menu</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="2856.0" y="434.8">Admin tools (admin only)</tspan><tspan x="2856.0" y="444.1">Safety Assistant Chat</tspan><tspan x="2856.0" y="453.3">Settings</tspan><tspan x="2856.0" y="462.5">Sign out</tspan></text>
+</g>
+<g id="APP">
+<rect x="520.0" y="200.0" width="150.0" height="28.0" rx="14.0" fill="#0f172a" stroke="#0f172a" stroke-width="1.4"/><text font-size="9" fill="#ffffff" text-anchor="middle" font-weight="bold"><tspan x="595.0" y="217.8">▶ START: app launch</tspan></text>
+</g>
+<g id="ref_out_S18_4410_300"><title>Off-diagram reference to out:S18: to S18 Admin tools</title>
+<rect x="4410.0" y="300.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="4420.0" y="313.2">↗ to S18 Admin tools</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="4420.0" y="325.7">Admin tools (08)</tspan></text>
+</g>
+<g id="ref_out_S17_4410_350"><title>Off-diagram reference to out:S17: to S17 Safety Assistant Chat</title>
+<rect x="4410.0" y="350.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="4420.0" y="363.2">↗ to S17 Safety Assistant Chat</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="4420.0" y="375.7">Safety assistant (09)</tspan></text>
+</g>
+<g id="legend242">
+<rect x="4000.0" y="2091.8" width="640.0" height="237.5" rx="8.0" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text font-size="12" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="4012.0" y="2111.8">LEGEND</tspan></text>
+<rect x="4014.0" y="2131.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#1e293b" stroke-width="2.1"/>
+<text font-size="7" fill="#1e293b" text-anchor="middle"><tspan x="4049.0" y="2134.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4058.0" y="2135.2">Navigation (tap → new screen)</tspan></text>
+<rect x="4334.0" y="2131.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#1d4ed8" stroke-width="2.1" stroke-dasharray="10 3"/>
+<text font-size="7" fill="#1d4ed8" text-anchor="middle"><tspan x="4369.0" y="2134.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4378.0" y="2135.2">Conditional navigation (label = condition)</tspan></text>
+<rect x="4014.0" y="2149.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#c2410c" stroke-width="2.3"/>
+<text font-size="7" fill="#c2410c" text-anchor="middle"><tspan x="4049.0" y="2152.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4058.0" y="2153.2">Admin-only navigation</tspan></text>
+<rect x="4334.0" y="2149.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#64748b" stroke-width="2.0" stroke-dasharray="2 3"/>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="4369.0" y="2152.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4378.0" y="2153.2">Return after save / photo (popBackStack to the opener)</tspan></text>
+<rect x="4014.0" y="2167.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#64748b" stroke-width="1.9" stroke-dasharray="1 3"/>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="4049.0" y="2170.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4058.0" y="2171.2">← / system Back → previous screen on the stack</tspan></text>
+<rect x="4334.0" y="2167.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#7c3aed" stroke-width="1.9" stroke-dasharray="5 3"/>
+<text font-size="7" fill="#7c3aed" text-anchor="middle"><tspan x="4369.0" y="2170.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4378.0" y="2171.2">Opens a pop-up / menu / permission prompt</tspan></text>
+<rect x="4014.0" y="2185.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#a21caf" stroke-width="1.9" stroke-dasharray="3 2"/>
+<text font-size="7" fill="#a21caf" text-anchor="middle"><tspan x="4049.0" y="2188.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4058.0" y="2189.2">Dialog outcome (OK / Cancel / Save / Delete …)</tspan></text>
+<rect x="4334.0" y="2185.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#b45309" stroke-width="1.9" stroke-dasharray="4 2"/>
+<text font-size="7" fill="#b45309" text-anchor="middle"><tspan x="4369.0" y="2188.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4378.0" y="2189.2">In-screen state change (annotation box)</tspan></text>
+<rect x="4014.0" y="2203.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0f766e" stroke-width="1.9" stroke-dasharray="7 3 2 3"/>
+<text font-size="7" fill="#0f766e" text-anchor="middle"><tspan x="4049.0" y="2206.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4058.0" y="2207.2">Hands off to Android / another app / server</tspan></text>
+<rect x="4334.0" y="2203.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0f766e" stroke-width="1.7999999999999998" stroke-dasharray="2 2"/>
+<text font-size="7" fill="#0f766e" text-anchor="middle"><tspan x="4369.0" y="2206.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4378.0" y="2207.2">Background work (WorkManager)</tspan></text>
+<rect x="4014.0" y="2221.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#dc2626" stroke-width="2.1" stroke-dasharray="6 3"/>
+<text font-size="7" fill="#dc2626" text-anchor="middle"><tspan x="4049.0" y="2224.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4058.0" y="2225.2">Partially implemented path</tspan></text>
+<rect x="4334.0" y="2221.8" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0e7490" stroke-width="2.1"/>
+<text font-size="7" fill="#0e7490" text-anchor="middle"><tspan x="4369.0" y="2224.7">▶</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="4378.0" y="2225.2">Bottom-bar tab switch</tspan></text>
+<rect x="4014.0" y="2237.8" width="67.6" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="6.8" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="4047.8" y="2247.7">IMPLEMENTED</tspan></text>
+<rect x="4089.6" y="2237.8" width="45.6" height="14.0" rx="7.0" fill="#fef3c7" stroke="#b45309" stroke-width="0.8"/><text font-size="6.8" fill="#b45309" text-anchor="middle" font-weight="bold"><tspan x="4112.4" y="2247.7">PARTIAL</tspan></text>
+<rect x="4143.2" y="2237.8" width="64.8" height="14.0" rx="7.0" fill="#e2e8f0" stroke="#475569" stroke-width="0.8"/><text font-size="6.8" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="4175.6" y="2247.7">UNREACHABLE</tspan></text>
+<rect x="4216.0" y="2237.8" width="82.6" height="14.0" rx="7.0" fill="#ede9fe" stroke="#7c3aed" stroke-width="0.8"/><text font-size="6.8" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="4257.4" y="2247.7">DOCUMENTED ONLY</tspan></text>
+<rect x="4306.7" y="2237.8" width="66.9" height="14.0" rx="7.0" fill="#fee2e2" stroke="#b91c1c" stroke-width="0.8"/><text font-size="6.8" fill="#b91c1c" text-anchor="middle" font-weight="bold"><tspan x="4340.1" y="2247.7">NOT VERIFIED</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="4014.0" y="2267.0">✓ in an arrow label, or &#x27;✓ RUN&#x27; on a screen = exercised in the Android 16 emulator walkthrough; everything else is traced in source.</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="4014.0" y="2280.9">ADMIN dashed outline inside a frame = control rendered only when user.isAdmin. Dashed tray under a frame = that screen&#x27;s pop-ups and hand-offs.</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="4014.0" y="2294.8">Every screen with ← (and the system Back gesture) returns to the previous screen via NavController.popBackStack(); only non-obvious returns are drawn.</tspan></text>
+<text font-size="7.6" fill="#334155" text-anchor="start"><tspan x="4014.0" y="2308.7">Hover a frame or arrow in the .drawio/.svg to see its route, source file:line, roles and verification status.</tspan></text>
+</g>
+<path d="M1385.0,760.0 L1385.0,794.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1385.0,760.0 L1385.0,794.0" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S01 → S01: Validation error shown inline — invalid input / passwords differ — All — app/src/main/java/com/safestitch/app/ui/auth/AuthScreens.kt:72</title></path>
+<path d="M1385.0,1913.2 L1385.0,1947.2" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1385.0,1913.2 L1385.0,1947.2" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S02 → S02: Sign-in rejected — wrong credentials / deactivated / 5 failures → 30 s lock — All — app/src/main/java/com/safestitch/app/data/AuthRepository.kt:87</title></path>
+<path d="M2175.0,1213.0 L2175.0,1247.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2175.0,1213.0 L2175.0,1247.0" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S03 → S03: Shutter: save tagged captured photo (create) — camera ready — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:509
+S03 → S03: Tap captured thumbnail: toggle selected tag (update) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:697
+S03 → S03: Capture-tag / filter chips, torch, Hide/Show viewfinder — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:673
+S03 → S03: Invalid code / no barcode in picture → snackbar — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:191</title></path>
+<path d="M2850.0,1508.2 L2810.0,1508.2" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2850.0,1508.2 L2810.0,1508.2" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S16 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/settings/SettingsScreen.kt:48</title></path>
+<path d="M595.0,228.0 L595.0,270.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M595.0,228.0 L595.0,270.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>APP → S00: Cold start — always — All — app/src/main/java/com/safestitch/app/MainActivity.kt:38</title></path>
+<path d="M2640.0,345.0 L2655.0,345.0 L2655.0,525.0 L2640.0,525.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2640.0,345.0 L2655.0,345.0 L2655.0,525.0 L2640.0,525.0" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>D16 → X05: Open app settings — permission denied once — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/components/Common.kt:175</title></path>
+<path d="M3080.0,1555.0 L3245.0,1555.0 L3245.0,1525.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M3080.0,1555.0 L3245.0,1555.0 L3245.0,1525.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S16 → D13: Change my password — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/settings/SettingsScreen.kt:60</title></path>
+<path d="M3220.0,1495.0 L3080.0,1495.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M3220.0,1495.0 L3080.0,1495.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D13 → S16: Cancel / dismiss — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/settings/SettingsScreen.kt:110</title></path>
+<path d="M2430.0,345.0 L2290.0,345.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2430.0,345.0 L2290.0,345.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D16 → S03: Permission granted → camera preview shown — user allows the camera — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/components/Common.kt:161</title></path>
+<path d="M710.0,515.0 L1270.0,515.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,515.0 L1270.0,515.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S00 → S01: No accounts yet — users.count() == 0 — All — app/src/main/java/com/safestitch/app/MainActivity.kt:42</title></path>
+<path d="M1500.0,535.0 L2060.0,535.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,535.0 L2060.0,535.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S01 → S03: Create admin account — valid name, username, password ≥ 8, passwords match — First user → Admin — app/src/main/java/com/safestitch/app/ui/auth/AuthScreens.kt:82</title></path>
+<path d="M2290.0,365.0 L2415.0,365.0 L2415.0,445.0 L2850.0,445.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2290.0,365.0 L2415.0,365.0 L2415.0,445.0 L2850.0,445.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S03 → D01: Account icon — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:356</title></path>
+<path d="M2850.0,435.0 L2665.0,435.0 L2665.0,385.0 L2290.0,385.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2850.0,435.0 L2665.0,435.0 L2665.0,385.0 L2290.0,385.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D01 → S03: Dismiss menu (tap outside / Back) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:359</title></path>
+<path d="M2965.0,470.9 L2965.0,1423.2" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2965.0,470.9 L2965.0,1423.2" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>D01 → S16: Settings — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:378</title></path>
+<path d="M595.0,760.0 L595.0,775.0 L2060.0,775.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M595.0,760.0 L595.0,775.0 L2060.0,775.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S00 → S03: Session restore — remembered user id exists and the account is active — Admin, Inspector — app/src/main/java/com/safestitch/app/MainActivity.kt:45</title></path>
+<path d="M2850.0,1585.0 L1500.0,1585.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2850.0,1585.0 L1500.0,1585.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S16 → S02: Sign out — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/settings/SettingsScreen.kt:61</title></path>
+<path d="M3080.0,435.0 L4435.0,435.0 L4435.0,384.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M3080.0,435.0 L4435.0,435.0 L4435.0,384.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>D01 → S17: Safety Assistant Chat — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:372</title></path>
+<path d="M3080.0,435.0 L3095.0,435.0 L3095.0,325.0 L4410.0,325.0" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M3080.0,435.0 L3095.0,435.0 L3095.0,325.0 L4410.0,325.0" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>D01 → S18: Admin tools — user.isAdmin (menu item is not rendered for inspectors) — Admin — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:365</title></path>
+<path d="M595.0,760.0 L595.0,1495.0 L1270.0,1495.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M595.0,760.0 L595.0,1495.0 L1270.0,1495.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S00 → S02: Accounts exist, nobody remembered — no remembered active user id — All — app/src/main/java/com/safestitch/app/MainActivity.kt:43</title></path>
+<path d="M1500.0,1635.0 L2035.0,1635.0 L2035.0,1185.0 L2060.0,1185.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,1635.0 L2035.0,1635.0 L2035.0,1185.0 L2060.0,1185.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S02 → S03: Sign in — correct credentials, active account, not locked — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/auth/AuthScreens.kt:109</title></path>
+<path d="M2850.0,435.0 L2835.0,435.0 L2835.0,1395.0 L1475.0,1395.0 L1475.0,1423.2" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2850.0,435.0 L2835.0,435.0 L2835.0,1395.0 L1475.0,1395.0 L1475.0,1423.2" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>D01 → S02: Sign out — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:384</title></path>
+<rect x="578.4" y="242.4" width="33.2" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="595.0" y="251.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">launch</text>
+<rect x="2626.8" y="378.0" width="56.4" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="2655.0" y="387.4" font-size="7.4" text-anchor="middle" fill="#0f766e" font-weight="bold">app settings</text>
+<rect x="3153.9" y="1548.4" width="17.1" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="3162.5" y="1557.8" font-size="7.4" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓</text>
+<rect x="3132.9" y="1488.4" width="34.2" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="3150.0" y="1497.8" font-size="7.4" text-anchor="middle" fill="#a21caf" font-weight="bold">Cancel</text>
+<rect x="2340.3" y="338.4" width="39.4" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="2360.0" y="347.8" font-size="7.4" text-anchor="middle" fill="#a21caf" font-weight="bold">granted</text>
+<rect x="958.2" y="508.4" width="63.5" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="990.0" y="517.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ no accounts</text>
+<rect x="1729.6" y="528.4" width="100.9" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1780.0" y="537.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ Create admin account</text>
+<rect x="2599.6" y="438.4" width="65.7" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="2632.5" y="447.8" font-size="7.4" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓ account icon</text>
+<rect x="2458.5" y="378.4" width="38.0" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="2477.5" y="387.8" font-size="7.4" text-anchor="middle" fill="#a21caf" font-weight="bold">dismiss</text>
+<rect x="2939.0" y="940.4" width="52.0" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="2965.0" y="949.9" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Settings</text>
+<rect x="1284.8" y="768.4" width="85.4" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1327.5" y="777.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ remembered user</text>
+<rect x="2150.0" y="1578.4" width="50.0" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="2175.0" y="1587.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Sign out</text>
+<rect x="3738.9" y="428.4" width="37.2" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="3757.5" y="437.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Chat</text>
+<rect x="3720.9" y="318.4" width="63.1" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="3752.5" y="327.8" font-size="7.4" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ Admin tools</text>
+<rect x="566.3" y="1120.9" width="57.3" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="595.0" y="1130.3" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ signed out</text>
+<rect x="1745.6" y="1628.4" width="43.8" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1767.5" y="1637.8" font-size="7.4" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ Sign in</text>
+<rect x="2130.0" y="1388.4" width="50.0" height="13.2" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="2155.0" y="1397.8" font-size="7.4" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Sign out</text>
+</svg>
