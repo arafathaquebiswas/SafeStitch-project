@@ -1,0 +1,471 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3120" height="2036.56" viewBox="0 0 3120 2036.56" font-family="Helvetica, Arial, sans-serif">
+<title>Module 08 — Admin tools (admin only)</title>
+<defs>
+<marker id="ah-nav" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e293b"/></marker>
+<marker id="ah-admin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker>
+<marker id="ah-popup" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+<marker id="ah-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+<marker id="ah-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+<marker id="ah-partial" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker>
+<marker id="ah-tab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0e7490"/></marker>
+<marker id="ah-background" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+<marker id="ah-conditional" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/></marker>
+<marker id="ah-back" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+<marker id="ah-dialog_result" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a21caf"/></marker>
+<marker id="ah-state" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b45309"/></marker>
+</defs>
+<rect x="0" y="0" width="3120" height="2036.56" fill="#ffffff"/>
+<text font-size="30" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="60.0" y="56.6">Module 08 — Admin tools (admin only)</tspan></text>
+
+
+<text font-size="13" fill="#334155" text-anchor="start"><tspan x="60.0" y="78.3">Reached only from Account menu › Admin tools (rendered when user.isAdmin). Users, the 4-level location tree, the checklist question editor, optional HTTPS sync and a read-only SQL inspector; &#x27;Equipment&#x27; jumps to the Inspect tab.</tspan></text>
+<g id="S18"><title>S18 Admin tools | Route: AdminRoute | Source: ui/admin/AdminScreens.kt | Roles: Admin | Status: IMPLEMENTED</title>
+<rect x="480.0" y="269.0" width="34.0" height="18.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="10" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="497.0" y="282.2">S18</tspan></text>
+<text font-size="13.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="519.0" y="283.7">Admin tools</tspan></text>
+<text font-size="8.5" fill="#475569" text-anchor="start"><tspan x="480.0" y="299.1">AdminRoute</tspan></text>
+<rect x="480.0" y="310.0" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="575.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="334.0" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="595.0" cy="742.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="597.8" y="303.0" width="104.2" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.9"/><text font-size="7.4" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="649.9" y="313.1">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="494.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="696.0" y="341.9">▴ ▮</tspan></text>
+<rect x="488.0" y="345.0" width="214.0" height="24.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="368.2" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="494.0" y="359.2">←</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="508.0" y="358.8">Admin tools</tspan></text>
+<rect x="494.0" y="369.0" width="202.0" height="24.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="379.3">Users</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="387.7">Add inspectors and admins, reset passwords…</tspan></text>
+<text font-size="11" fill="#64748b" text-anchor="middle"><tspan x="689.0" y="385.8">›</tspan></text>
+<rect x="494.0" y="396.8" width="202.0" height="24.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="407.1">Locations</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="415.5">Factory › building › floor › area.</tspan></text>
+<text font-size="11" fill="#64748b" text-anchor="middle"><tspan x="689.0" y="413.5">›</tspan></text>
+<rect x="494.0" y="424.6" width="202.0" height="24.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="434.9">Equipment</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="443.3">Add, edit and print QR labels.</tspan></text>
+<text font-size="11" fill="#64748b" text-anchor="middle"><tspan x="689.0" y="441.3">›</tspan></text>
+<rect x="494.0" y="452.3" width="202.0" height="24.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="462.7">Checklist questions</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="471.0">Add, edit, reorder, switch off…</tspan></text>
+<text font-size="11" fill="#64748b" text-anchor="middle"><tspan x="689.0" y="469.1">›</tspan></text>
+<rect x="494.0" y="480.1" width="202.0" height="24.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="490.5">SQL Database</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="498.8">Inspect tables, run SELECT queries</tspan></text>
+<text font-size="11" fill="#64748b" text-anchor="middle"><tspan x="689.0" y="496.9">›</tspan></text>
+<rect x="494.0" y="507.9" width="202.0" height="24.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="518.2">Sync</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="526.6">Optional: upload when online.</tspan></text>
+<text font-size="11" fill="#64748b" text-anchor="middle"><tspan x="689.0" y="524.7">›</tspan></text>
+</g>
+<g id="BACK_S18"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="344.0" y="340.0" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="392.0" y="353.7">↩ previous screen</tspan><tspan x="392.0" y="362.1">(back stack)</tspan></text>
+</g>
+<g id="S19"><title>S19 Users | Route: UsersRoute | Source: ui/admin/AdminScreens.kt | Roles: Admin | Status: IMPLEMENTED</title>
+<rect x="1270.0" y="269.0" width="34.0" height="18.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="10" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1287.0" y="282.2">S19</tspan></text>
+<text font-size="13.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1309.0" y="283.7">Users</tspan></text>
+<text font-size="8.5" fill="#475569" text-anchor="start"><tspan x="1270.0" y="299.1">UsersRoute</tspan></text>
+<rect x="1270.0" y="310.0" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="1365.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="334.0" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="1385.0" cy="742.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="1387.8" y="303.0" width="104.2" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.9"/><text font-size="7.4" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="1439.9" y="313.1">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="1486.0" y="341.9">▴ ▮</tspan></text>
+<rect x="1278.0" y="345.0" width="214.0" height="24.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="368.2" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="1284.0" y="359.2">←</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1298.0" y="358.8">Users</tspan></text>
+<rect x="1284.0" y="369.0" width="202.0" height="40.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1289.0" y="379.3">Walk Admin (you)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="1289.0" y="387.7">@walkadmin · Admin · Active</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="1289.0" y="400.6">Reset password</tspan></text>
+<rect x="1284.0" y="412.8" width="202.0" height="40.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1289.0" y="423.1">Walk Inspector</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="1289.0" y="431.5">@walkinsp · Inspector · Active</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="1289.0" y="444.4">Reset password</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="1362.4" y="444.4">Deactivate</tspan></text>
+<rect x="1284.0" y="456.6" width="202.0" height="40.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1289.0" y="466.9">Old Inspector</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="1289.0" y="475.3">@oldinsp · Inspector · Deactivated</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="1289.0" y="488.2">Reset password</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="1362.4" y="488.2">Activate</tspan></text>
+<rect x="1458.0" y="694.0" width="26.0" height="26.0" rx="8.0" fill="#ccfbf1" stroke="#0f766e" stroke-width="1"/><text font-size="12" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1471.0" y="712.0">+</tspan></text>
+</g>
+<g id="D08_S19"><title>D08 Add user | Source: ui/admin/AdminScreens.kt | Roles: Admin</title>
+<rect x="1640.0" y="318.0" width="210.0" height="63.0" rx="7.0" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="1645.0" y="322.0" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1656.0" y="329.6">D08</tspan></text>
+<rect x="1817.9" y="322.0" width="28.1" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1831.9" y="328.8">POP-UP</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1671.0" y="330.0">Add user</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="1646.0" y="342.8">← + (FAB)</tspan><tspan x="1646.0" y="352.1">Name · Username · Admin/Inspector</tspan><tspan x="1646.0" y="361.3">Password · Repeat</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1844.0" y="372.5">Cancel Add ⇒ user created</tspan></text>
+</g>
+<g id="D09_S19"><title>D09 New password for &lt;name&gt; | Source: ui/admin/AdminScreens.kt | Roles: Admin</title>
+<rect x="1640.0" y="411.0" width="210.0" height="53.8" rx="7.0" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="1645.0" y="415.0" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1656.0" y="422.7">D09</tspan></text>
+<rect x="1817.9" y="415.0" width="28.1" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1831.9" y="421.8">POP-UP</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1671.0" y="423.0">New password for &lt;name&gt;</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="1646.0" y="435.8">← Reset password</tspan><tspan x="1646.0" y="445.1">New password (8+ characters)</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1844.0" y="456.3">Cancel Save ⇒ password reset</tspan></text>
+</g>
+<g id="BACK_S19"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="1134.0" y="340.0" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="1182.0" y="353.7">↩ previous screen</tspan><tspan x="1182.0" y="362.1">(back stack)</tspan></text>
+</g>
+<g id="note80">
+<rect x="1270.0" y="794.0" width="580.0" height="38.6" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="1277.0" y="809.0">S19 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1277.0" y="821.6">• Activate / Deactivate (not yourself; keep ≥ 1 active admin) — ADMIN</tspan></text>
+</g>
+<g id="S20"><title>S20 Locations (4 levels) | Route: LocationsRoute(level, parentId, title) | Source: ui/admin/LocationsScreen.kt | Roles: Admin | Status: IMPLEMENTED</title>
+<rect x="2060.0" y="269.0" width="34.0" height="18.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="10" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2077.0" y="282.2">S20</tspan></text>
+<text font-size="13.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2099.0" y="283.7">Locations (4 levels)</tspan></text>
+<text font-size="8.5" fill="#475569" text-anchor="start"><tspan x="2060.0" y="299.1">LocationsRoute(level, parentId, title)</tspan></text>
+<rect x="2060.0" y="310.0" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="2155.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="2068.0" y="334.0" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="2175.0" cy="742.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="2177.8" y="303.0" width="104.2" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.9"/><text font-size="7.4" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="2229.9" y="313.1">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="2074.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="2276.0" y="341.9">▴ ▮</tspan></text>
+<rect x="2068.0" y="345.0" width="214.0" height="30.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="2068.0" y="374.2" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="2074.0" y="359.2">←</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2088.0" y="358.8">Locations</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2088.0" y="368.5">or &#x27;PlantA › Buildings&#x27; … &#x27;PlantA › BlockB › FloorOne › Areas&#x27;</tspan></text>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="2074.0" y="381.3">Factory › building › floor › area. Equipment is assigned to an</tspan><tspan x="2074.0" y="389.7">area. Renaming keeps past inspection reports unchanged.</tspan></text>
+<rect x="2074.0" y="396.4" width="202.0" height="16.2" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="406.7">PlantA ✎ ›</tspan></text>
+<rect x="2074.0" y="416.1" width="202.0" height="16.2" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="426.5">PlantB ✎ ›</tspan></text>
+<rect x="2074.0" y="435.8" width="202.0" height="21.9" rx="3.0" fill="#fef9c3" stroke="#eab308" stroke-width="0.8"/><text font-size="6.2" fill="#713f12" text-anchor="start" font-style="italic"><tspan x="2078.0" y="445.4">Areas (4th level) show ✎ only — no ›. There is no delete at any</tspan><tspan x="2078.0" y="453.3">level.</tspan></text>
+<rect x="2074.0" y="461.2" width="202.0" height="13.9" rx="3.0" fill="#fef9c3" stroke="#eab308" stroke-width="0.8"/><text font-size="6.2" fill="#713f12" text-anchor="start" font-style="italic"><tspan x="2078.0" y="470.8">Empty level: &#x27;No factories yet. Tap &quot;Add factory&quot;.&#x27;</tspan></text>
+<rect x="2131.9" y="698.0" width="142.1" height="22.0" rx="8.0" fill="#ccfbf1" stroke="#0f766e" stroke-width="1"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2203.0" y="711.9">+ Add factory | building | floor | area</tspan></text>
+</g>
+<g id="D10_S20"><title>D10 Add / Rename &lt;level&gt; | Source: ui/admin/LocationsScreen.kt | Roles: Admin</title>
+<rect x="2430.0" y="318.0" width="210.0" height="53.8" rx="7.0" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="2435.0" y="322.0" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2446.0" y="329.6">D10</tspan></text>
+<rect x="2607.9" y="322.0" width="28.1" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="2621.9" y="328.8">POP-UP</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2461.0" y="330.0">Add / Rename &lt;level&gt;</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="2436.0" y="342.8">← Add &lt;level&gt; (FAB) / ✎ rename</tspan><tspan x="2436.0" y="352.1">&lt;Level&gt; name</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="2634.0" y="363.3">Cancel Save ⇒ added / renamed</tspan></text>
+</g>
+<g id="BACK_S20"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="1924.0" y="340.0" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="1972.0" y="353.7">↩ previous screen</tspan><tspan x="1972.0" y="362.1">(back stack)</tspan></text>
+</g>
+<g id="S21"><title>S21 Checklist questions editor | Route: ChecklistEditorRoute | Source: ui/admin/ChecklistEditorScreen.kt | Roles: Admin | Status: IMPLEMENTED</title>
+<rect x="480.0" y="937.6" width="34.0" height="18.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="10" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="497.0" y="950.8">S21</tspan></text>
+<text font-size="13.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="519.0" y="952.2">Checklist questions editor</tspan></text>
+<text font-size="8.5" fill="#475569" text-anchor="start"><tspan x="480.0" y="967.6">ChecklistEditorRoute</tspan></text>
+<rect x="480.0" y="978.6" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="575.0" y="987.6" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="1002.6" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="595.0" cy="1410.6" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="597.8" y="971.6" width="104.2" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.9"/><text font-size="7.4" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="649.9" y="981.7">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="494.0" y="1010.5">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="696.0" y="1010.5">▴ ▮</tspan></text>
+<rect x="488.0" y="1013.6" width="214.0" height="24.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="1036.8" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="494.0" y="1027.8">←</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="508.0" y="1027.3">Checklist questions</tspan></text>
+<rect x="494.0" y="1037.6" width="58.8" height="11.0" rx="5.5" fill="#ccfbf1" stroke="#0f766e" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="523.4" y="1045.6">Fire extinguisher</tspan></text>
+<rect x="555.8" y="1037.6" width="54.2" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="582.9" y="1045.6">Electrical panel</tspan></text>
+<rect x="613.0" y="1037.6" width="40.0" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="633.0" y="1045.6">Fire alarm</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="662.0" y="1046.0">…</tspan></text>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="494.0" y="1060.3">Changes apply to new inspections. Inspections already started</tspan><tspan x="494.0" y="1068.8">or submitted keep the questions they had. Switch a question off</tspan><tspan x="494.0" y="1077.2">instead of deleting it.</tspan></text>
+<rect x="494.0" y="1083.9" width="202.0" height="40.4" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1094.2">Fire extinguisher</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1102.6">1. Extinguisher is in its marked place and mounted at the right</tspan><tspan x="499.0" y="1110.7">height</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1118.7">↑ ↓ ✎ In use [on]</tspan></text>
+<rect x="494.0" y="1127.8" width="202.0" height="40.4" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1138.2">Fire extinguisher</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1146.5">2. Pressure gauge reads in the green (charged) zone</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1154.6">Critical</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1162.6">↑ ↓ ✎ In use [on]</tspan></text>
+<rect x="494.0" y="1171.7" width="202.0" height="32.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1182.1">Fire extinguisher</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1190.4">5. Hose and nozzle are undamaged and unblocked</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1198.5">↑ ↓ ✎ Switched off [off]</tspan></text>
+<rect x="626.5" y="1366.6" width="67.5" height="22.0" rx="8.0" fill="#ccfbf1" stroke="#0f766e" stroke-width="1"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="660.3" y="1380.4">+ Add question</tspan></text>
+</g>
+<g id="D11_S21"><title>D11 Add / Edit question | Source: ui/admin/ChecklistEditorScreen.kt | Roles: Admin</title>
+<rect x="850.0" y="986.6" width="210.0" height="53.8" rx="7.0" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="855.0" y="990.6" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="866.0" y="998.2">D11</tspan></text>
+<rect x="1027.9" y="990.6" width="28.1" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1041.9" y="997.3">POP-UP</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="881.0" y="998.5">Add / Edit question</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="856.0" y="1011.4">← Add question (FAB) / ✎ edit</tspan><tspan x="856.0" y="1020.6">Section · Question · ☐ Critical</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1054.0" y="1031.8">Cancel Save ⇒ question saved</tspan></text>
+</g>
+<g id="BACK_S21"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="344.0" y="1008.6" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="392.0" y="1022.3">↩ previous screen</tspan><tspan x="392.0" y="1030.7">(back stack)</tspan></text>
+</g>
+<g id="note148">
+<rect x="480.0" y="1462.6" width="580.0" height="38.6" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="487.0" y="1477.6">S21 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="487.0" y="1490.2">• Type chips, move ↑/↓, In use switch — ADMIN</tspan></text>
+</g>
+<g id="S22"><title>S22 Sync (optional server upload) | Route: SyncRoute | Source: ui/admin/AdminScreens.kt | Roles: Admin | Status: IMPLEMENTED</title>
+<rect x="1270.0" y="937.6" width="34.0" height="18.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="10" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1287.0" y="950.8">S22</tspan></text>
+<text font-size="13.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1309.0" y="952.2">Sync (optional server upload)</tspan></text>
+<text font-size="8.5" fill="#475569" text-anchor="start"><tspan x="1270.0" y="967.6">SyncRoute</tspan></text>
+<rect x="1270.0" y="978.6" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="1365.0" y="987.6" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="1002.6" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="1385.0" cy="1410.6" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="1387.8" y="971.6" width="104.2" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.9"/><text font-size="7.4" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="1439.9" y="981.7">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="1010.5">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="1486.0" y="1010.5">▴ ▮</tspan></text>
+<rect x="1278.0" y="1013.6" width="214.0" height="24.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="1036.8" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="1284.0" y="1027.8">←</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1298.0" y="1027.3">Sync</tspan></text>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="1043.8">Off by default. SafeStitch always works offline. When sync is</tspan><tspan x="1284.0" y="1052.3">on, submitted inspections, corrective-action changes and photos</tspan><tspan x="1284.0" y="1060.7">are uploaded to your server; offline they wait in a queue that</tspan><tspan x="1284.0" y="1069.2">survives restarts. Passwords are never uploaded.</tspan></text>
+<text font-size="7.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1284.0" y="1086.0">Sync to server</tspan></text>
+<rect x="1462.0" y="1077.9" width="22.0" height="11.0" rx="5.5" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<ellipse cx="1467.5" cy="1083.4" rx="4.5" ry="4.5" fill="#fff" stroke="none" stroke-width="1"/>
+<rect x="1284.0" y="1093.4" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="1288.0" y="1100.7">Server address</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="1288.0" y="1110.2">https://sync.example.com</tspan></text>
+<rect x="1284.0" y="1116.9" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="1288.0" y="1124.2">API key</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="1288.0" y="1133.7">••••••</tspan></text>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="1146.6">Test build: http://10.0.2.2 and http://localhost allowed. Release</tspan><tspan x="1284.0" y="1155.1">builds require https.</tspan></text>
+<rect x="1284.0" y="1161.7" width="78.4" height="17.0" rx="8.5" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1323.2" y="1173.1">Save</tspan></text>
+<rect x="1366.4" y="1161.7" width="119.6" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1426.2" y="1173.1">Sync now</tspan></text>
+<rect x="1284.0" y="1182.2" width="202.0" height="32.3" rx="5.0" fill="#e0f2fe" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1289.0" y="1192.6">Status: Sync is off</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="1289.0" y="1200.9">Waiting to upload: 0 record(s), 0 photo(s)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="1289.0" y="1209.0">Device ID: 52b88ea7…</tspan></text>
+<text font-size="6.6" fill="#1e293b" text-anchor="start"><tspan x="1284.0" y="1224.4">Conflicts: 0 — None. The server and this phone agree.</tspan></text>
+<rect x="1284.0" y="1231.0" width="202.0" height="21.9" rx="3.0" fill="#fef9c3" stroke="#eab308" stroke-width="0.8"/><text font-size="6.2" fill="#713f12" text-anchor="start" font-style="italic"><tspan x="1288.0" y="1240.6">Conflict cards (when present): [Keep server copy] [Send mine</tspan><tspan x="1288.0" y="1248.5">again]</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="1284.0" y="1265.8">Re-upload everything</tspan></text>
+</g>
+<g id="D12_S22"><title>D12 Re-upload everything? | Source: ui/admin/AdminScreens.kt | Roles: Admin</title>
+<rect x="1640.0" y="986.6" width="210.0" height="53.8" rx="7.0" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="1645.0" y="990.6" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1656.0" y="998.2">D12</tspan></text>
+<rect x="1817.9" y="990.6" width="28.1" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1831.9" y="997.3">POP-UP</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1671.0" y="998.5">Re-upload everything?</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="1646.0" y="1011.4">← Re-upload everything</tspan><tspan x="1646.0" y="1020.6">Server de-duplicates copies.</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1844.0" y="1031.8">Cancel Re-upload ⇒ sync queued</tspan></text>
+</g>
+<g id="X06_S22"><title>X06 Sync server (HTTPS, WorkManager) | Source: sync/SyncManager.kt | Status: IMPLEMENTED | Only when an admin enables sync; not exercised against a real server in this analysis.</title>
+<rect x="1640.0" y="1070.4" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="1644.0" y="1078.4" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1655.0" y="1086.0">X06</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1669.0" y="1086.2">Sync server (HTTPS, WorkManager)</tspan></text>
+<rect x="1815.0" y="1078.4" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1831.0" y="1085.0">SYSTEM</tspan></text>
+</g>
+<g id="BACK_S22"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="1134.0" y="1008.6" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="1182.0" y="1022.3">↩ previous screen</tspan><tspan x="1182.0" y="1030.7">(back stack)</tspan></text>
+</g>
+<g id="note193">
+<rect x="1270.0" y="1462.6" width="580.0" height="49.1" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="1277.0" y="1477.6">S22 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1277.0" y="1490.2">• Conflicts: Keep server copy / Send mine again [conflicts exist] — ADMIN</tspan><tspan x="1277.0" y="1500.7">• App start / any syncable change → requestSync() [sync enabled + network]</tspan></text>
+</g>
+<g id="S23"><title>S23 SQL Database inspector | Route: SqlDatabaseRoute | Source: ui/admin/AdminScreens.kt | Roles: Admin | Status: IMPLEMENTED</title>
+<rect x="2060.0" y="937.6" width="34.0" height="18.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="10" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2077.0" y="950.8">S23</tspan></text>
+<text font-size="13.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2099.0" y="952.2">SQL Database inspector</tspan></text>
+<text font-size="8.5" fill="#475569" text-anchor="start"><tspan x="2060.0" y="967.6">SqlDatabaseRoute</tspan></text>
+<rect x="2060.0" y="978.6" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="2155.0" y="987.6" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="2068.0" y="1002.6" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="2175.0" cy="1410.6" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="2177.8" y="971.6" width="104.2" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.9"/><text font-size="7.4" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="2229.9" y="981.7">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="2074.0" y="1010.5">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="2276.0" y="1010.5">▴ ▮</tspan></text>
+<rect x="2068.0" y="1013.6" width="214.0" height="24.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="2068.0" y="1036.8" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="2074.0" y="1027.8">←</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2088.0" y="1027.3">SQL Database</tspan></text>
+<rect x="2074.0" y="1037.6" width="202.0" height="24.3" rx="5.0" fill="#e0f2fe" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="1047.9">Engine: SQLite 3 · Room v2 (safestitch.db)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="1056.3">13 relational tables · 72 total rows persisted on device</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="2074.0" y="1074.0">Preset SQL Queries</tspan></text>
+<rect x="2074.0" y="1079.8" width="115.0" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2131.5" y="1091.2">Equipment &amp; Inspections</tspan></text>
+<rect x="2193.0" y="1079.8" width="83.0" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2234.5" y="1091.2">Captured Photos</tspan></text>
+<rect x="2074.0" y="1100.3" width="100.3" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2124.1" y="1111.7">Corrective Actions</tspan></text>
+<rect x="2178.3" y="1100.3" width="97.7" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2227.1" y="1111.7">Factory Locations</tspan></text>
+<rect x="2074.0" y="1120.8" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="2078.0" y="1128.2">Read-only SQL query (SELECT / PRAGMA)</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="2078.0" y="1137.7">SELECT c.code, c.name, … FROM checkpoints c …</tspan></text>
+<rect x="2074.0" y="1144.3" width="96.9" height="17.0" rx="8.5" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2122.4" y="1155.7">Run SQL Query</tspan></text>
+<rect x="2174.9" y="1144.3" width="101.1" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="2225.4" y="1155.7">Refresh Counts</tspan></text>
+<rect x="2074.0" y="1164.8" width="202.0" height="32.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="1175.2">Result: 0 row(s) in 3 ms</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="1183.5">code | name | type | inspections</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="1191.6">No rows returned.</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="2074.0" y="1209.3">Relational Tables (13)</tspan></text>
+<rect x="2074.0" y="1215.2" width="202.0" height="24.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="1225.5">action_events 0 row(s)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="1233.9">id, actionId, fromStatus, toStatus, byName, …</tspan></text>
+<rect x="2074.0" y="1243.0" width="202.0" height="24.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="1253.3">areas 1 row(s)</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="2079.0" y="1261.7">id, floorId, name</tspan></text>
+</g>
+<g id="BACK_S23"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="1924.0" y="1008.6" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="1972.0" y="1022.3">↩ previous screen</tspan><tspan x="1972.0" y="1030.7">(back stack)</tspan></text>
+</g>
+<g id="note234">
+<rect x="2060.0" y="1462.6" width="580.0" height="38.6" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="2067.0" y="1477.6">S23 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2067.0" y="1490.2">• Preset queries, Run SQL Query, Refresh Counts, table card → SELECT * — ADMIN</tspan></text>
+</g>
+<g id="ref_in_D01_60_300"><title>Off-diagram reference to in:D01: from D01 Account menu</title>
+<rect x="60.0" y="300.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="313.2">↗ from D01 Account menu</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="325.7">Home dashboard (03)</tspan></text>
+</g>
+<g id="ref_out_S04_2830_300"><title>Off-diagram reference to out:S04: to S04 Inspect — find equipment</title>
+<rect x="2830.0" y="300.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="313.2">↗ to S04 Inspect — find equipment</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="325.7">Equipment &amp; inspection (04)</tspan></text>
+</g>
+<g id="legend242">
+<rect x="2420.0" y="1617.7" width="640.0" height="322.9" rx="8.0" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text font-size="17" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2432.0" y="1644.8">LEGEND</tspan></text>
+<rect x="2434.0" y="1665.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#1e293b" stroke-width="2.1"/>
+<text font-size="7" fill="#1e293b" text-anchor="middle"><tspan x="2469.0" y="1668.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1670.6">Navigation (tap → new screen)</tspan></text>
+<rect x="2754.0" y="1665.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#1d4ed8" stroke-width="2.1" stroke-dasharray="10 3"/>
+<text font-size="7" fill="#1d4ed8" text-anchor="middle"><tspan x="2789.0" y="1668.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1670.6">Conditional navigation (label = condition)</tspan></text>
+<rect x="2434.0" y="1688.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#c2410c" stroke-width="2.3"/>
+<text font-size="7" fill="#c2410c" text-anchor="middle"><tspan x="2469.0" y="1691.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1693.6">Admin-only navigation</tspan></text>
+<rect x="2754.0" y="1688.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#64748b" stroke-width="2.0" stroke-dasharray="2 3"/>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="2789.0" y="1691.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1693.6">Return after save / photo (popBackStack to the opener)</tspan></text>
+<rect x="2434.0" y="1711.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#64748b" stroke-width="1.9" stroke-dasharray="1 3"/>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="2469.0" y="1714.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1716.6">← / system Back → previous screen on the stack</tspan></text>
+<rect x="2754.0" y="1711.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#7c3aed" stroke-width="1.9" stroke-dasharray="5 3"/>
+<text font-size="7" fill="#7c3aed" text-anchor="middle"><tspan x="2789.0" y="1714.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1716.6">Opens a pop-up / menu / permission prompt</tspan></text>
+<rect x="2434.0" y="1734.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#a21caf" stroke-width="1.9" stroke-dasharray="3 2"/>
+<text font-size="7" fill="#a21caf" text-anchor="middle"><tspan x="2469.0" y="1737.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1739.6">Dialog outcome (OK / Cancel / Save / Delete …)</tspan></text>
+<rect x="2754.0" y="1734.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#b45309" stroke-width="1.9" stroke-dasharray="4 2"/>
+<text font-size="7" fill="#b45309" text-anchor="middle"><tspan x="2789.0" y="1737.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1739.6">In-screen state change (annotation box)</tspan></text>
+<rect x="2434.0" y="1757.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0f766e" stroke-width="1.9" stroke-dasharray="7 3 2 3"/>
+<text font-size="7" fill="#0f766e" text-anchor="middle"><tspan x="2469.0" y="1760.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1762.6">Hands off to Android / another app / server</tspan></text>
+<rect x="2754.0" y="1757.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0f766e" stroke-width="1.7999999999999998" stroke-dasharray="2 2"/>
+<text font-size="7" fill="#0f766e" text-anchor="middle"><tspan x="2789.0" y="1760.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1762.6">Background work (WorkManager)</tspan></text>
+<rect x="2434.0" y="1780.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#dc2626" stroke-width="2.1" stroke-dasharray="6 3"/>
+<text font-size="7" fill="#dc2626" text-anchor="middle"><tspan x="2469.0" y="1783.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1785.6">Partially implemented path</tspan></text>
+<rect x="2754.0" y="1780.7" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0e7490" stroke-width="2.1"/>
+<text font-size="7" fill="#0e7490" text-anchor="middle"><tspan x="2789.0" y="1783.6">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1785.6">Bottom-bar tab switch</tspan></text>
+<rect x="2434.0" y="1803.7" width="84.3" height="18.0" rx="9.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="8.6" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="2476.2" y="1816.3">IMPLEMENTED</tspan></text>
+<rect x="2526.3" y="1803.7" width="56.5" height="18.0" rx="9.0" fill="#fef3c7" stroke="#b45309" stroke-width="0.8"/><text font-size="8.6" fill="#b45309" text-anchor="middle" font-weight="bold"><tspan x="2554.6" y="1816.3">PARTIAL</tspan></text>
+<rect x="2590.8" y="1803.7" width="80.8" height="18.0" rx="9.0" fill="#e2e8f0" stroke="#475569" stroke-width="0.8"/><text font-size="8.6" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="2631.2" y="1816.3">UNREACHABLE</tspan></text>
+<rect x="2679.6" y="1803.7" width="103.4" height="18.0" rx="9.0" fill="#ede9fe" stroke="#7c3aed" stroke-width="0.8"/><text font-size="8.6" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="2731.3" y="1816.3">DOCUMENTED ONLY</tspan></text>
+<rect x="2791.0" y="1803.7" width="83.4" height="18.0" rx="9.0" fill="#fee2e2" stroke="#b91c1c" stroke-width="0.8"/><text font-size="8.6" fill="#b91c1c" text-anchor="middle" font-weight="bold"><tspan x="2832.7" y="1816.3">NOT VERIFIED</tspan></text>
+<text font-size="9.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1840.8">✓ in an arrow label, or &#x27;✓ RUN&#x27; on a screen = exercised in the Android 16 emulator walkthrough; everything else is traced in source.</tspan></text>
+<text font-size="9.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1858.3">ADMIN dashed outline inside a frame = control rendered only when user.isAdmin. Dashed tray under a frame = that screen&#x27;s pop-ups</tspan><tspan x="2434.0" y="1870.8">and hand-offs.</tspan></text>
+<text font-size="9.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1888.2">Every screen with ← (and the system Back gesture) returns to the previous screen via NavController.popBackStack(); only</tspan><tspan x="2434.0" y="1900.7">non-obvious returns are drawn.</tspan></text>
+<text font-size="9.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1918.2">Hover a frame or arrow in the .drawio/.svg to see its route, source file:line, roles and verification status.</tspan></text>
+</g>
+<rect x="40.0" y="1988.6" width="3040.0" height="1.2" rx="0.0" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<text font-size="13" fill="#334155" text-anchor="start" font-weight="bold"><tspan x="40.0" y="2016.0">SafeStitch – Garment Factory Safety Inspection &amp; Corrective Action Tracker</tspan></text>
+<text font-size="12" fill="#475569" text-anchor="end"><tspan x="3080.0" y="2015.6">Arafat Haque Biswas · Student ID 24241325 · CSE489 – Mobile App Development · BRAC University · 08-Module-Admin-Tools</tspan></text>
+<path d="M480.0,355.0 L440.0,355.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M480.0,355.0 L440.0,355.0" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S18 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:91</title></path>
+<path d="M1270.0,355.0 L1230.0,355.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1270.0,355.0 L1230.0,355.0" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S19 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:135</title></path>
+<path d="M1385.0,760.0 L1385.0,794.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1385.0,760.0 L1385.0,794.0" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S19 → S19: Activate / Deactivate (not yourself; keep ≥ 1 active admin) — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:162</title></path>
+<path d="M2060.0,355.0 L2020.0,355.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2060.0,355.0 L2020.0,355.0" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S20 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin — app/src/main/java/com/safestitch/app/ui/admin/LocationsScreen.kt:71</title></path>
+<path d="M480.0,1023.6 L440.0,1023.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M480.0,1023.6 L440.0,1023.6" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S21 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin — app/src/main/java/com/safestitch/app/ui/admin/ChecklistEditorScreen.kt:67</title></path>
+<path d="M595.0,1428.6 L595.0,1462.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M595.0,1428.6 L595.0,1462.6" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S21 → S21: Type chips, move ↑/↓, In use switch — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/ChecklistEditorScreen.kt:104</title></path>
+<path d="M1270.0,1023.6 L1230.0,1023.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1270.0,1023.6 L1230.0,1023.6" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S22 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:291</title></path>
+<path d="M1385.0,1428.6 L1385.0,1462.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1385.0,1428.6 L1385.0,1462.6" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S22 → S22: Conflicts: Keep server copy / Send mine again — conflicts exist — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:372
+APP → X06: App start / any syncable change → requestSync() — sync enabled + network — Admin, Inspector — app/src/main/java/com/safestitch/app/SafeStitchApp.kt:13</title></path>
+<path d="M2060.0,1023.6 L2020.0,1023.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2060.0,1023.6 L2020.0,1023.6" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S23 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:435</title></path>
+<path d="M2175.0,1428.6 L2175.0,1462.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2175.0,1428.6 L2175.0,1462.6" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S23 → S23: Preset queries, Run SQL Query, Refresh Counts, table card → SELECT * — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:477</title></path>
+<path d="M2060.0,404.5 L2030.0,404.5 L2030.0,474.5 L2060.0,474.5" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2060.0,404.5 L2030.0,404.5 L2030.0,474.5 L2060.0,474.5" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>S20 → S20: Tap row → next level (Factory → Building → Floor → Area) — level &lt; Area — Admin — app/src/main/java/com/safestitch/app/ui/admin/LocationsScreen.kt:103</title></path>
+<path d="M1745.0,1040.4 L1745.0,1070.4" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1745.0,1040.4 L1745.0,1070.4" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>D12 → X06: Re-upload → reset sync state + sync now — sync enabled — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:393</title></path>
+<path d="M1500.0,705.0 L1615.0,705.0 L1615.0,365.0 L1640.0,365.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,705.0 L1615.0,705.0 L1615.0,365.0 L1640.0,365.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S19 → D08: + (FAB) — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:137</title></path>
+<path d="M2290.0,705.0 L2455.0,705.0 L2455.0,371.8" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2290.0,705.0 L2455.0,705.0 L2455.0,371.8" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S20 → D10: Add &lt;level&gt; (FAB) / ✎ rename — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/LocationsScreen.kt:79</title></path>
+<path d="M710.0,1375.0 L875.0,1375.0 L875.0,1040.4" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,1375.0 L875.0,1375.0 L875.0,1040.4" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S21 → D11: Add question (FAB) / ✎ edit — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/ChecklistEditorScreen.kt:73</title></path>
+<path d="M1270.0,1265.0 L1255.0,1265.0 L1255.0,915.0 L1665.0,915.0 L1665.0,986.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1270.0,1265.0 L1255.0,1265.0 L1255.0,915.0 L1665.0,915.0 L1665.0,986.6" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S22 → D12: Re-upload everything — sync enabled — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:378</title></path>
+<path d="M1640.0,345.0 L1500.0,345.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1640.0,345.0 L1500.0,345.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D08 → S19: Add → user created (snackbar); errors stay in the dialog — valid name, username, password ≥ 8, passwords match — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:221
+D08 → S19: Cancel / dismiss — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:232</title></path>
+<path d="M2430.0,345.0 L2290.0,345.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2430.0,345.0 L2290.0,345.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D10 → S20: Save → location added or renamed / Cancel — name not blank — Admin — app/src/main/java/com/safestitch/app/ui/admin/LocationsScreen.kt:138</title></path>
+<path d="M850.0,1015.0 L710.0,1015.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M850.0,1015.0 L710.0,1015.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D11 → S21: Save → question added or edited / Cancel — section and question not blank — Admin — app/src/main/java/com/safestitch/app/ui/admin/ChecklistEditorScreen.kt:165</title></path>
+<path d="M270.0,315.0 L455.0,315.0 L455.0,345.0 L480.0,345.0" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,315.0 L455.0,315.0 L455.0,345.0 L480.0,345.0" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>D01 → S18: Admin tools — user.isAdmin (menu item is not rendered for inspectors) — Admin — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:365</title></path>
+<path d="M1270.0,1175.0 L1245.0,1175.0 L1245.0,905.0 L1615.0,905.0 L1615.0,1075.0 L1640.0,1075.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1270.0,1175.0 L1245.0,1175.0 L1245.0,905.0 L1615.0,905.0 L1615.0,1075.0 L1640.0,1075.0" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>S22 → X06: Save (on) / Sync now — sync enabled; WorkManager waits for a network — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:345</title></path>
+<path d="M1500.0,395.0 L1665.0,395.0 L1665.0,411.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,395.0 L1665.0,395.0 L1665.0,411.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S19 → D09: Reset password — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:158</title></path>
+<path d="M1640.0,435.0 L1500.0,435.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1640.0,435.0 L1500.0,435.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D09 → S19: Save → password reset (snackbar) / Cancel — new password ≥ 8 — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:253</title></path>
+<path d="M710.0,465.0 L725.0,465.0 L725.0,1005.0 L710.0,1005.0" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,465.0 L725.0,465.0 L725.0,1005.0 L710.0,1005.0" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>S18 → S21: Checklist questions — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:99</title></path>
+<path d="M710.0,385.0 L1270.0,385.0" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,385.0 L1270.0,385.0" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>S18 → S19: Users — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:96</title></path>
+<path d="M710.0,525.0 L1255.0,525.0 L1255.0,895.0 L1295.0,895.0 L1295.0,938.6" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,525.0 L1255.0,525.0 L1255.0,895.0 L1295.0,895.0 L1295.0,938.6" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>S18 → S22: Sync — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:101</title></path>
+<path d="M710.0,405.0 L1255.0,405.0 L1255.0,255.0 L2085.0,255.0 L2085.0,270.0" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,405.0 L1255.0,405.0 L1255.0,255.0 L2085.0,255.0 L2085.0,270.0" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>S18 → S20: Locations — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:97</title></path>
+<path d="M710.0,495.0 L1245.0,495.0 L1245.0,885.0 L2085.0,885.0 L2085.0,938.6" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,495.0 L1245.0,495.0 L1245.0,885.0 L2085.0,885.0 L2085.0,938.6" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>S18 → S23: SQL Database — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:100</title></path>
+<path d="M710.0,435.0 L1245.0,435.0 L1245.0,245.0 L2855.0,245.0 L2855.0,300.0" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,435.0 L1245.0,435.0 L1245.0,245.0 L2855.0,245.0 L2855.0,300.0" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>S18 → S04: Equipment — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:98</title></path>
+<rect x="1916.6" y="430.8" width="109.4" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="1971.3" y="443.6" font-size="10.0" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ row › next level</text>
+<rect x="1714.1" y="1046.6" width="61.8" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="1745.0" y="1059.4" font-size="10.0" text-anchor="middle" fill="#0f766e" font-weight="bold">Re-upload</text>
+<rect x="1604.2" y="526.2" width="21.6" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="1615.0" y="539.0" font-size="10.0" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓</text>
+<rect x="2444.2" y="529.6" width="21.6" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="2455.0" y="542.4" font-size="10.0" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓</text>
+<rect x="864.2" y="1198.9" width="21.6" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="875.0" y="1211.7" font-size="10.0" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓</text>
+<rect x="1532.6" y="336.2" width="74.8" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="1570.0" y="349.1" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">Add / Cancel</text>
+<rect x="2319.8" y="336.2" width="80.5" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="2360.0" y="349.1" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">Save / Cancel</text>
+<rect x="739.8" y="1006.2" width="80.5" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="780.0" y="1019.0" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">Save / Cancel</text>
+<rect x="320.6" y="306.2" width="83.8" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="362.5" y="319.1" font-size="10.0" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ Admin tools</text>
+<rect x="1393.9" y="896.2" width="72.1" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="1430.0" y="909.0" font-size="10.0" text-anchor="middle" fill="#0f766e" font-weight="bold">✓ Sync now</text>
+<rect x="1571.7" y="386.2" width="21.6" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="1582.5" y="399.1" font-size="10.0" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓</text>
+<rect x="1529.8" y="426.2" width="80.5" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="1570.0" y="439.1" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">Save / Cancel</text>
+<rect x="663.5" y="807.2" width="123.1" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="725.0" y="820.0" font-size="10.0" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ Checklist questions</text>
+<rect x="962.8" y="376.2" width="54.4" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="990.0" y="389.1" font-size="10.0" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ Users</text>
+<rect x="958.1" y="516.2" width="48.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="982.5" y="529.0" font-size="10.0" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ Sync</text>
+<rect x="1632.8" y="246.2" width="74.4" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="1670.0" y="259.1" font-size="10.0" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ Locations</text>
+<rect x="1617.2" y="876.2" width="95.6" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="1665.0" y="889.0" font-size="10.0" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ SQL Database</text>
+<rect x="2011.1" y="236.2" width="77.8" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="2050.0" y="249.1" font-size="10.0" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ Equipment</text>
+</svg>

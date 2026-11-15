@@ -1,0 +1,818 @@
+{
+ "results": [
+  {
+   "key": "APP>S01:no-users",
+   "ok": true,
+   "detail": "reached S01",
+   "screenshot": "01-S01-setup.png",
+   "role": "All",
+   "part": 1
+  },
+  {
+   "key": "S01:password-mismatch",
+   "ok": true,
+   "detail": "inline error 'The two passwords do not match.'",
+   "screenshot": "02-S01-error.png",
+   "role": "All",
+   "part": 1
+  },
+  {
+   "key": "S01>S03:create-admin",
+   "ok": true,
+   "detail": "reached S03",
+   "screenshot": "03-S03-dashboard-admin.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S03>D01:account-menu",
+   "ok": true,
+   "detail": "reached D01",
+   "screenshot": "04-D01-account-menu-admin.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "D01:admin-tools-visible-for-admin",
+   "ok": true,
+   "detail": "Admin tools item present",
+   "screenshot": null,
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "D01>S18:admin-tools",
+   "ok": true,
+   "detail": "reached S18",
+   "screenshot": "05-S18-admin-tools.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S18>S19:users",
+   "ok": true,
+   "detail": "reached S19",
+   "screenshot": "06-S19-users.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S19>D08:add-user",
+   "ok": true,
+   "detail": "reached D08",
+   "screenshot": "07-D08-add-user.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "D08>S19:add-user-save",
+   "ok": true,
+   "detail": "inspector row appears",
+   "screenshot": "08-S19-users-after-add.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S19>D09:reset-password",
+   "ok": true,
+   "detail": "reached D09",
+   "screenshot": "09-D09-reset-password.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S18>S20:locations",
+   "ok": true,
+   "detail": "reached S20",
+   "screenshot": "10-S20-locations-factories.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S20>D10:add-location-L0",
+   "ok": true,
+   "detail": "reached D10",
+   "screenshot": "11-D10-add-location.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S20>S20:open-child-L1",
+   "ok": true,
+   "detail": "reached S20",
+   "screenshot": "12-S20-locations-level1.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S20>D10:add-location-L1",
+   "ok": true,
+   "detail": "reached D10",
+   "screenshot": "13-D10.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S20>S20:open-child-L2",
+   "ok": true,
+   "detail": "reached S20",
+   "screenshot": "14-S20-locations-level2.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S20>D10:add-location-L2",
+   "ok": true,
+   "detail": "reached D10",
+   "screenshot": "15-D10.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S20>S20:open-child-L3",
+   "ok": true,
+   "detail": "reached S20",
+   "screenshot": "16-S20-locations-level3.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S20>D10:add-location-L3",
+   "ok": true,
+   "detail": "reached D10",
+   "screenshot": "17-D10.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S18>S21:checklists",
+   "ok": true,
+   "detail": "reached S21",
+   "screenshot": "19-S21-checklist-editor.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S21>D11:add-question",
+   "ok": true,
+   "detail": "reached D11",
+   "screenshot": "20-D11-add-question.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S18>S23:sql-database",
+   "ok": true,
+   "detail": "reached S23",
+   "screenshot": "21-S23-sql-database.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S18>S22:sync",
+   "ok": true,
+   "detail": "reached S22",
+   "screenshot": "22-S22-sync.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S22:sync-now-disabled-when-off",
+   "ok": true,
+   "detail": "'Sync now' disabled while sync is off",
+   "screenshot": null,
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S18>S04:equipment",
+   "ok": true,
+   "detail": "reached S04",
+   "screenshot": "23-S04-inspect-admin-empty.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S04:admin-controls-visible",
+   "ok": true,
+   "detail": "FAB + and print-labels visible for admin",
+   "screenshot": null,
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "S04>S10:add-equipment",
+   "ok": true,
+   "detail": "reached S10",
+   "screenshot": "24-S10-new-equipment-admin.png",
+   "role": "Admin",
+   "part": 1
+  },
+  {
+   "key": "HARNESS:part1-stopped-at-equipment-save",
+   "ok": false,
+   "detail": "Test harness: a location DropdownMenu popup was still open, so uiautomator could not see the form's resource-ids while scrolling to 'Save equipment'. The form itself was filled correctly (screenshot); saving was re-run and passed in part 2 (S10>S04:save-equipment).",
+   "screenshot": null,
+   "role": "",
+   "part": 1,
+   "cause": "test harness"
+  },
+  {
+   "key": "S10>S04:save-equipment",
+   "ok": true,
+   "detail": "returns to Inspect list with FE-12",
+   "screenshot": "61-S04-after-save.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S04>D02:print-labels",
+   "ok": true,
+   "detail": "reached D02",
+   "screenshot": "62-D02-qr-labels-ready.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S04>S10:edit-equipment",
+   "ok": true,
+   "detail": "reached S10",
+   "screenshot": "63-S10-edit-equipment.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S04>S11:inspect",
+   "ok": true,
+   "detail": "reached S11",
+   "screenshot": "64-S11-inspection-new.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S11>D03:submit-incomplete",
+   "ok": true,
+   "detail": "reached D03",
+   "screenshot": "65-D03-almost-done.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S11>D14:due-date-picker",
+   "ok": true,
+   "detail": "date picker dialog opens",
+   "screenshot": "66-D14-due-date-picker.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S11>D15:responsible-select",
+   "ok": true,
+   "detail": "dropdown lists 2 people",
+   "screenshot": "67-D15-responsible-dropdown.png",
+   "role": "",
+   "part": 2
+  },
+  {
+   "key": "S11>S12:item-photo",
+   "ok": true,
+   "detail": "reached S12",
+   "screenshot": "68-S12-take-photo-item.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S12>S11:shutter-saved",
+   "ok": true,
+   "detail": "reached S11",
+   "screenshot": "69-S11.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S11:photo-attached",
+   "ok": true,
+   "detail": "item photo button reads ' Photo (1) '",
+   "screenshot": "70-S11-after-photo.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S11>S13:submit",
+   "ok": true,
+   "detail": "reached S13",
+   "screenshot": "71-S13-report.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S13>S14:open-pdf",
+   "ok": true,
+   "detail": "reached S14",
+   "screenshot": "72-S14-pdf-viewer.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S13>S15:open-action",
+   "ok": true,
+   "detail": "reached S15",
+   "screenshot": "74-S15-action-open.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S15:status-open",
+   "ok": true,
+   "detail": "action starts Open with 'Start work'",
+   "screenshot": null,
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S15:start-work",
+   "ok": true,
+   "detail": "status -> In progress",
+   "screenshot": "75-S15-in-progress.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S15>S12:after-fix-photo",
+   "ok": true,
+   "detail": "reached S12",
+   "screenshot": "76-S12-take-photo-after-fix.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S12>S15:shutter-saved",
+   "ok": true,
+   "detail": "reached S15",
+   "screenshot": "77-S15.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S15:resolve",
+   "ok": true,
+   "detail": "status -> Resolved; admin sees Verify",
+   "screenshot": "78-S15-resolved-admin.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S15>D06:send-back",
+   "ok": true,
+   "detail": "reached D06",
+   "screenshot": "79-D06-send-back.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S15:verify",
+   "ok": true,
+   "detail": "status -> Verified",
+   "screenshot": "80-S15-verified.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "S15>S13:open-inspection-report",
+   "ok": true,
+   "detail": "reached S13",
+   "screenshot": "81-S13.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "TAB>S05:tab-actions",
+   "ok": true,
+   "detail": "reached S05",
+   "screenshot": "82-S05-actions.png",
+   "role": "Admin",
+   "part": 2
+  },
+  {
+   "key": "HARNESS:S05>S15:open-action-empty-filter",
+   "ok": false,
+   "detail": "Missing test data: the only corrective action had just been verified, so the default 'To do' filter was empty. Re-run with the 'All' filter in part 3: PASS.",
+   "screenshot": "83-FAIL-S05_S15_open-action.png",
+   "role": "Admin",
+   "part": 2,
+   "cause": "test data"
+  },
+  {
+   "key": "HARNESS:part2-back-from-actions-tab",
+   "ok": false,
+   "detail": "Test harness expectation: System Back on a bottom-tab screen returns Home (correct app behaviour); the script expected to stay on Actions.",
+   "screenshot": null,
+   "role": "",
+   "part": 2,
+   "cause": "test harness"
+  },
+  {
+   "key": "TAB>S05:tab-actions#2",
+   "ok": true,
+   "detail": "reached S05",
+   "screenshot": "101-S05.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "S05>S15:open-action",
+   "ok": true,
+   "detail": "reached S15",
+   "screenshot": "102-S15-from-actions-list.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "TAB>S06:tab-history",
+   "ok": true,
+   "detail": "reached S06",
+   "screenshot": "103-S06-history.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "S06>S13:open-completed",
+   "ok": true,
+   "detail": "reached S13",
+   "screenshot": "104-S13.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "S06>S07:captured-button",
+   "ok": true,
+   "detail": "reached S07",
+   "screenshot": "105-S07-captured-list.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "S07>S08:open-captured",
+   "ok": true,
+   "detail": "reached S08",
+   "screenshot": "106-S08-captured-details.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "S08>D07:delete",
+   "ok": true,
+   "detail": "reached D07",
+   "screenshot": "107-D07-delete-captured.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "S06>S08:captured-strip-item",
+   "ok": true,
+   "detail": "reached S08",
+   "screenshot": "108-S08.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "TAB>S03:tab-home",
+   "ok": true,
+   "detail": "reached S03",
+   "screenshot": "109-S03.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "TAB>S04:tab-inspect",
+   "ok": true,
+   "detail": "reached S04",
+   "screenshot": "110-S04.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "S03>S06:manual-code-history",
+   "ok": true,
+   "detail": "reached S06",
+   "screenshot": "111-S06-history-filtered-by-code.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "S06:scanned-equipment-banner",
+   "ok": true,
+   "detail": "banner 'Equipment Identified via QR / Barcode'",
+   "screenshot": null,
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "S03>S07:view-captured",
+   "ok": true,
+   "detail": "reached S07",
+   "screenshot": "112-S07.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "S03>S06:quick-scan-chip",
+   "ok": true,
+   "detail": "reached S06",
+   "screenshot": "113-S06.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "S03:voice-note",
+   "ok": true,
+   "detail": "transcript shown although RECORD_AUDIO granted=false; text: 'Field safety voice note: checked equipment FE-101 pressure gauge in green zone, verified electrical panel EL-2'",
+   "screenshot": "114-S03-voice-note-fallback.png",
+   "role": "",
+   "part": 3
+  },
+  {
+   "key": "S03>S05:kpi-card",
+   "ok": true,
+   "detail": "reached S05",
+   "screenshot": "115-S05.png",
+   "role": "Admin",
+   "part": 3
+  },
+  {
+   "key": "BUG:home-tab-after-kpi-card",
+   "ok": false,
+   "detail": "APP PROBLEM (reproduced 3\u00d7): after Home \u203a KPI card opens Corrective actions, tapping the Home tab keeps showing Corrective actions \u2014 also from the History tab. NavHost onOpenActions navigates without popUpTo, so the Actions screen sits in Home's saved back stack and is restored. System Back returns to the dashboard.",
+   "screenshot": null,
+   "role": "",
+   "part": 3,
+   "cause": "app"
+  },
+  {
+   "key": "S03>S09:scan-for-checklist",
+   "ok": true,
+   "detail": "reached S09",
+   "screenshot": "131-S09-scan.png",
+   "role": "Admin",
+   "part": 4
+  },
+  {
+   "key": "S09>S10:unknown-code",
+   "ok": true,
+   "detail": "reached S10",
+   "screenshot": "132-S10-new-equipment-from-scan.png",
+   "role": "Admin",
+   "part": 4
+  },
+  {
+   "key": "S10:back-skips-scan",
+   "ok": true,
+   "detail": "Back from scanned-code form returns to Home (Scan was popped)",
+   "screenshot": null,
+   "role": "Admin",
+   "part": 4
+  },
+  {
+   "key": "S03>S09:scan-for-checklist#2",
+   "ok": true,
+   "detail": "reached S09",
+   "screenshot": "133-S09.png",
+   "role": "Admin",
+   "part": 4
+  },
+  {
+   "key": "S09>S11:known-code",
+   "ok": true,
+   "detail": "reached S11",
+   "screenshot": "134-S11-from-scan.png",
+   "role": "Admin",
+   "part": 4
+  },
+  {
+   "key": "S11>D04:delete",
+   "ok": true,
+   "detail": "reached D04",
+   "screenshot": "135-D04-delete-inspection.png",
+   "role": "Admin",
+   "part": 4
+  },
+  {
+   "key": "D04>BACK:delete-confirm",
+   "ok": true,
+   "detail": "reached S03",
+   "screenshot": "136-S03.png",
+   "role": "Admin",
+   "part": 4
+  },
+  {
+   "key": "S03>S04:find-equipment",
+   "ok": true,
+   "detail": "reached S04",
+   "screenshot": "137-S04.png",
+   "role": "Admin",
+   "part": 4
+  },
+  {
+   "key": "S04>S09:scan-button",
+   "ok": true,
+   "detail": "reached S09",
+   "screenshot": "138-S09.png",
+   "role": "Admin",
+   "part": 4
+  },
+  {
+   "key": "BUG:home-tab-after-find-equipment",
+   "ok": false,
+   "detail": "On Inspect opened via Home \u203a Find equipment, tapping the Home tab kept showing Inspect (NavHost onFindEquipment navigates without popUpTo; Home's saved back stack is restored). System Back returns to the dashboard.",
+   "screenshot": "161-BUG-home-tab-restores-inspect.png",
+   "role": "Admin",
+   "part": 5,
+   "cause": "app"
+  },
+  {
+   "key": "S03>S17:dashboard-chat-button",
+   "ok": true,
+   "detail": "reached S17",
+   "screenshot": "162-S17-chat.png",
+   "role": "Admin",
+   "part": 5
+  },
+  {
+   "key": "S17:send-quick-prompt",
+   "ok": true,
+   "detail": "3 visible message bubbles after quick prompt (no server on 10.0.2.2:3000 -> local fallback reply)",
+   "screenshot": "163-S17-chat-reply.png",
+   "role": "",
+   "part": 5
+  },
+  {
+   "key": "D01>S17:menu-chat",
+   "ok": true,
+   "detail": "reached S17",
+   "screenshot": "164-S17.png",
+   "role": "Admin",
+   "part": 5
+  },
+  {
+   "key": "D01>S16:settings",
+   "ok": true,
+   "detail": "reached S16",
+   "screenshot": "165-S16-settings.png",
+   "role": "Admin",
+   "part": 5
+  },
+  {
+   "key": "S16>D13:change-password",
+   "ok": true,
+   "detail": "reached D13",
+   "screenshot": "166-D13-change-password.png",
+   "role": "Admin",
+   "part": 5
+  },
+  {
+   "key": "S16>S02:sign-out",
+   "ok": true,
+   "detail": "reached S02",
+   "screenshot": "167-S02-sign-in.png",
+   "role": "All",
+   "part": 5
+  },
+  {
+   "key": "S02:wrong-password",
+   "ok": true,
+   "detail": "'Wrong username or password.'",
+   "screenshot": "168-S02-error.png",
+   "role": "All",
+   "part": 5
+  },
+  {
+   "key": "S02>S03:sign-in",
+   "ok": true,
+   "detail": "reached S03",
+   "screenshot": "169-S03-dashboard-inspector.png",
+   "role": "Inspector",
+   "part": 5
+  },
+  {
+   "key": "S03>D01:account-menu#inspector",
+   "ok": true,
+   "detail": "reached D01",
+   "screenshot": "170-D01-account-menu-inspector.png",
+   "role": "Inspector",
+   "part": 5
+  },
+  {
+   "key": "D01:admin-tools-hidden-for-inspector",
+   "ok": true,
+   "detail": "no 'Admin tools' item",
+   "screenshot": null,
+   "role": "Inspector",
+   "part": 5
+  },
+  {
+   "key": "TAB>S04:tab-inspect#inspector",
+   "ok": true,
+   "detail": "reached S04",
+   "screenshot": "171-S04-inspect-inspector.png",
+   "role": "Inspector",
+   "part": 5
+  },
+  {
+   "key": "S04:admin-controls-hidden-for-inspector",
+   "ok": true,
+   "detail": "no FAB, no print-labels, no Edit for inspector",
+   "screenshot": null,
+   "role": "Inspector",
+   "part": 5
+  },
+  {
+   "key": "S04>S11:inspect#inspector",
+   "ok": true,
+   "detail": "reached S11",
+   "screenshot": "172-S11.png",
+   "role": "Inspector",
+   "part": 5
+  },
+  {
+   "key": "S11>S13:submit#inspector",
+   "ok": true,
+   "detail": "reached S13",
+   "screenshot": "173-S13.png",
+   "role": "Inspector",
+   "part": 5
+  },
+  {
+   "key": "S13>S15:open-action#inspector",
+   "ok": true,
+   "detail": "reached S15",
+   "screenshot": "174-S15.png",
+   "role": "Inspector",
+   "part": 5
+  },
+  {
+   "key": "S15:verify-locked-for-inspector",
+   "ok": true,
+   "detail": "'Only an admin can verify this fix.'",
+   "screenshot": "175-S15-resolved-inspector.png",
+   "role": "Inspector",
+   "part": 5
+  },
+  {
+   "key": "S03>S09:scan#inspector",
+   "ok": true,
+   "detail": "reached S09",
+   "screenshot": "176-S09.png",
+   "role": "Inspector",
+   "part": 5
+  },
+  {
+   "key": "S09>S10:unknown-code#inspector",
+   "ok": true,
+   "detail": "reached S10",
+   "screenshot": "177-S10-new-equipment-inspector.png",
+   "role": "Inspector",
+   "part": 5
+  },
+  {
+   "key": "HARNESS:part5-scroll-to-save-with-keyboard",
+   "ok": false,
+   "detail": "Test harness: the on-screen keyboard still covered the inspector's 'New equipment' form while scrolling to Save. Re-run in part 6 after hiding the keyboard: PASS.",
+   "screenshot": null,
+   "role": "",
+   "part": 5,
+   "cause": "test harness"
+  },
+  {
+   "key": "S10>S11:save-and-start#inspector",
+   "ok": true,
+   "detail": "inspector registered new equipment and its inspection opened",
+   "screenshot": "191-S11-inspector-new-equipment.png",
+   "role": "Inspector",
+   "part": 6
+  },
+  {
+   "key": "APP>S03:session-restore",
+   "ok": true,
+   "detail": "remembered user lands on Home",
+   "screenshot": "192-S03-session-restored.png",
+   "role": "Inspector",
+   "part": 6
+  },
+  {
+   "key": "D01>S02:sign-out",
+   "ok": true,
+   "detail": "reached S02",
+   "screenshot": "193-S02.png",
+   "role": "All",
+   "part": 6
+  },
+  {
+   "key": "APP>S02:signed-out",
+   "ok": true,
+   "detail": "signed-out launch opens Sign in",
+   "screenshot": "194-S02-after-restart.png",
+   "role": "All",
+   "part": 6
+  }
+ ]
+}

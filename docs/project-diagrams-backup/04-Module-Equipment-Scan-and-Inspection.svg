@@ -1,0 +1,645 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3120" height="2105.0" viewBox="0 0 3120 2105.0" font-family="Helvetica, Arial, sans-serif">
+<title>Module 04 — Equipment, QR scan &amp; inspection checklist</title>
+<defs>
+<marker id="ah-nav" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1e293b"/></marker>
+<marker id="ah-admin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker>
+<marker id="ah-popup" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+<marker id="ah-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+<marker id="ah-external" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+<marker id="ah-partial" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker>
+<marker id="ah-tab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0e7490"/></marker>
+<marker id="ah-background" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/></marker>
+<marker id="ah-conditional" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/></marker>
+<marker id="ah-back" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+<marker id="ah-dialog_result" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a21caf"/></marker>
+<marker id="ah-state" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b45309"/></marker>
+</defs>
+<rect x="0" y="0" width="3120" height="2105.0" fill="#ffffff"/>
+<text font-size="30" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="60.0" y="56.6">Module 04 — Equipment, QR scan &amp; inspection checklist</tspan></text>
+
+
+<text font-size="13" fill="#334155" text-anchor="start"><tspan x="60.0" y="78.3">Find or scan equipment, register unknown codes (any role, via scan) or add/edit equipment (admin), then run the checklist. Every answer auto-saves; Submit validates (D03), writes the PDF and creates one corrective action per failed item.</tspan></text>
+<g id="S04"><title>S04 Inspect — find equipment | Route: InspectRoute (bottom tab) | Source: ui/inspect/FindEquipmentScreen.kt | Roles: Admin, Inspector | Status: IMPLEMENTED</title>
+<rect x="480.0" y="269.0" width="34.0" height="18.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="10" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="497.0" y="282.2">S04</tspan></text>
+<text font-size="13.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="519.0" y="283.7">Inspect — find equipment</tspan></text>
+<text font-size="8.5" fill="#475569" text-anchor="start"><tspan x="480.0" y="299.1">InspectRoute (bottom tab)</tspan></text>
+<rect x="480.0" y="310.0" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="575.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="334.0" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="595.0" cy="742.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="597.8" y="303.0" width="104.2" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.9"/><text font-size="7.4" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="649.9" y="313.1">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="494.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="696.0" y="341.9">▴ ▮</tspan></text>
+<rect x="488.0" y="345.0" width="214.0" height="24.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="368.2" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<rect x="671.2" y="349.0" width="21.8" height="13.0" rx="3.0" fill="#fff" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.5" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="682.1" y="358.2">PDF</tspan></text>
+<rect x="669.2" y="347.5" width="25.8" height="16.0" rx="3.0" fill="none" stroke="#c2410c" stroke-width="0.9" stroke-dasharray="3 2"/>
+<rect x="639.2" y="352.0" width="27.0" height="8.0" rx="2.0" fill="#fff7ed" stroke="#c2410c" stroke-width="0.6"/><text font-size="5" fill="#c2410c" text-anchor="middle" font-weight="bold"><tspan x="652.7" y="358.1">ADMIN</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="494.0" y="358.8">Inspect</tspan></text>
+<rect x="494.0" y="369.0" width="202.0" height="17.0" rx="8.5" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="595.0" y="380.4">Scan the equipment&#x27;s QR code</tspan></text>
+<rect x="494.0" y="389.5" width="202.0" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="498.0" y="400.8">⌕ Search name, code or location</tspan></text>
+<rect x="494.0" y="410.0" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="498.0" y="417.4">Factory</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="498.0" y="426.9">All</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="689.0" y="422.9">▾</tspan></text>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="494.0" y="439.8">1 of 1 equipment</tspan></text>
+<rect x="494.0" y="446.4" width="202.0" height="48.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="456.8">Fire extinguisher FE-12</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="465.1">FE-12 · Fire extinguisher</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="473.2">PlantA › BlockB › FloorOne › Cutting</tspan></text>
+<rect x="499.0" y="476.3" width="41.9" height="14.0" rx="7.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="520.0" y="486.1">Inspect</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="544.9" y="486.1">Edit</tspan></text>
+<rect x="542.9" y="474.8" width="32.6" height="17.0" rx="3.0" fill="none" stroke="#c2410c" stroke-width="0.9" stroke-dasharray="3 2"/>
+<rect x="577.5" y="479.3" width="26.0" height="8.0" rx="2.0" fill="#fff7ed" stroke="#c2410c" stroke-width="0.6"/><text font-size="5" fill="#c2410c" text-anchor="middle" font-weight="bold"><tspan x="590.5" y="485.4">ADMIN</tspan></text>
+<rect x="494.0" y="498.3" width="202.0" height="21.9" rx="3.0" fill="#fef9c3" stroke="#eab308" stroke-width="0.8"/><text font-size="6.2" fill="#713f12" text-anchor="start" font-style="italic"><tspan x="498.0" y="507.9">Empty list: &#x27;No equipment yet…&#x27; — admins are told to add</tspan><tspan x="498.0" y="515.8">locations + equipment, inspectors to scan a QR label</tspan></text>
+<rect x="488.0" y="702.0" width="214.0" height="26.0" rx="0.0" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/>
+<text font-size="8" fill="#64748b" text-anchor="middle"><tspan x="514.8" y="713.4">⌂</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="middle"><tspan x="514.8" y="723.5">Home</tspan></text>
+<rect x="553.2" y="704.0" width="30.0" height="12.0" rx="6.0" fill="#ccfbf1" stroke="none" stroke-width="1"/>
+<text font-size="8" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="568.2" y="713.4">▦</tspan></text>
+<text font-size="6" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="568.2" y="723.5">Inspect</tspan></text>
+<text font-size="8" fill="#64748b" text-anchor="middle"><tspan x="621.8" y="713.4">☰</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="middle"><tspan x="621.8" y="723.5">Actions</tspan></text>
+<text font-size="8" fill="#64748b" text-anchor="middle"><tspan x="675.2" y="713.4">◷</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="middle"><tspan x="675.2" y="723.5">History</tspan></text>
+<rect x="668.0" y="668.0" width="26.0" height="26.0" rx="8.0" fill="#ccfbf1" stroke="#0f766e" stroke-width="1"/><text font-size="12" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="681.0" y="686.0">+</tspan></text>
+<rect x="666.0" y="666.5" width="30.0" height="29.0" rx="3.0" fill="none" stroke="#c2410c" stroke-width="0.9" stroke-dasharray="3 2"/>
+<rect x="670.0" y="662.0" width="26.0" height="8.0" rx="2.0" fill="#fff7ed" stroke="#c2410c" stroke-width="0.6"/><text font-size="5" fill="#c2410c" text-anchor="middle" font-weight="bold"><tspan x="683.0" y="668.1">ADMIN</tspan></text>
+</g>
+<g id="D02_S04"><title>D02 QR labels ready | Source: ui/inspect/FindEquipmentScreen.kt | Roles: Admin</title>
+<rect x="850.0" y="318.0" width="210.0" height="53.8" rx="7.0" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="855.0" y="322.0" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="866.0" y="329.6">D02</tspan></text>
+<rect x="1027.9" y="322.0" width="28.1" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1041.9" y="328.8">POP-UP</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="881.0" y="330.0">QR labels ready</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="856.0" y="342.8">← PDF icon: print QR labels</tspan><tspan x="856.0" y="352.1">n labels on A4. Print, cut, stick.</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1054.0" y="363.3">Open ⇒ PDF app Share / print ⇒ share sheet</tspan></text>
+</g>
+<g id="X02_S04"><title>X02 Android share sheet | Source: util/FileSharing.kt | Status: IMPLEMENTED</title>
+<rect x="850.0" y="401.8" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="854.0" y="409.8" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="865.0" y="417.4">X02</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="879.0" y="417.6">Android share sheet</tspan></text>
+<rect x="1025.0" y="409.8" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1041.0" y="416.5">SYSTEM</tspan></text>
+</g>
+<g id="X03_S04"><title>X03 External PDF app | Source: util/FileSharing.kt | Status: IMPLEMENTED</title>
+<rect x="850.0" y="457.8" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="854.0" y="465.8" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="865.0" y="473.4">X03</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="879.0" y="473.6">External PDF app</tspan></text>
+<rect x="1025.0" y="465.8" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1041.0" y="472.5">SYSTEM</tspan></text>
+</g>
+<g id="D15_S04"><title>D15 Select-field dropdown | Source: ui/components/Pickers.kt | Roles: Admin, Inspector</title>
+<rect x="850.0" y="513.8" width="210.0" height="42.4" rx="7.0" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="855.0" y="517.8" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="866.0" y="525.4">D15</tspan></text>
+<rect x="1033.6" y="517.8" width="22.4" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1044.8" y="524.6">MENU</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="881.0" y="525.8">Select-field dropdown</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="856.0" y="538.6">← Location filter dropdowns</tspan><tspan x="856.0" y="547.8">People / inspector / type / location options</tspan></text>
+</g>
+<g id="note65">
+<rect x="480.0" y="794.0" width="580.0" height="38.6" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="487.0" y="809.0">S04 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="487.0" y="821.6">• Search, location filter</tspan></text>
+</g>
+<g id="S09"><title>S09 Scan checkpoint | Route: ScanRoute | Source: ui/scan/ScanScreen.kt | Roles: Admin, Inspector | Status: IMPLEMENTED</title>
+<rect x="1270.0" y="269.0" width="34.0" height="18.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="10" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1287.0" y="282.2">S09</tspan></text>
+<text font-size="13.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1309.0" y="283.7">Scan checkpoint</tspan></text>
+<text font-size="8.5" fill="#475569" text-anchor="start"><tspan x="1270.0" y="299.1">ScanRoute</tspan></text>
+<rect x="1270.0" y="310.0" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="1365.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="334.0" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="1385.0" cy="742.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="1387.8" y="303.0" width="104.2" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.9"/><text font-size="7.4" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="1439.9" y="313.1">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="1486.0" y="341.9">▴ ▮</tspan></text>
+<rect x="1278.0" y="345.0" width="214.0" height="24.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="368.2" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="1284.0" y="359.2">←</tspan></text>
+<rect x="1468.7" y="349.0" width="14.3" height="13.0" rx="3.0" fill="#fff" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.5" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="1475.9" y="358.2">⚡</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1298.0" y="358.8">Scan checkpoint</tspan></text>
+<rect x="1284.0" y="369.0" width="202.0" height="150.0" rx="5.0" fill="#0f172a" stroke="none" stroke-width="1"/>
+<rect x="1343.8" y="402.8" width="82.5" height="82.5" rx="8.0" fill="none" stroke="#fff" stroke-width="1.6"/>
+<rect x="1288.0" y="503.0" width="158.0" height="13.0" rx="6.0" fill="#334155" stroke="none" stroke-width="1"/><text font-size="5.8" fill="#fff" text-anchor="middle"><tspan x="1367.0" y="511.9">CameraX + ZXing analyzer · QR viewfinder</tspan></text>
+<text font-size="6.6" fill="#1e293b" text-anchor="start"><tspan x="1284.0" y="528.8">Point the camera at the equipment&#x27;s QR label. It opens the</tspan><tspan x="1284.0" y="537.2">checklist automatically.</tspan></text>
+<rect x="1284.0" y="543.9" width="202.0" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1385.0" y="555.3">Scan a QR code from a picture</tspan></text>
+<rect x="1284.0" y="564.4" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="1288.0" y="571.7">Or type the checkpoint code</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="1288.0" y="581.3">e.g. SS-LINE-04</tspan></text>
+<rect x="1284.0" y="587.9" width="202.0" height="17.0" rx="8.5" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1385.0" y="599.3">Continue</tspan></text>
+</g>
+<g id="D16_S09"><title>D16 Camera permission gate | Source: ui/components/Common.kt | Roles: Admin, Inspector</title>
+<rect x="1640.0" y="318.0" width="210.0" height="53.8" rx="7.0" fill="#fffbeb" stroke="#b45309" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="1645.0" y="322.0" width="22.0" height="10.0" rx="3.0" fill="#b45309" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1656.0" y="329.6">D16</tspan></text>
+<rect x="1800.8" y="322.0" width="45.2" height="9.0" rx="2.0" fill="#fff" stroke="#b45309" stroke-width="0.6"/><text font-size="5.4" fill="#b45309" text-anchor="middle" font-weight="bold"><tspan x="1823.4" y="328.8">PERMISSION</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1671.0" y="330.0">Camera permission gate</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="1646.0" y="342.8">← Camera permission gate</tspan><tspan x="1646.0" y="352.1">System prompt, asked once</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1844.0" y="363.3">Allow camera ⇒ preview Open app settings</tspan></text>
+</g>
+<g id="X01_S09"><title>X01 System photo picker | Source: ui/scan/ScanScreen.kt | Status: IMPLEMENTED</title>
+<rect x="1640.0" y="401.8" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="1644.0" y="409.8" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1655.0" y="417.4">X01</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1669.0" y="417.6">System photo picker</tspan></text>
+<rect x="1815.0" y="409.8" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1831.0" y="416.5">SYSTEM</tspan></text>
+</g>
+<g id="X05_S09"><title>X05 Android app settings | Source: ui/components/Common.kt | Status: IMPLEMENTED</title>
+<rect x="1640.0" y="457.8" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="1644.0" y="465.8" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1655.0" y="473.4">X05</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1669.0" y="473.6">Android app settings</tspan></text>
+<rect x="1815.0" y="465.8" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1831.0" y="472.5">SYSTEM</tspan></text>
+</g>
+<g id="BACK_S09"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="1134.0" y="340.0" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="1182.0" y="353.7">↩ previous screen</tspan><tspan x="1182.0" y="362.1">(back stack)</tspan></text>
+</g>
+<g id="note103">
+<rect x="1270.0" y="794.0" width="580.0" height="38.6" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="1277.0" y="809.0">S09 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1277.0" y="821.6">• Unusable / missing QR → snackbar, analyzer resumes</tspan></text>
+</g>
+<g id="S10"><title>S10 New / edit equipment | Route: CheckpointFormRoute(code?, checkpointId) | Source: ui/checkpoint/CheckpointFormScreen.kt | Roles: Admin (+ / Edit); any role via an unknown scanned code | Status: IMPLEMENTED</title>
+<rect x="2060.0" y="269.0" width="34.0" height="18.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="10" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2077.0" y="282.2">S10</tspan></text>
+<text font-size="13.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2099.0" y="283.7">New / edit equipment</tspan></text>
+<text font-size="8.5" fill="#475569" text-anchor="start"><tspan x="2060.0" y="299.1">CheckpointFormRoute(code?, checkpointId)</tspan></text>
+<rect x="2060.0" y="310.0" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="2155.0" y="319.0" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="2068.0" y="334.0" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="2175.0" cy="742.0" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="2177.8" y="303.0" width="104.2" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.9"/><text font-size="7.4" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="2229.9" y="313.1">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="2074.0" y="341.9">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="2276.0" y="341.9">▴ ▮</tspan></text>
+<rect x="2068.0" y="345.0" width="214.0" height="30.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="2068.0" y="374.2" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="2074.0" y="359.2">←</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2088.0" y="358.8">New equipment</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="2088.0" y="368.5">or &#x27;Edit equipment&#x27;</tspan></text>
+<rect x="2074.0" y="375.0" width="202.0" height="25.4" rx="5.0" fill="#fef3c7" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2079.0" y="385.3">Code NEW-99 is not registered yet. Describe it</tspan><tspan x="2079.0" y="394.6">once; every later scan opens its checklist.</tspan></text>
+<rect x="2074.0" y="403.9" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="2078.0" y="411.3">Equipment code (on the QR label)</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="2078.0" y="420.8">read-only when scanned / editing</tspan></text>
+<rect x="2074.0" y="427.4" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="2078.0" y="434.8">Name</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="2078.0" y="444.3">e.g. Fire extinguisher FE-12</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="2074.0" y="459.6">Location</tspan></text>
+<rect x="2074.0" y="465.4" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="2078.0" y="472.8">Factory</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="2078.0" y="482.3">Not set</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="2269.0" y="478.4">▾</tspan></text>
+<rect x="2074.0" y="488.9" width="73.6" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.8"/><text font-size="6.3" fill="#64748b" text-anchor="start"><tspan x="2078.0" y="500.1">Building ▾</tspan></text>
+<rect x="2151.6" y="488.9" width="61.7" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.8"/><text font-size="6.3" fill="#64748b" text-anchor="start"><tspan x="2155.6" y="500.1">Floor ▾</tspan></text>
+<rect x="2217.4" y="488.9" width="58.6" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.8"/><text font-size="6.3" fill="#64748b" text-anchor="start"><tspan x="2221.4" y="500.1">Area ▾</tspan></text>
+<rect x="2074.0" y="509.4" width="202.0" height="13.9" rx="3.0" fill="#fef9c3" stroke="#eab308" stroke-width="0.8"/><text font-size="6.2" fill="#713f12" text-anchor="start" font-style="italic"><tspan x="2078.0" y="519.0">Building / Floor / Area appear after the level above is chosen</tspan></text>
+<rect x="2074.0" y="526.9" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="2078.0" y="534.2">Exact spot (optional)</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="2078.0" y="543.7">e.g. next to stair B</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="2074.0" y="559.0">Type (decides the checklist)</tspan></text>
+<ellipse cx="2079.5" cy="569.9" rx="3.5" ry="3.5" fill="#0f766e" stroke="#0f766e" stroke-width="0.9"/>
+<text font-size="6.6" fill="#1e293b" text-anchor="start"><tspan x="2087.0" y="572.6">Fire extinguisher</tspan></text>
+<ellipse cx="2079.5" cy="580.4" rx="3.5" ry="3.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/>
+<text font-size="6.6" fill="#1e293b" text-anchor="start"><tspan x="2087.0" y="583.1">Electrical panel</tspan></text>
+<ellipse cx="2079.5" cy="590.9" rx="3.5" ry="3.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/>
+<text font-size="6.6" fill="#1e293b" text-anchor="start"><tspan x="2087.0" y="593.6">Fire alarm</tspan></text>
+<ellipse cx="2079.5" cy="601.4" rx="3.5" ry="3.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/>
+<text font-size="6.6" fill="#1e293b" text-anchor="start"><tspan x="2087.0" y="604.1">Emergency exit</tspan></text>
+<ellipse cx="2079.5" cy="611.9" rx="3.5" ry="3.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/>
+<text font-size="6.6" fill="#1e293b" text-anchor="start"><tspan x="2087.0" y="614.6">Boiler</tspan></text>
+<text font-size="6.6" fill="#dc2626" text-anchor="start"><tspan x="2074.0" y="627.1">Enter the code printed on (or planned for) its QR label.</tspan></text>
+<rect x="2074.0" y="633.8" width="202.0" height="17.0" rx="8.5" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2175.0" y="645.2">Save and start inspection | Save equipment | Save changes</tspan></text>
+</g>
+<g id="D15_S10"><title>D15 Select-field dropdown | Source: ui/components/Pickers.kt | Roles: Admin, Inspector</title>
+<rect x="2430.0" y="318.0" width="210.0" height="51.6" rx="7.0" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="2435.0" y="322.0" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="2446.0" y="329.6">D15</tspan></text>
+<rect x="2613.6" y="322.0" width="22.4" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="2624.8" y="328.8">MENU</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2461.0" y="330.0">Select-field dropdown</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="2436.0" y="342.8">← Location dropdowns (Factory › Building › Floor ›</tspan><tspan x="2436.0" y="352.1">Area)</tspan><tspan x="2436.0" y="361.3">People / inspector / type / location options</tspan></text>
+</g>
+<g id="BACK_S10"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="1924.0" y="340.0" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="1972.0" y="353.7">↩ previous screen</tspan><tspan x="1972.0" y="362.1">(back stack)</tspan></text>
+</g>
+<g id="note158">
+<rect x="2060.0" y="794.0" width="580.0" height="38.6" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="2067.0" y="809.0">S10 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="2067.0" y="821.6">• Validation / duplicate-code errors</tspan></text>
+</g>
+<g id="S11"><title>S11 Inspection checklist | Route: InspectionRoute(inspectionId) | Source: ui/inspection/InspectionScreen.kt | Roles: Admin, Inspector | Status: IMPLEMENTED</title>
+<rect x="480.0" y="937.6" width="34.0" height="18.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="10" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="497.0" y="950.8">S11</tspan></text>
+<text font-size="13.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="519.0" y="952.2">Inspection checklist</tspan></text>
+<text font-size="8.5" fill="#475569" text-anchor="start"><tspan x="480.0" y="967.6">InspectionRoute(inspectionId)</tspan></text>
+<rect x="480.0" y="978.6" width="230.0" height="529.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="575.0" y="987.6" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="1002.6" width="214.0" height="473.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="595.0" cy="1489.6" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="597.8" y="971.6" width="104.2" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.9"/><text font-size="7.4" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="649.9" y="981.7">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="494.0" y="1010.5">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="696.0" y="1010.5">▴ ▮</tspan></text>
+<rect x="488.0" y="1013.6" width="214.0" height="30.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="488.0" y="1042.8" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="494.0" y="1027.8">←</tspan></text>
+<rect x="678.7" y="1017.6" width="14.3" height="13.0" rx="3.0" fill="#fff" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.5" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="685.9" y="1026.8">🗑</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="508.0" y="1027.3">Fire extinguisher FE-12</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="508.0" y="1037.1">FE-12 · Fire extinguisher</tspan></text>
+<rect x="494.0" y="1043.6" width="202.0" height="32.3" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1053.9">Inspector: Walk Admin</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1062.3">Location: PlantA › BlockB › FloorOne › Cutting</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1070.3">Started Nov 15, 2026, 6:46 AM</tspan></text>
+<text font-size="7" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="494.0" y="1086.8">0 of 7 answered</tspan></text>
+<rect x="494.0" y="1089.4" width="202.0" height="3.5" rx="1.7" fill="#e2e8f0" stroke="none" stroke-width="1"/>
+<rect x="494.0" y="1089.4" width="0.0" height="3.5" rx="0.0" fill="#0f766e" stroke="none" stroke-width="1"/>
+<rect x="494.0" y="1097.9" width="27.6" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="507.8" y="1105.9">0 pass</tspan></text>
+<rect x="524.6" y="1097.9" width="24.6" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="536.9" y="1105.9">0 fail</tspan></text>
+<rect x="552.2" y="1097.9" width="26.0" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="565.1" y="1105.9">0 N/A</tspan></text>
+<text font-size="7.5" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="494.0" y="1123.1">Fire extinguisher</tspan></text>
+<rect x="494.0" y="1128.9" width="202.0" height="25.4" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1139.2">1. Extinguisher is in its marked place and mounted</tspan><tspan x="499.0" y="1148.5">at the right height</tspan></text>
+<rect x="494.0" y="1157.8" width="67.3" height="15.0" rx="7.0" fill="#fff" stroke="#94a3b8" stroke-width="0.8"/><text font-size="6.8" fill="#1e293b" text-anchor="middle"><tspan x="527.7" y="1168.2">Pass</tspan></text>
+<rect x="561.3" y="1157.8" width="67.3" height="15.0" rx="0.0" fill="#fee2e2" stroke="#94a3b8" stroke-width="0.8"/><text font-size="6.8" fill="#b91c1c" text-anchor="middle" font-weight="bold"><tspan x="595.0" y="1168.2">Fail</tspan></text>
+<rect x="628.7" y="1157.8" width="67.3" height="15.0" rx="7.0" fill="#fff" stroke="#94a3b8" stroke-width="0.8"/><text font-size="6.8" fill="#1e293b" text-anchor="middle"><tspan x="662.3" y="1168.2">N/A</tspan></text>
+<rect x="494.0" y="1176.3" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="498.0" y="1183.7">Problem and corrective action (required)</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="498.0" y="1193.2">Gauge in red zone</tspan></text>
+<rect x="494.0" y="1199.8" width="202.0" height="20.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="5.6" fill="#64748b" text-anchor="start"><tspan x="498.0" y="1207.2">Responsible for the fix</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start"><tspan x="498.0" y="1216.7">Walk Admin</tspan></text>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="689.0" y="1212.8">▾</tspan></text>
+<text font-size="6.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="494.0" y="1229.6">Finding priority</tspan></text>
+<rect x="494.0" y="1236.3" width="31.7" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="509.9" y="1244.3">Critical</tspan></text>
+<rect x="528.7" y="1236.3" width="22.0" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="539.7" y="1244.3">High</tspan></text>
+<rect x="553.7" y="1236.3" width="31.4" height="11.0" rx="5.5" fill="#ccfbf1" stroke="#0f766e" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle" font-weight="bold"><tspan x="569.4" y="1244.3">Medium</tspan></text>
+<rect x="588.1" y="1236.3" width="22.2" height="11.0" rx="5.5" fill="#fff" stroke="#94a3b8" stroke-width="0.7"/><text font-size="6" fill="#1e293b" text-anchor="middle"><tspan x="599.3" y="1244.3">Low</tspan></text>
+<rect x="494.0" y="1252.8" width="109.9" height="17.0" rx="8.5" fill="#fff" stroke="#0f766e" stroke-width="0.9"/><text font-size="6.8" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="548.9" y="1264.1">Due Nov 22, 2026</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="607.9" y="1264.1">📷 Photo (1)</tspan></text>
+<rect x="494.0" y="1273.3" width="202.0" height="24.0" rx="4.0" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="0.8"/><text font-size="6.4" fill="#64748b" text-anchor="middle" font-style="italic"><tspan x="595.0" y="1288.0">▣ photo thumbnail — tap → &#x27;Remove photo?&#x27;</tspan></text>
+<rect x="494.0" y="1300.8" width="202.0" height="33.5" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1311.1">2. Pressure gauge reads in the green (charged)</tspan><tspan x="499.0" y="1320.3">zone</tspan></text>
+<text font-size="6.3" fill="#475569" text-anchor="start"><tspan x="499.0" y="1328.7">Critical item</tspan></text>
+<rect x="494.0" y="1337.8" width="67.3" height="15.0" rx="7.0" fill="#fff" stroke="#94a3b8" stroke-width="0.8"/><text font-size="6.8" fill="#1e293b" text-anchor="middle"><tspan x="527.7" y="1348.1">Pass</tspan></text>
+<rect x="561.3" y="1337.8" width="67.3" height="15.0" rx="0.0" fill="#fff" stroke="#94a3b8" stroke-width="0.8"/><text font-size="6.8" fill="#1e293b" text-anchor="middle"><tspan x="595.0" y="1348.1">Fail</tspan></text>
+<rect x="628.7" y="1337.8" width="67.3" height="15.0" rx="7.0" fill="#fff" stroke="#94a3b8" stroke-width="0.8"/><text font-size="6.8" fill="#1e293b" text-anchor="middle"><tspan x="662.3" y="1348.1">N/A</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="494.0" y="1367.6">📷 Add photo</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="609.3" y="1367.6">Add note</tspan></text>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="494.0" y="1383.1">… items 3–7 (safety pin, service tag, hose, …)</tspan></text>
+<rect x="494.0" y="1389.7" width="202.0" height="32.2" rx="5.0" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="0.8"/>
+<text font-size="7.2" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1400.1">General notes &amp; photos</tspan></text>
+<text font-size="6.8" fill="#0f766e" text-anchor="start" font-weight="bold"><tspan x="499.0" y="1413.3">📷 Add general photo</tspan></text>
+<rect x="494.0" y="1425.4" width="202.0" height="17.0" rx="3.0" fill="#fff" stroke="#94a3b8" stroke-width="0.9"/>
+<text font-size="6.6" fill="#64748b" text-anchor="start"><tspan x="498.0" y="1436.7">General notes (optional)</tspan></text>
+<rect x="488.0" y="1451.6" width="214.0" height="24.0" rx="0.0" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/>
+<text font-size="6.5" fill="#1e293b" text-anchor="start"><tspan x="494.0" y="1466.3">0/7 answered · 7 left</tspan></text>
+<rect x="607.9" y="1455.6" width="88.1" height="16.0" rx="8.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.8" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="651.9" y="1466.4">Submit &amp; create PDF</tspan></text>
+</g>
+<g id="D03_S11"><title>D03 Almost done | Source: ui/inspection/InspectionScreen.kt | Roles: Admin, Inspector</title>
+<rect x="850.0" y="986.6" width="210.0" height="63.0" rx="7.0" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="855.0" y="990.6" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="866.0" y="998.2">D03</tspan></text>
+<rect x="1027.9" y="990.6" width="28.1" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1041.9" y="997.3">POP-UP</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="881.0" y="998.5">Almost done</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="856.0" y="1011.4">← Submit with problems</tspan><tspan x="856.0" y="1020.6">• items still need an answer</tspan><tspan x="856.0" y="1029.8">• failed items need note, priority, due</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1054.0" y="1041.0">OK ⇒ back to the checklist</tspan></text>
+</g>
+<g id="D04_S11"><title>D04 Delete this inspection? | Source: ui/inspection/InspectionScreen.kt | Roles: Admin, Inspector</title>
+<rect x="850.0" y="1079.6" width="210.0" height="53.8" rx="7.0" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="855.0" y="1083.6" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="866.0" y="1091.2">D04</tspan></text>
+<rect x="1027.9" y="1083.6" width="28.1" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1041.9" y="1090.3">POP-UP</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="881.0" y="1091.5">Delete this inspection?</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="856.0" y="1104.4">← Trash icon</tspan><tspan x="856.0" y="1113.6">Answers, notes, photos removed.</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1054.0" y="1124.8">Cancel ⇒ stays Delete ⇒ previous screen</tspan></text>
+</g>
+<g id="D05_S11"><title>D05 Remove photo? | Source: ui/inspection/InspectionScreen.kt | Roles: Admin, Inspector</title>
+<rect x="850.0" y="1163.4" width="210.0" height="53.8" rx="7.0" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="855.0" y="1167.4" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="866.0" y="1175.0">D05</tspan></text>
+<rect x="1027.9" y="1167.4" width="28.1" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1041.9" y="1174.1">POP-UP</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="881.0" y="1175.3">Remove photo?</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="856.0" y="1188.2">← Tap a photo thumbnail</tspan><tspan x="856.0" y="1197.4">Tap a thumbnail; not in the PDF.</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1054.0" y="1208.6">Keep Remove ⇒ photo deleted</tspan></text>
+</g>
+<g id="D14_S11"><title>D14 Due-date picker | Source: ui/components/Pickers.kt | Roles: Admin, Inspector</title>
+<rect x="850.0" y="1247.2" width="210.0" height="53.8" rx="7.0" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="855.0" y="1251.2" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="866.0" y="1258.8">D14</tspan></text>
+<rect x="1027.9" y="1251.2" width="28.1" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1041.9" y="1257.9">POP-UP</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="881.0" y="1259.1">Due-date picker</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="856.0" y="1272.0">← Due date button (failed item)</tspan><tspan x="856.0" y="1281.2">Material date picker</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1054.0" y="1292.4">Cancel OK ⇒ due date set</tspan></text>
+</g>
+<g id="D15_S11"><title>D15 Select-field dropdown | Source: ui/components/Pickers.kt | Roles: Admin, Inspector</title>
+<rect x="850.0" y="1330.9" width="210.0" height="42.4" rx="7.0" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="855.0" y="1334.9" width="22.0" height="10.0" rx="3.0" fill="#7c3aed" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="866.0" y="1342.6">D15</tspan></text>
+<rect x="1033.6" y="1334.9" width="22.4" height="9.0" rx="2.0" fill="#fff" stroke="#7c3aed" stroke-width="0.6"/><text font-size="5.4" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="1044.8" y="1341.7">MENU</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="881.0" y="1342.9">Select-field dropdown</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="856.0" y="1355.8">← Responsible for the fix ▾ (failed item)</tspan><tspan x="856.0" y="1365.0">People / inspector / type / location options</tspan></text>
+</g>
+<g id="BACK_S11"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="344.0" y="1008.6" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="392.0" y="1022.3">↩ previous screen</tspan><tspan x="392.0" y="1030.7">(back stack)</tspan></text>
+</g>
+<g id="note249">
+<rect x="480.0" y="1541.6" width="580.0" height="38.6" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="487.0" y="1556.6">S11 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="487.0" y="1569.2">• Answer Pass/Fail/N/A, notes, priority, general notes (auto-saved)</tspan></text>
+</g>
+<g id="S12"><title>S12 Take photo | Route: PhotoCaptureRoute(inspectionId, itemId, actionId) | Source: ui/camera/PhotoCaptureScreen.kt | Roles: Admin, Inspector | Status: IMPLEMENTED</title>
+<rect x="1270.0" y="937.6" width="34.0" height="18.0" rx="4.0" fill="#1e293b" stroke="none" stroke-width="1"/><text font-size="10" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1287.0" y="950.8">S12</tspan></text>
+<text font-size="13.5" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1309.0" y="952.2">Take photo</tspan></text>
+<text font-size="8.5" fill="#475569" text-anchor="start"><tspan x="1270.0" y="967.6">PhotoCaptureRoute(inspectionId, itemId, actionId)</tspan></text>
+<rect x="1270.0" y="978.6" width="230.0" height="450.0" rx="26.0" fill="#e2e8f0" stroke="#475569" stroke-width="1.6"/>
+<rect x="1365.0" y="987.6" width="40.0" height="5.0" rx="2.5" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="1002.6" width="214.0" height="394.0" rx="4.0" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+<ellipse cx="1385.0" cy="1410.6" rx="9.0" ry="9.0" fill="none" stroke="#64748b" stroke-width="1.3"/>
+<rect x="1387.8" y="971.6" width="104.2" height="14.0" rx="7.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.9"/><text font-size="7.4" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="1439.9" y="981.7">IMPLEMENTED · ✓ RUN</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="start"><tspan x="1284.0" y="1010.5">9:41</tspan></text>
+<text font-size="5.8" fill="#64748b" text-anchor="end"><tspan x="1486.0" y="1010.5">▴ ▮</tspan></text>
+<rect x="1278.0" y="1013.6" width="214.0" height="30.0" rx="0.0" fill="#f8fafc" stroke="none" stroke-width="1"/>
+<rect x="1278.0" y="1042.8" width="214.0" height="0.8" rx="0.0" fill="#cbd5e1" stroke="none" stroke-width="1"/>
+<text font-size="10" fill="#1e293b" text-anchor="start"><tspan x="1284.0" y="1027.8">←</tspan></text>
+<text font-size="9" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1298.0" y="1027.3">Take photo</tspan></text>
+<text font-size="6" fill="#64748b" text-anchor="start"><tspan x="1298.0" y="1037.1">Item 1: … | General photo | After-fix · action #1</tspan></text>
+<rect x="1284.0" y="1043.6" width="202.0" height="300.0" rx="5.0" fill="#0f172a" stroke="none" stroke-width="1"/>
+<rect x="1288.0" y="1327.6" width="158.0" height="13.0" rx="6.0" fill="#334155" stroke="none" stroke-width="1"/><text font-size="5.8" fill="#fff" text-anchor="middle"><tspan x="1367.0" y="1336.5">CameraX preview (full screen)</tspan></text>
+<ellipse cx="1385.0" cy="1301.6" rx="16.0" ry="16.0" fill="#0f766e" stroke="#fff" stroke-width="1.2"/><text font-size="16" fill="#fff" text-anchor="middle"><tspan x="1385.0" y="1308.3">◉</tspan></text>
+</g>
+<g id="D16_S12"><title>D16 Camera permission gate | Source: ui/components/Common.kt | Roles: Admin, Inspector</title>
+<rect x="1640.0" y="986.6" width="210.0" height="53.8" rx="7.0" fill="#fffbeb" stroke="#b45309" stroke-width="1.2" stroke-dasharray="4 2"/>
+<rect x="1645.0" y="990.6" width="22.0" height="10.0" rx="3.0" fill="#b45309" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1656.0" y="998.2">D16</tspan></text>
+<rect x="1800.8" y="990.6" width="45.2" height="9.0" rx="2.0" fill="#fff" stroke="#b45309" stroke-width="0.6"/><text font-size="5.4" fill="#b45309" text-anchor="middle" font-weight="bold"><tspan x="1823.4" y="997.3">PERMISSION</tspan></text>
+<text font-size="8.4" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1671.0" y="998.5">Camera permission gate</tspan></text>
+<text font-size="7.2" fill="#475569" text-anchor="start"><tspan x="1646.0" y="1011.4">← Camera permission gate</tspan><tspan x="1646.0" y="1020.6">System prompt, asked once</tspan></text>
+<text font-size="7.2" fill="#0f766e" text-anchor="end" font-weight="bold"><tspan x="1844.0" y="1031.8">Allow camera ⇒ preview Open app settings</tspan></text>
+</g>
+<g id="X05_S12"><title>X05 Android app settings | Source: ui/components/Common.kt | Status: IMPLEMENTED</title>
+<rect x="1640.0" y="1070.4" width="210.0" height="26.0" rx="4.0" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+<rect x="1644.0" y="1078.4" width="22.0" height="10.0" rx="3.0" fill="#0f766e" stroke="none" stroke-width="1"/><text font-size="6.3" fill="#fff" text-anchor="middle" font-weight="bold"><tspan x="1655.0" y="1086.0">X05</tspan></text>
+<text font-size="6.8" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="1669.0" y="1086.2">Android app settings</tspan></text>
+<rect x="1815.0" y="1078.4" width="32.0" height="9.0" rx="2.0" fill="#fff" stroke="#0f766e" stroke-width="0.6"/><text font-size="5.2" fill="#0f766e" text-anchor="middle" font-weight="bold"><tspan x="1831.0" y="1085.0">SYSTEM</tspan></text>
+</g>
+<g id="BACK_S12"><title>Back / ← : NavController.popBackStack() — returns to the screen underneath</title>
+<rect x="1134.0" y="1008.6" width="96.0" height="30.0" rx="15.0" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="2 2"/><text font-size="7" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="1182.0" y="1022.3">↩ previous screen</tspan><tspan x="1182.0" y="1030.7">(back stack)</tspan></text>
+</g>
+<g id="note278">
+<rect x="1270.0" y="1462.6" width="580.0" height="38.6" rx="6.0" fill="#fffbeb" stroke="#b45309" stroke-width="1"/>
+<text font-size="9.6" fill="#b45309" text-anchor="start" font-weight="bold"><tspan x="1277.0" y="1477.6">S12 — in-screen actions &amp; state changes (no navigation)</tspan></text>
+<text font-size="8" fill="#1e293b" text-anchor="start"><tspan x="1277.0" y="1490.2">• Shutter: capture + save photo (spinner); error → snackbar, stays [camera ready]</tspan></text>
+</g>
+<g id="ref_in_TABS_60_300"><title>Off-diagram reference to in:TABS: from Bottom-bar tab</title>
+<rect x="60.0" y="300.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="313.2">↗ from Bottom-bar tab</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="325.7">bottom navigation bar</tspan></text>
+</g>
+<g id="ref_in_S03_60_350"><title>Off-diagram reference to in:S03: from S03 Home dashboard</title>
+<rect x="60.0" y="350.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="363.2">↗ from S03 Home dashboard</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="375.7">Home dashboard (03)</tspan></text>
+</g>
+<g id="ref_in_S06_60_400"><title>Off-diagram reference to in:S06: from S06 Inspection history</title>
+<rect x="60.0" y="400.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="413.2">↗ from S06 Inspection history</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="425.7">History &amp; captured (07)</tspan></text>
+</g>
+<g id="ref_in_S15_60_450"><title>Off-diagram reference to in:S15: from S15 Corrective action detail</title>
+<rect x="60.0" y="450.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="463.2">↗ from S15 Corrective action detail</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="475.7">Corrective actions (06)</tspan></text>
+</g>
+<g id="ref_in_S18_60_500"><title>Off-diagram reference to in:S18: from S18 Admin tools</title>
+<rect x="60.0" y="500.0" width="210.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="70.0" y="513.2">↗ from S18 Admin tools</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="70.0" y="525.7">Admin tools (08)</tspan></text>
+</g>
+<g id="ref_out_S13_2830_300"><title>Off-diagram reference to out:S13: to S13 Inspection report</title>
+<rect x="2830.0" y="300.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="313.2">↗ to S13 Inspection report</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="325.7">Report &amp; PDF (05)</tspan></text>
+</g>
+<g id="ref_out_S15_2830_350"><title>Off-diagram reference to out:S15: to S15 Corrective action detail</title>
+<rect x="2830.0" y="350.0" width="240.0" height="34.0" rx="17.0" fill="#ffffff" stroke="#334155" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text font-size="7.6" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2840.0" y="363.2">↗ to S15 Corrective action detail</tspan></text>
+<text font-size="6.4" fill="#64748b" text-anchor="start" font-style="italic"><tspan x="2840.0" y="375.7">Corrective actions (06)</tspan></text>
+</g>
+<g id="legend296">
+<rect x="2420.0" y="1686.1" width="640.0" height="322.9" rx="8.0" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>
+<text font-size="17" fill="#1e293b" text-anchor="start" font-weight="bold"><tspan x="2432.0" y="1713.3">LEGEND</tspan></text>
+<rect x="2434.0" y="1734.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#1e293b" stroke-width="2.1"/>
+<text font-size="7" fill="#1e293b" text-anchor="middle"><tspan x="2469.0" y="1737.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1739.0">Navigation (tap → new screen)</tspan></text>
+<rect x="2754.0" y="1734.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#1d4ed8" stroke-width="2.1" stroke-dasharray="10 3"/>
+<text font-size="7" fill="#1d4ed8" text-anchor="middle"><tspan x="2789.0" y="1737.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1739.0">Conditional navigation (label = condition)</tspan></text>
+<rect x="2434.0" y="1757.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#c2410c" stroke-width="2.3"/>
+<text font-size="7" fill="#c2410c" text-anchor="middle"><tspan x="2469.0" y="1760.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1762.0">Admin-only navigation</tspan></text>
+<rect x="2754.0" y="1757.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#64748b" stroke-width="2.0" stroke-dasharray="2 3"/>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="2789.0" y="1760.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1762.0">Return after save / photo (popBackStack to the opener)</tspan></text>
+<rect x="2434.0" y="1780.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#64748b" stroke-width="1.9" stroke-dasharray="1 3"/>
+<text font-size="7" fill="#64748b" text-anchor="middle"><tspan x="2469.0" y="1783.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1785.0">← / system Back → previous screen on the stack</tspan></text>
+<rect x="2754.0" y="1780.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#7c3aed" stroke-width="1.9" stroke-dasharray="5 3"/>
+<text font-size="7" fill="#7c3aed" text-anchor="middle"><tspan x="2789.0" y="1783.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1785.0">Opens a pop-up / menu / permission prompt</tspan></text>
+<rect x="2434.0" y="1803.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#a21caf" stroke-width="1.9" stroke-dasharray="3 2"/>
+<text font-size="7" fill="#a21caf" text-anchor="middle"><tspan x="2469.0" y="1806.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1808.0">Dialog outcome (OK / Cancel / Save / Delete …)</tspan></text>
+<rect x="2754.0" y="1803.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#b45309" stroke-width="1.9" stroke-dasharray="4 2"/>
+<text font-size="7" fill="#b45309" text-anchor="middle"><tspan x="2789.0" y="1806.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1808.0">In-screen state change (annotation box)</tspan></text>
+<rect x="2434.0" y="1826.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0f766e" stroke-width="1.9" stroke-dasharray="7 3 2 3"/>
+<text font-size="7" fill="#0f766e" text-anchor="middle"><tspan x="2469.0" y="1829.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1831.0">Hands off to Android / another app / server</tspan></text>
+<rect x="2754.0" y="1826.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0f766e" stroke-width="1.7999999999999998" stroke-dasharray="2 2"/>
+<text font-size="7" fill="#0f766e" text-anchor="middle"><tspan x="2789.0" y="1829.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1831.0">Background work (WorkManager)</tspan></text>
+<rect x="2434.0" y="1849.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#dc2626" stroke-width="2.1" stroke-dasharray="6 3"/>
+<text font-size="7" fill="#dc2626" text-anchor="middle"><tspan x="2469.0" y="1852.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2480.0" y="1854.0">Partially implemented path</tspan></text>
+<rect x="2754.0" y="1849.1" width="34.0" height="0.1" rx="0.0" fill="none" stroke="#0e7490" stroke-width="2.1"/>
+<text font-size="7" fill="#0e7490" text-anchor="middle"><tspan x="2789.0" y="1852.1">▶</tspan></text>
+<text font-size="10.5" fill="#1e293b" text-anchor="start"><tspan x="2800.0" y="1854.0">Bottom-bar tab switch</tspan></text>
+<rect x="2434.0" y="1872.1" width="84.3" height="18.0" rx="9.0" fill="#dcfce7" stroke="#15803d" stroke-width="0.8"/><text font-size="8.6" fill="#15803d" text-anchor="middle" font-weight="bold"><tspan x="2476.2" y="1884.7">IMPLEMENTED</tspan></text>
+<rect x="2526.3" y="1872.1" width="56.5" height="18.0" rx="9.0" fill="#fef3c7" stroke="#b45309" stroke-width="0.8"/><text font-size="8.6" fill="#b45309" text-anchor="middle" font-weight="bold"><tspan x="2554.6" y="1884.7">PARTIAL</tspan></text>
+<rect x="2590.8" y="1872.1" width="80.8" height="18.0" rx="9.0" fill="#e2e8f0" stroke="#475569" stroke-width="0.8"/><text font-size="8.6" fill="#475569" text-anchor="middle" font-weight="bold"><tspan x="2631.2" y="1884.7">UNREACHABLE</tspan></text>
+<rect x="2679.6" y="1872.1" width="103.4" height="18.0" rx="9.0" fill="#ede9fe" stroke="#7c3aed" stroke-width="0.8"/><text font-size="8.6" fill="#7c3aed" text-anchor="middle" font-weight="bold"><tspan x="2731.3" y="1884.7">DOCUMENTED ONLY</tspan></text>
+<rect x="2791.0" y="1872.1" width="83.4" height="18.0" rx="9.0" fill="#fee2e2" stroke="#b91c1c" stroke-width="0.8"/><text font-size="8.6" fill="#b91c1c" text-anchor="middle" font-weight="bold"><tspan x="2832.7" y="1884.7">NOT VERIFIED</tspan></text>
+<text font-size="9.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1909.2">✓ in an arrow label, or &#x27;✓ RUN&#x27; on a screen = exercised in the Android 16 emulator walkthrough; everything else is traced in source.</tspan></text>
+<text font-size="9.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1926.7">ADMIN dashed outline inside a frame = control rendered only when user.isAdmin. Dashed tray under a frame = that screen&#x27;s pop-ups</tspan><tspan x="2434.0" y="1939.2">and hand-offs.</tspan></text>
+<text font-size="9.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1956.7">Every screen with ← (and the system Back gesture) returns to the previous screen via NavController.popBackStack(); only</tspan><tspan x="2434.0" y="1969.2">non-obvious returns are drawn.</tspan></text>
+<text font-size="9.6" fill="#334155" text-anchor="start"><tspan x="2434.0" y="1986.6">Hover a frame or arrow in the .drawio/.svg to see its route, source file:line, roles and verification status.</tspan></text>
+</g>
+<rect x="40.0" y="2057.0" width="3040.0" height="1.2" rx="0.0" fill="#94a3b8" stroke="none" stroke-width="1"/>
+<text font-size="13" fill="#334155" text-anchor="start" font-weight="bold"><tspan x="40.0" y="2084.5">SafeStitch – Garment Factory Safety Inspection &amp; Corrective Action Tracker</tspan></text>
+<text font-size="12" fill="#475569" text-anchor="end"><tspan x="3080.0" y="2084.0">Arafat Haque Biswas · Student ID 24241325 · CSE489 – Mobile App Development · BRAC University · 04-Module-Equipment-Scan-and-Inspection</tspan></text>
+<path d="M595.0,760.0 L595.0,794.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M595.0,760.0 L595.0,794.0" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S04 → S04: Search, location filter — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspect/FindEquipmentScreen.kt:188</title></path>
+<path d="M1270.0,355.0 L1230.0,355.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1270.0,355.0 L1230.0,355.0" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S09 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/scan/ScanScreen.kt:209</title></path>
+<path d="M1385.0,760.0 L1385.0,794.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1385.0,760.0 L1385.0,794.0" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S09 → S09: Unusable / missing QR → snackbar, analyzer resumes — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/scan/ScanScreen.kt:102</title></path>
+<path d="M2060.0,355.0 L2020.0,355.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2060.0,355.0 L2020.0,355.0" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S10 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/checkpoint/CheckpointFormScreen.kt:167</title></path>
+<path d="M2175.0,760.0 L2175.0,794.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2175.0,760.0 L2175.0,794.0" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S10 → S10: Validation / duplicate-code errors — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/checkpoint/CheckpointFormScreen.kt:110</title></path>
+<path d="M480.0,1023.6 L440.0,1023.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M480.0,1023.6 L440.0,1023.6" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S11 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:117</title></path>
+<path d="M595.0,1507.6 L595.0,1541.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M595.0,1507.6 L595.0,1541.6" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S11 → S11: Answer Pass/Fail/N/A, notes, priority, general notes (auto-saved) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:261</title></path>
+<path d="M1270.0,1023.6 L1230.0,1023.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1270.0,1023.6 L1230.0,1023.6" fill="none" stroke="#64748b" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="1 3" marker-end="url(#ah-back)"><title>S12 → BACK: ← / system Back → previous screen on the back stack — destination depends on how the screen was opened — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/camera/PhotoCaptureScreen.kt:130</title></path>
+<path d="M1385.0,1428.6 L1385.0,1462.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1385.0,1428.6 L1385.0,1462.6" fill="none" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="4 2" marker-end="url(#ah-state)"><title>S12 → S12: Shutter: capture + save photo (spinner); error → snackbar, stays — camera ready — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/camera/PhotoCaptureScreen.kt:151</title></path>
+<path d="M955.0,371.8 L955.0,401.8" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M955.0,371.8 L955.0,401.8" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>D02 → X02: Share / print — always — Admin — app/src/main/java/com/safestitch/app/ui/inspect/FindEquipmentScreen.kt:245</title></path>
+<path d="M1060.0,345.0 L1075.0,345.0 L1075.0,465.0 L1060.0,465.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1060.0,345.0 L1075.0,345.0 L1075.0,465.0 L1060.0,465.0" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>D02 → X03: Open — falls back to the share sheet when no PDF app is installed — Admin — app/src/main/java/com/safestitch/app/ui/inspect/FindEquipmentScreen.kt:251</title></path>
+<path d="M1850.0,345.0 L1865.0,345.0 L1865.0,465.0 L1850.0,465.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1850.0,345.0 L1865.0,345.0 L1865.0,465.0 L1850.0,465.0" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>D16 → X05: Open app settings — permission denied once — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/components/Common.kt:175</title></path>
+<path d="M710.0,355.0 L850.0,355.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,355.0 L850.0,355.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S04 → D02: PDF icon: print QR labels — user.isAdmin and ≥ 1 equipment (else snackbar &#x27;Add equipment first.&#x27;) — Admin — app/src/main/java/com/safestitch/app/ui/inspect/FindEquipmentScreen.kt:147</title></path>
+<path d="M1500.0,445.0 L1615.0,445.0 L1615.0,355.0 L1640.0,355.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,445.0 L1615.0,445.0 L1615.0,355.0 L1640.0,355.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S09 → D16: Camera permission gate — camera not granted — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/scan/ScanScreen.kt:238</title></path>
+<path d="M2290.0,515.0 L2455.0,515.0 L2455.0,369.6" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2290.0,515.0 L2455.0,515.0 L2455.0,369.6" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S10 → D15: Location dropdowns (Factory › Building › Floor › Area) — locations exist — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/checkpoint/CheckpointFormScreen.kt:216</title></path>
+<path d="M710.0,1465.0 L825.0,1465.0 L825.0,1035.0 L850.0,1035.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,1465.0 L825.0,1465.0 L825.0,1035.0 L850.0,1035.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S11 → D03: Submit with problems — CompletionRules.problems not empty — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:175</title></path>
+<path d="M1500.0,1195.0 L1615.0,1195.0 L1615.0,1025.0 L1640.0,1025.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,1195.0 L1615.0,1195.0 L1615.0,1025.0 L1640.0,1025.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S12 → D16: Camera permission gate — camera not granted — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/camera/PhotoCaptureScreen.kt:135</title></path>
+<path d="M850.0,345.0 L710.0,345.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M850.0,345.0 L710.0,345.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D02 → S04: Dismiss (tap outside / Back) — always — Admin — app/src/main/java/com/safestitch/app/ui/inspect/FindEquipmentScreen.kt:239</title></path>
+<path d="M850.0,1015.0 L710.0,1015.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M850.0,1015.0 L710.0,1015.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D03 → S11: OK / dismiss → fix the listed problems — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:177</title></path>
+<path d="M2430.0,345.0 L2290.0,345.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2430.0,345.0 L2290.0,345.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D15 → S10: Option selected → field updated — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/components/Pickers.kt:87</title></path>
+<path d="M1640.0,345.0 L1500.0,345.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1640.0,345.0 L1500.0,345.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D16 → S09: Permission granted → camera preview shown — user allows the camera — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/components/Common.kt:161</title></path>
+<path d="M1640.0,1015.0 L1500.0,1015.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1640.0,1015.0 L1500.0,1015.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D16 → S12: Permission granted → camera preview shown — user allows the camera — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/components/Common.kt:161</title></path>
+<path d="M270.0,315.0 L455.0,315.0 L455.0,345.0 L480.0,345.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,315.0 L455.0,315.0 L455.0,345.0 L480.0,345.0" fill="none" stroke="#0e7490" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-tab)"><title>TABS → S04: Bottom bar: Inspect — bottom bar is shown only on the 4 tab screens — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/navigation/SafeStitchNavHost.kt:53</title></path>
+<path d="M270.0,365.0 L480.0,365.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,365.0 L480.0,365.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S03 → S04: Find equipment — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:760</title></path>
+<path d="M1500.0,555.0 L1625.0,555.0 L1625.0,425.0 L1640.0,425.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,555.0 L1625.0,555.0 L1625.0,425.0 L1640.0,425.0" fill="none" stroke="#0f766e" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="7 3 2 3" marker-end="url(#ah-external)"><title>S09 → X01: Scan a QR code from a picture — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/scan/ScanScreen.kt:267</title></path>
+<path d="M710.0,1025.0 L815.0,1025.0 L815.0,1095.0 L850.0,1095.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,1025.0 L815.0,1025.0 L815.0,1095.0 L850.0,1095.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S11 → D04: Trash icon — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:119</title></path>
+<path d="M850.0,1105.0 L710.0,1105.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M850.0,1105.0 L710.0,1105.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D04 → S11: Cancel / dismiss (inspection kept) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:186</title></path>
+<path d="M710.0,1265.0 L815.0,1265.0 L815.0,1205.0 L850.0,1205.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,1265.0 L815.0,1265.0 L815.0,1205.0 L850.0,1205.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S11 → D05: Tap a photo thumbnail — an item or general photo exists — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:155</title></path>
+<path d="M850.0,1185.0 L710.0,1185.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M850.0,1185.0 L710.0,1185.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D05 → S11: Remove → photo deleted (not in the PDF) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:194
+D05 → S11: Keep / dismiss — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:195</title></path>
+<path d="M710.0,515.0 L825.0,515.0 L825.0,525.0 L850.0,525.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,515.0 L825.0,515.0 L825.0,525.0 L850.0,525.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S04 → D15: Location filter dropdowns — locations exist — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspect/FindEquipmentScreen.kt:192</title></path>
+<path d="M850.0,535.0 L710.0,535.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M850.0,535.0 L710.0,535.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D15 → S04: Option selected → field updated — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/components/Pickers.kt:87</title></path>
+<path d="M850.0,1105.0 L835.0,1105.0 L835.0,915.0 L425.0,915.0 L425.0,1008.6" fill="none" stroke="#ffffff" stroke-width="4.0" stroke-linejoin="round" opacity="0.9"/>
+<path d="M850.0,1105.0 L835.0,1105.0 L835.0,915.0 L425.0,915.0 L425.0,1008.6" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linejoin="round" stroke-dasharray="2 3" marker-end="url(#ah-return)"><title>D04 → BACK: Delete → back to the previous screen — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/navigation/SafeStitchNavHost.kt:178</title></path>
+<path d="M270.0,515.0 L480.0,515.0" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,515.0 L480.0,515.0" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>S18 → S04: Equipment — always — Admin — app/src/main/java/com/safestitch/app/ui/admin/AdminScreens.kt:98</title></path>
+<path d="M710.0,1265.0 L725.0,1265.0 L725.0,1275.0 L850.0,1275.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,1265.0 L725.0,1265.0 L725.0,1275.0 L850.0,1275.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S11 → D14: Due date button (failed item) — item failed — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:292</title></path>
+<path d="M850.0,1275.0 L835.0,1275.0 L835.0,1285.0 L710.0,1285.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M850.0,1275.0 L835.0,1275.0 L835.0,1285.0 L710.0,1285.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D14 → S11: OK → due date set / Cancel — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/components/Pickers.kt:222</title></path>
+<path d="M480.0,485.0 L465.0,485.0 L465.0,1005.0 L480.0,1005.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M480.0,485.0 L465.0,485.0 L465.0,1005.0 L480.0,1005.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S04 → S11: Inspect (start or resume the draft) — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspect/FindEquipmentScreen.kt:228</title></path>
+<path d="M710.0,1205.0 L805.0,1205.0 L805.0,1345.0 L850.0,1345.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,1205.0 L805.0,1205.0 L805.0,1345.0 L850.0,1345.0" fill="none" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#ah-popup)"><title>S11 → D15: Responsible for the fix ▾ (failed item) — item failed — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:284</title></path>
+<path d="M850.0,1355.0 L710.0,1355.0" fill="none" stroke="#ffffff" stroke-width="3.9000000000000004" stroke-linejoin="round" opacity="0.9"/>
+<path d="M850.0,1355.0 L710.0,1355.0" fill="none" stroke="#a21caf" stroke-width="1.3" stroke-linejoin="round" stroke-dasharray="3 2" marker-end="url(#ah-dialog_result)"><title>D15 → S11: Option selected → field updated — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/components/Pickers.kt:87</title></path>
+<path d="M710.0,375.0 L835.0,375.0 L835.0,385.0 L1270.0,385.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,375.0 L835.0,375.0 L835.0,385.0 L1270.0,385.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S04 → S09: Scan the equipment&#x27;s QR code — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspect/FindEquipmentScreen.kt:176</title></path>
+<path d="M1500.0,595.0 L2060.0,595.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,595.0 L2060.0,595.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S09 → S10: Unknown code — code not registered (any role) — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/scan/ScanScreen.kt:110</title></path>
+<path d="M710.0,1265.0 L725.0,1265.0 L725.0,1235.0 L1270.0,1235.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,1265.0 L725.0,1265.0 L725.0,1235.0 L1270.0,1235.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S11 → S12: Add photo (item) / Add general photo — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:295</title></path>
+<path d="M1270.0,1195.0 L1075.0,1195.0 L1075.0,1145.0 L710.0,1145.0" fill="none" stroke="#ffffff" stroke-width="4.0" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1270.0,1195.0 L1075.0,1195.0 L1075.0,1145.0 L710.0,1145.0" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linejoin="round" stroke-dasharray="2 3" marker-end="url(#ah-return)"><title>S12 → S11: Shutter → photo saved → back — opened from the inspection — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/camera/PhotoCaptureScreen.kt:112</title></path>
+<path d="M270.0,415.0 L455.0,415.0 L455.0,1015.0 L480.0,1015.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,415.0 L455.0,415.0 L455.0,1015.0 L480.0,1015.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S06 → S11: Inspection card (draft) — completedAt == null — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/history/HistoryScreen.kt:356</title></path>
+<path d="M270.0,365.0 L285.0,365.0 L285.0,1055.0 L480.0,1055.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,365.0 L285.0,365.0 L285.0,1055.0 L480.0,1055.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S03 → S11: Summary card: recent draft checklist — inspection still a draft — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/SummaryDashboardCard.kt:434</title></path>
+<path d="M270.0,365.0 L285.0,365.0 L285.0,255.0 L1295.0,255.0 L1295.0,270.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,365.0 L285.0,365.0 L285.0,255.0 L1295.0,255.0 L1295.0,270.0" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah-nav)"><title>S03 → S09: Scan for Checklist — always — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/dashboard/DashboardScreen.kt:756</title></path>
+<path d="M1270.0,595.0 L1075.0,595.0 L1075.0,905.0 L685.0,905.0 L685.0,938.6" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1270.0,595.0 L1075.0,595.0 L1075.0,905.0 L685.0,905.0 L685.0,938.6" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S09 → S11: Known code (camera, picture or typed + Continue) — code is registered → start or resume — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/scan/ScanScreen.kt:112</title></path>
+<path d="M710.0,685.0 L1255.0,685.0 L1255.0,775.0 L2085.0,775.0 L2085.0,760.0" fill="none" stroke="#ffffff" stroke-width="4.3" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,685.0 L1255.0,685.0 L1255.0,775.0 L2085.0,775.0 L2085.0,760.0" fill="none" stroke="#c2410c" stroke-width="1.7" stroke-linejoin="round" marker-end="url(#ah-admin)"><title>S04 → S10: + Add equipment (FAB) — user.isAdmin — Admin — app/src/main/java/com/safestitch/app/ui/inspect/FindEquipmentScreen.kt:156
+S04 → S10: Edit — user.isAdmin — Admin — app/src/main/java/com/safestitch/app/ui/inspect/FindEquipmentScreen.kt:229</title></path>
+<path d="M2060.0,645.0 L1865.0,645.0 L1865.0,845.0 L1085.0,845.0 L1085.0,735.0 L710.0,735.0" fill="none" stroke="#ffffff" stroke-width="4.0" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2060.0,645.0 L1865.0,645.0 L1865.0,845.0 L1085.0,845.0 L1085.0,735.0 L710.0,735.0" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linejoin="round" stroke-dasharray="2 3" marker-end="url(#ah-return)"><title>S10 → S04: Save equipment / Save changes → back — opened from + or Edit (admin) — Admin — app/src/main/java/com/safestitch/app/ui/checkpoint/CheckpointFormScreen.kt:119</title></path>
+<path d="M270.0,465.0 L445.0,465.0 L445.0,895.0 L1295.0,895.0 L1295.0,938.6" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M270.0,465.0 L445.0,465.0 L445.0,895.0 L1295.0,895.0 L1295.0,938.6" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S15 → S12: Add after-fix photo — status In progress — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/actions/ActionsScreens.kt:305</title></path>
+<path d="M1500.0,1195.0 L1515.0,1195.0 L1515.0,855.0 L2855.0,855.0 L2855.0,384.0" fill="none" stroke="#ffffff" stroke-width="4.0" stroke-linejoin="round" opacity="0.9"/>
+<path d="M1500.0,1195.0 L1515.0,1195.0 L1515.0,855.0 L2855.0,855.0 L2855.0,384.0" fill="none" stroke="#64748b" stroke-width="1.4" stroke-linejoin="round" stroke-dasharray="2 3" marker-end="url(#ah-return)"><title>S12 → S15: Shutter → after-fix photo saved → back — opened from a corrective action — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/camera/PhotoCaptureScreen.kt:83</title></path>
+<path d="M2060.0,645.0 L2045.0,645.0 L2045.0,885.0 L675.0,885.0 L675.0,938.6" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M2060.0,645.0 L2045.0,645.0 L2045.0,885.0 L675.0,885.0 L675.0,938.6" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S10 → S11: Save and start inspection — opened from an unknown scanned code — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/checkpoint/CheckpointFormScreen.kt:122</title></path>
+<path d="M710.0,1465.0 L725.0,1465.0 L725.0,1445.0 L2805.0,1445.0 L2805.0,325.0 L2830.0,325.0" fill="none" stroke="#ffffff" stroke-width="4.1" stroke-linejoin="round" opacity="0.9"/>
+<path d="M710.0,1465.0 L725.0,1465.0 L725.0,1445.0 L2805.0,1445.0 L2805.0,325.0 L2830.0,325.0" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="10 3" marker-end="url(#ah-conditional)"><title>S11 → S13: Submit &amp; create PDF — all answered; each fail has a note, priority and due date — Admin, Inspector — app/src/main/java/com/safestitch/app/ui/inspection/InspectionScreen.kt:364</title></path>
+<rect x="915.5" y="378.0" width="79.1" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="955.0" y="390.8" font-size="10.0" text-anchor="middle" fill="#0f766e" font-weight="bold">Share / print</text>
+<rect x="1057.0" y="378.2" width="36.1" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="1075.0" y="391.1" font-size="10.0" text-anchor="middle" fill="#0f766e" font-weight="bold">Open</text>
+<rect x="1827.6" y="378.2" width="74.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="1865.0" y="391.1" font-size="10.0" text-anchor="middle" fill="#0f766e" font-weight="bold">app settings</text>
+<rect x="769.2" y="346.2" width="21.6" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="780.0" y="359.1" font-size="10.0" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓</text>
+<rect x="814.2" y="1241.2" width="21.6" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="825.0" y="1254.0" font-size="10.0" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓</text>
+<rect x="794.3" y="336.2" width="49.8" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="819.2" y="349.1" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">dismiss</text>
+<rect x="766.9" y="1006.2" width="26.1" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="780.0" y="1019.0" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">OK</text>
+<rect x="2315.5" y="336.2" width="89.0" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="2360.0" y="349.1" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">option selected</text>
+<rect x="1544.2" y="336.2" width="51.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="1570.0" y="349.1" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">granted</text>
+<rect x="1544.2" y="1006.2" width="51.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="1570.0" y="1019.0" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">granted</text>
+<rect x="319.6" y="306.2" width="85.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0e7490" stroke-width="0.6"/>
+<text x="362.5" y="319.1" font-size="10.0" text-anchor="middle" fill="#0e7490" font-weight="bold">✓ Inspect tab</text>
+<rect x="324.6" y="356.2" width="100.8" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="375.0" y="369.1" font-size="10.0" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Find equipment</text>
+<rect x="1587.6" y="500.8" width="74.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#0f766e" stroke-width="0.6"/>
+<text x="1625.0" y="513.5" font-size="10.0" text-anchor="middle" fill="#0f766e" font-weight="bold">photo picker</text>
+<rect x="735.9" y="1016.2" width="21.6" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="746.8" y="1029.0" font-size="10.0" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓</text>
+<rect x="757.6" y="1096.2" width="44.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="780.0" y="1109.0" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">Cancel</text>
+<rect x="736.7" y="1176.2" width="86.6" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="780.0" y="1189.0" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">Remove / Keep</text>
+<rect x="735.5" y="526.2" width="89.0" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="780.0" y="539.0" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">option selected</text>
+<rect x="582.2" y="906.2" width="95.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#64748b" stroke-width="0.6"/>
+<text x="630.0" y="919.0" font-size="10.0" text-anchor="middle" fill="#64748b" font-weight="bold">✓ Delete ⇒ back</text>
+<rect x="336.1" y="506.2" width="77.8" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="375.0" y="519.0" font-size="10.0" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ Equipment</text>
+<rect x="776.7" y="1266.2" width="21.6" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="787.5" y="1279.0" font-size="10.0" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓</text>
+<rect x="737.2" y="1289.0" width="70.5" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="772.5" y="1301.8" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">OK / Cancel</text>
+<rect x="432.1" y="881.9" width="65.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="465.0" y="894.6" font-size="10.0" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Inspect</text>
+<rect x="794.2" y="1210.2" width="21.6" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#7c3aed" stroke-width="0.6"/>
+<text x="805.0" y="1223.0" font-size="10.0" text-anchor="middle" fill="#7c3aed" font-weight="bold">✓</text>
+<rect x="735.5" y="1346.2" width="89.0" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#a21caf" stroke-width="0.6"/>
+<text x="780.0" y="1359.0" font-size="10.0" text-anchor="middle" fill="#a21caf" font-weight="bold">option selected</text>
+<rect x="1141.4" y="376.2" width="65.8" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="1174.3" y="389.1" font-size="10.0" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Scan QR</text>
+<rect x="1733.3" y="586.2" width="93.4" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1780.0" y="599.0" font-size="10.0" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ unknown code</text>
+<rect x="960.3" y="1226.2" width="74.4" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="997.5" y="1239.0" font-size="10.0" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Add photo</text>
+<rect x="846.9" y="1136.2" width="91.3" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#64748b" stroke-width="0.6"/>
+<text x="892.5" y="1149.0" font-size="10.0" text-anchor="middle" fill="#64748b" font-weight="bold">✓ saved ⇒ back</text>
+<rect x="434.8" y="706.2" width="40.4" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="455.0" y="719.0" font-size="10.0" text-anchor="middle" fill="#1d4ed8" font-weight="bold">draft</text>
+<rect x="240.6" y="701.2" width="88.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="285.0" y="714.0" font-size="10.0" text-anchor="middle" fill="#1d4ed8" font-weight="bold">recent (draft)</text>
+<rect x="730.6" y="246.2" width="118.8" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1e293b" stroke-width="0.6"/>
+<text x="790.0" y="259.1" font-size="10.0" text-anchor="middle" fill="#1e293b" font-weight="bold">✓ Scan for Checklist</text>
+<rect x="839.0" y="896.2" width="82.1" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="880.0" y="909.0" font-size="10.0" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ known code</text>
+<rect x="1627.6" y="766.2" width="84.8" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#c2410c" stroke-width="0.6"/>
+<text x="1670.0" y="779.0" font-size="10.0" text-anchor="middle" fill="#c2410c" font-weight="bold">✓ + Add / Edit</text>
+<rect x="1431.5" y="836.2" width="87.0" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#64748b" stroke-width="0.6"/>
+<text x="1475.0" y="849.0" font-size="10.0" text-anchor="middle" fill="#64748b" font-weight="bold">✓ Save ⇒ back</text>
+<rect x="690.3" y="886.2" width="104.3" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="742.5" y="899.0" font-size="10.0" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ after-fix photo</text>
+<rect x="2129.4" y="846.2" width="111.3" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#64748b" stroke-width="0.6"/>
+<text x="2185.0" y="859.0" font-size="10.0" text-anchor="middle" fill="#64748b" font-weight="bold">✓ after-fix ⇒ back</text>
+<rect x="1315.6" y="876.2" width="88.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1360.0" y="889.0" font-size="10.0" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ Save &amp; start</text>
+<rect x="1699.7" y="1436.2" width="130.7" height="17.5" rx="3" fill="#ffffff" fill-opacity="0.95" stroke="#1d4ed8" stroke-width="0.6"/>
+<text x="1765.0" y="1449.0" font-size="10.0" text-anchor="middle" fill="#1d4ed8" font-weight="bold">✓ Submit &amp; create PDF</text>
+</svg>
